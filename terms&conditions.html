@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & Conditions</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3YR8SBMEQY"></script>
+
+    <style>
+        /* Base Variables & Reset */
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #cbd5e1;
+            --text-heading: #f8fafc;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --border-color: #334155;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+            /* Disable text selection */
+    * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Disable drag of images and links */
+    img, a {
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+        user-drag: none;
+        pointer-events: auto;
+    }
+
+    /* Disable pointer events for iframes or embeds */
+    iframe, embed, object, video {
+        pointer-events: none;
+    }
+
+    /* Prevent right-click via pointer-events */
+    body {
+        cursor: default;
+    }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--accent);
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-hover);
+        }
+
+        /* Header */
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            height:50px;
+            width:50px;
+            background:url("https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/330px-Bitcoin.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail");
+            background-size: 100% 100%;
+            border:none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin:-5px;
+        }
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 10px 5px;
+            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero h1 {
+            font-size: 30px;
+            color: var(--text-heading);
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+
+        /* Layout Grid */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            padding: 40px 0;
+        }
+
+        /* Sidebar Navigation */
+         .sidebar {
+            position: sticky;
+            top: 100px;
+            height: max-content;
+            background-color: var(--bg-card);
+            padding: 10px;
+            margin:5px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar h4 {
+            color: var(--text-heading);
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar ul li a {
+            color: var(--text-main);
+            font-size: 14px;
+            display: block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar ul li a:hover, .sidebar ul li a.active {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            padding-left: 10px;
+        }
+
+        /* Content Area */
+        .content-area section {
+            background-color: var(--bg-card);
+            padding: 10px;
+            border-radius: 12px;
+            margin:5px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-area section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .content-area h2 {
+            color: var(--text-heading);
+            font-size: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .content-area h2 i {
+            color: var(--accent);
+        }
+
+        .content-area p {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .content-area ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .content-area ul li {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .content-area .nested-list {
+            list-style-type: lower-alpha;
+            background: rgba(0,0,0,0.5);
+            padding:10px;
+            padding-left: 5px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        /* Important Alerts */
+        .alert {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .alert p {
+            margin: 0;
+            color: #fca5a5;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0 20px;
+            margin-top: 10px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--bg-dark);
+            border-radius: 50%;
+            color: var(--text-main);
+            font-size: 18px;
+            border: 1px solid var(--border-color);
+        }
+
+        .social-links a:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.6;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            width: 100%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: relative;
+                top: 0;
+                margin-bottom: 0px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+             <div>
+                <a href="home.html" style="color: var(--text-main); font-weight: 600;">Go Back</a>
+            </div>
+            <div class="logo"></div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Terms & Conditions</h1>
+            <p>Please review our Terms of Service to understand your rights, responsibilities, and the rules of engagement on the Bitcoin Mines Pvt Ltd 'BTCmines' platform.</p>
+        </div>
+    </section>
+
+    <div class="container main-layout">
+        
+        <aside class="sidebar">
+            <h4>Table of Contents</h4>
+            <ul>
+                <li><a href="#introduction" class="nav-link active">1. Introduction</a></li>
+                <li><a href="#personal-data" class="nav-link">2. Personal Data</a></li>
+                <li><a href="#consent" class="nav-link">3. Users' Consent</a></li>
+                <li><a href="#security" class="nav-link">4. Data Security</a></li>
+                <li><a href="#minors" class="nav-link">5. Privacy for Minors</a></li>
+                <li><a href="#exclusions" class="nav-link">6. Exclusions</a></li>
+                <li><a href="#liability" class="nav-link">7. Limitation of Liability</a></li>
+                <li><a href="#area-restrict" class="nav-link">8. Area Restrictions</a></li>
+                <li><a href="#refund" class="nav-link">9. Refund Policy</a></li>
+                <li><a href="#termination" class="nav-link">10. Termination by User</a></li>
+                <li><a href="#cash-balance" class="nav-link">11. Cash Balance & Virtual Accounts</a></li>
+            </ul>
+        </aside>
+
+        <main class="content-area">
+
+            <section id="preliminary">
+                <div class="alert">
+                    <p><i class="fa-solid fa-triangle-exclamation"></i> <strong>Age & Location Restriction:</strong> Forbid 18 years old and below. This product is for India except restricted regions (Telangana, Assam, Odisha, Gujarat, Maharashtra, Delhi, Andhra Pradesh, Tamil Nadu, Nagaland, Sikkim).</p>
+                </div>
+                <p>By accepting the Terms of Service and Privacy Policy on our app, you consent to share your sensitive personal data or personal information and are aware of the purpose of sharing such information. Please read this carefully before using BTCmine's services. Please do not register if you do not wish to share with our platform (hereinafter referred to as "BTCmines", "we", "us", or "our") the mandatory personal information requested at the time of registration. Registration procedure cannot be completed until information sought in the non-optional fields is provided. Certain additional personal information may be requested by BTCmines for permitting you access to any Cash Games hosted by us.</p>
+            </section>
+
+            <section id="introduction">
+                <h2><i class="fa-solid fa-book-open"></i> 1. Introduction</h2>
+                <h3>1.1 About Games on BTCmines</h3>
+                <p>Card games like Indian rummy have become some of the most common games played in India currently. More than millions of players enjoy these games on web and mobile platforms. 13-card rummy along with its deviation, the 21-card version, are considered skill-based games rather than luck-based ones. The only element of luck involved in this game may be the cards that are dealt to a player. Once the cards are dealt, the player needs to play with strategy and skill to gain a win.</p>
+                
+                <h3>1.2 What is the objective of this Terms of Service?</h3>
+                <p>BTCmines respects your privacy and assures you that any information provided by you to this platform is protected and shall be dealt with according to this Privacy Policy and the applicable laws. To avail yourself of the services offered on our platform, you may have to provide certain information to us. This Policy delineates the procedure followed by BTCmines to gather, use, store, disclose and manage users' personal data. BTCmines collects personal data only for verifying user accounts, maintaining accounts, completing transactions initiated by users, and for analyzing user behavior and requirements. Along with providing users with the most enjoyable online gaming experience, we also build a relationship of trust with our users. Our commitment to protecting user data is based on the principles of transparency, fairness, accuracy, data minimization, integrity, and confidentiality.</p>
+            </section>
+
+            <section id="personal-data">
+                <h2><i class="fa-solid fa-id-card"></i> 2. What is included in personal data?</h2>
+                <p>Users' personal data includes the following types of personal data or information:</p>
+                <ul>
+                    <li><strong>Sensitive Personal Data:</strong> Account password, financial information such as Bank Account, Credit Card, Debit Card or other payment instrument details.</li>
+                    <li><strong>Other Personal Information:</strong> Name, Date of birth, Telephone number, Postal/Contact address, PAN (as applicable).</li>
+                    <li><strong>Technical Information:</strong> The IP address of your computer, browser type and language, the date and the time of your accessing the site, the address of the App that you may have used to link to our App.</li>
+                    <li><strong>Promotional Information:</strong> Your photograph for the purpose of testimonials and other promotions.</li>
+                    <li>Any other information that is defined as “sensitive personal data or information” in law.</li>
+                </ul>
+            </section>
+
+            <section id="consent">
+                <h2><i class="fa-solid fa-handshake"></i> 3. Users' Consent</h2>
+                <p><strong>Consent to the use of Data:</strong> All users of BTCmines consent to the use of their Sensitive Personal Data and Other Personal Information by this platform for the purposes stated in this policy. We restrict access to personal user information to our employees, contractors, and agents and only allow access to those who need to know such information in order to process it on our behalf.</p>
+                <p><strong>Withdrawal of Consent:</strong> Users are entitled to withdraw consent to the use of their Sensitive Personal Data or Other Personal Information by emailing a specific request to BTCmines. Withdrawal of consent to use all or any part of this data may result in immediate withdrawal of any right provided to the user to use the services provided by BTCmines. Withdrawal of consent by users shall not restrict the right of BTCmines to use Other Personal Information for the analysis of user data, subject to the condition that it is not personally identifiable to any individual user.</p>
+                <p><strong>Marketing & Analytics:</strong> Users providing photographs to BTCmines for marketing purposes gives us irrevocable rights to use them. BTCmines may also use software applications for traffic analysis, gathering statistics, advertising, and determining the efficacy of our platform.</p>
+                <p><strong>Consent to Communication:</strong> When you register your email address, you agree to receive email communication from BTCmines and authorized entities. If you use our referral program, we may send emails to referred persons on your behalf. Any telephonic communication between you and our Customer Support staff may be recorded for employee training, quality management, and speedy resolution of your queries.</p>
+            </section>
+
+            <section id="security">
+                <h2><i class="fa-solid fa-shield-halved"></i> 4. Data Security</h2>
+                <p>We take appropriate security measures to protect user data from unauthorized access, alteration, disclosure, or destruction. These measures include internal reviews of our data collection, storage, processing practices, and physical security measures. BTCmines has a comprehensive information security program and policies that contain managerial, technical, operational, and physical security control measures.</p>
+                <p>Information gathered by BTCmines is stored securely using several information security applications including firewalls. However, security is always relative, and data transmitted over the Internet is inherently exposed to security risks or threats. For instance, the security of information transmitted via chat or email might be compromised. Therefore, BTCmines cannot guarantee absolute security during transmission.</p>
+                <p>When you register with BTCmines, your account is protected by login information known only to you. You should not provide your personal information to anyone; breach hereof constitutes violation of this Policy and may result in closure of your account. If you suspect any breach of security, you must notify BTCmines immediately.</p>
+                <p><strong>Third Parties:</strong> BTCmines has a policy of not sharing any personally identifiable information with anyone other than specifically authorized entities, which may include advertisers and sponsors. However, BTCmines may use information like your name, photo, login ID, and state when announcing contest results. We may also share registration information with appointed market research and advertising firms.</p>
+            </section>
+
+            <section id="minors">
+                <h2><i class="fa-solid fa-child-reaching"></i> 5. Privacy measures for minors</h2>
+                <p>Our App and contests are meant only for persons aged 18 or above. If you are under 18 years of age, you are not permitted to use BTCmines. If you are a parent and/or guardian and believe that we may have inadvertently collected personal information from your child, you can notify us immediately by sending an email to our customer support address.</p>
+            </section>
+
+            <section id="exclusions">
+                <h2><i class="fa-solid fa-file-contract"></i> 6. Exclusions</h2>
+                <p>BTCmines may share Sensitive Personal Data and Other Personal Information if sharing of such information is necessary:</p>
+                <ul>
+                    <li>To comply with legal processes or governmental requests;</li>
+                    <li>To enforce its Terms of Service and this Privacy Policy;</li>
+                    <li>For prevention of fraud or issues involving information security;</li>
+                    <li>To protect your rights, the rights of BTCmines, or the rights of the general public.</li>
+                </ul>
+            </section>
+
+            <section id="liability">
+                <h2><i class="fa-solid fa-scale-balanced"></i> 7. Limitation of Liability</h2>
+                <p>This Privacy Policy is only a description of its operation regarding user information and does not create any legal rights in your favor. BTCmines reserves the right to change this Privacy Policy at any time without prior notice. The liability of BTCmines shall be limited to the removal of Sensitive Personal Data from our systems and the removal of personally identifiable elements. The aggregate liability of BTCmines for all claims pursuant to the provisions of services, including violations of this Policy, shall be limited to the maximum liability provided in the Terms of Service.</p>
+            </section>
+
+            <section id="area-restrict">
+                <h2><i class="fa-solid fa-map-location-dot"></i> 8. Area Restrictions</h2>
+                <p>You are prohibited to play cash games on BTCmines if you are not legally competent to perform transactions in Indian rupees through banking channels in India and/or if you are accessing this game from a jurisdiction where playing online cash games is not legally permitted.</p>
+                <p>Any violation of this policy will be considered a breach of our Terms. As a result, your BTCmines account shall be locked immediately and you shall not be entitled to receive any prizes or refunds. You acknowledge that the state laws of <strong>Telangana, Assam, Odisha, Gujarat, Maharashtra, Delhi, Andhra Pradesh, Tamil Nadu, Nagaland, and Sikkim</strong> (Restricted Territories) do not permit the residents to play cash rummy/card games. You undertake to abide by these laws and shall not use BTCmines's Services to deposit, withdraw, or participate in cash games while residing in these states.</p>
+            </section>
+
+            <section id="refund">
+                <h2><i class="fa-solid fa-money-bill-transfer"></i> 9. Refund Policy</h2>
+                <p><strong>Conditions for Refund:</strong></p>
+                <ul>
+                    <li>The payment is successful but not received by the player.</li>
+                    <li>Due to app technology problems, we cannot provide game services for a long time.</li>
+                    <li>Due to payment loopholes, players pay repeatedly.</li>
+                </ul>
+                <p><strong>How to process a Refund:</strong></p>
+                <ul>
+                    <li>Contact customer service via WhatsApp or email to describe the problem.</li>
+                    <li>The customer service staff will actively assist in solving the problem.</li>
+                    <li>If the problem is not properly resolved, we will initiate a refund.</li>
+                    <li>Usually, it will be returned to your fund account within 5 working days.</li>
+                </ul>
+                <p><strong>Scenarios where you cannot receive a refund:</strong></p>
+                <ul>
+                    <li>Recharge has arrived, and you have consumed part of it.</li>
+                    <li>Payment time is over 3 days.</li>
+                    <li>There is clear evidence that you cheat in the game and cause harm to other players, resulting in trading limits.</li>
+                </ul>
+            </section>
+
+            <section id="termination">
+                <h2><i class="fa-solid fa-user-xmark"></i> 10. Termination by User</h2>
+                <p>You may cease using the Services and terminate your Accounts at any time, by writing to us at <strong>www.btc.mines@gmail.com</strong> and informing us of your intention. Subject to such restrictions as may be applicable to Cash Withdrawals in accordance with the terms and conditions of this Agreement, the Company will refund the remaining amount of your Cash Balance to you at this time.</p>
+            </section>
+
+            <section id="cash-balance">
+                <h2><i class="fa-solid fa-coins"></i> 11. Cash Balance in Virtual Accounts</h2>
+                <p><strong>11.1</strong> - In order to participate in Cash Games, you are required to maintain a positive Cash Balance in your Accounts.</p>
+                <p><strong>11.2</strong> - The Cash Balance will comprise two components: Monies residing in your Chips Account and monies residing in your Winnings and Bonus Accounts. In relation to such Cash Balance, you undertake/understand the following:</p>
+                
+                <ul class="nested-list">
+                    <li><strong>a)</strong> All credits to your Chips Account ("Cash Credits") must be through the third-party payment gateway(s) made available on the Platform by the Company. We are not responsible for authorization/denial of such transactions. We may reverse any transaction, refunding the amount to the instrument used.</li>
+                    <li><strong>b)</strong> All credits in the Chips Account made by Users shall at all times be held by the Company in trust, for and on behalf of the Users till deducted to play Cash Games.</li>
+                    <li><strong>c)</strong> All Cash Credits must be through instruments/accounts which belong to you and are in your name.</li>
+                    <li><strong>d)</strong> All transactions on the Platform must be conducted in Indian Rupees.</li>
+                    <li><strong>e)</strong> Any winnings will be credited exclusively to the Winnings Component of the Winnings and Bonus Account. Any Bonus Amount shall also be credited exclusively to the Bonus Component.</li>
+                    <li><strong>f)</strong> The Company facilitates collecting the winning amount from other participants and transferring it to the winner. The Company holds the same in trust until the User utilizes it or withdraws it.</li>
+                    <li><strong>g)</strong> A cash amount corresponding to the aggregate Cash Balances of all Users is maintained in an unencumbered and non-interest-bearing bank account(s), separate from company funds. These balances can be played or withdrawn subject to restrictions.</li>
+                    <li><strong>h)</strong> Any withdrawal ("Cash Withdrawal") may be carried out only in accordance with the terms of this Agreement.</li>
+                    <li><strong>i)</strong> User's relevant details required for the processing of payment from BTCmines to the user's account will be shared with our payment partners.</li>
+                    <li><strong>j)</strong> The Company may impose daily/per-session limits on cash credits or Cash Withdrawals to encourage responsible play and prevent illegal activity. We reserve the right to impose/modify such limits using our sole discretion.</li>
+                    <li><strong>k)</strong> Cash Withdrawals will be affected by way of bank transfer to your bank account, which must be an Indian Rupee account in your name.</li>
+                    <li><strong>l)</strong> The Cash Balance does not carry interest and is not transferable. No Cash Withdrawal is allowed unless the User has played a sufficient number of Cash Games subsequent to the last recorded Cash Credit.</li>
+                    <li><strong>m)</strong> No Cash Withdrawal is permitted from the Chips Account directly. Withdrawals are only permitted from the Winnings Component garnered by participation in Cash Games and Bonus Amounts.</li>
+                    <li><strong>n)</strong> Cash Credits are not available for withdrawals and may only be utilized to gain a seat at a table or tournament.</li>
+                    <li><strong>o)</strong> When adding chips to gain a seat, the non-refundable component (Chips Account) gets deducted first, followed by the refundable component (Winnings and Bonus Account), to ensure maximum possible refund availability.</li>
+                    <li><strong>p)</strong> If for more than 300 days you maintain a Cash Balance and fail to participate in a Cash Game, the Company reserves the right to forfeit the Chips Account balance. The Winnings and Bonus Account will be refunded to your bank account, or forfeited if bank details are not provided in time. Forfeited amounts are considered Gross amounts charged, inclusive of applicable GST.</li>
+                </ul>
+
+                <p><strong>11.3 - Tax Deducted at Source (TDS):</strong> The Company is obligated to deduct tax at source in case of Cash Games upon winnings of more than Rs. 10,000/- in a single game tourney. Winnings shall be credited after deducting TDS @ 30%. You must possess a valid PAN and provide details immediately upon request. If you fail to provide valid PAN details within 60 days of the completion of a game where winnings are subject to TDS, the Company reserves the right to forfeit the winnings after remitting applicable TDS to Government authorities. These requirements may be modified in accordance with changes to relevant tax laws.</p>
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3 style="color: var(--text-heading); font-size: 20px; margin-bottom: 10px;">Connect with BTCmines</h3>
+                    <p style="font-size: 14px; opacity: 0.7;">Join our Minning community and stay updated.</p>
+                </div>
+                
+                <ul class="social-links">
+                    <li><a target="_blank" rel="noreferrer nofollow" href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+                    <li><a target="_blank" rel="noreferrer nofollow" href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+                    <li><a target="_blank" rel="noreferrer nofollow" href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a></li>
+                    <li><a target="_blank" rel="noreferrer nofollow" href="#" title="Youtube"><i class="fa-brands fa-youtube"></i></a></li>
+                    <li><a target="_blank" rel="noreferrer nofollow" href="#" title="Telegram"><i class="fa-brands fa-telegram"></i></a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 Bitcoin Mines Pvt Ltd 'BTCmines'. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.content-area section');
+            const navLinks = document.querySelectorAll('.sidebar ul li a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    // Adjusted for fixed header
+                    if (scrollY >= (sectionTop - 150)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Deposit Feedback</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+    /* Disable text selection */
+    * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Disable drag of images and links */
+    img, a {
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+        user-drag: none;
+        pointer-events: auto;
+    }
+
+    /* Disable pointer events for iframes or embeds */
+    iframe, embed, object, video {
+        pointer-events: none;
+    }
+
+    /* Prevent right-click via pointer-events */
+    body {
+        cursor: default;
+    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background:#1a1a1a;
+        background-blend-mode: overlay;
+        background-size: 100% 100%;
+            color: #333;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal {
+    background:rgba(0,0,0,0.7);
+    border-radius: 6px;
+    padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease;
+    border:1px solid rgba(300,150,0,0.6);
+    outline:2.5px solid rgba(0,0,0,0.7);
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    color: #6a11cb;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+}
+
+.modal-header p {
+    color: rgba(300,150,0,0.6);
+    font-size: 0.8rem;
+    background:rgba(555,355,255,0.5);
+    padding:6px;
+    margin-top:-10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    font-weight: 900;;
+    color:white;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    gap: 10px;
+}
+
+.modal-btn {
+    padding: 5px;
+    border: none;
+    border-radius: 30px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.3s;
+    max-width:60vw;
+    min-width: 100px; /* Add min-width for better appearance */
+}
+
+.modal-btn-primary {
+    background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgblH1VThPIvWAyTLgZFEi67yZybhnsLRq5jpUivmnoIefVXw79_L_jqf-8DjCHi_y8JVf2CrlJvsXZNrj6CSIJWfjDENRVJKlPk9L_AAZrgq74b3pC_2CtAvPtMtr9sC5F8mRqmjLhcWPbqydsC1xy8LTYA4DNT35Ub28ZatyPSIUREf0vXy0ufLkF-J4/s16000/1000110830.png"),rgba(0,0,0,0.5);
+    background-size: 100% 100%;
+    color: white;
+}
+
+.modal-btn-primary:active{
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(106, 17, 203, 0.3);
+}
+
+.modal-btn-secondary {
+    background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgblH1VThPIvWAyTLgZFEi67yZybhnsLRq5jpUivmnoIefVXw79_L_jqf-8DjCHi_y8JVf2CrlJvsXZNrj6CSIJWfjDENRVJKlPk9L_AAZrgq74b3pC_2CtAvPtMtr9sC5F8mRqmjLhcWPbqydsC1xy8LTYA4DNT35Ub28ZatyPSIUREf0vXy0ufLkF-J4/s16000/1000110830.png"),rgba(0,0,0,0.5);
+    background-size: 100% 100%;
+    color: white;
+}
+
+.modal-btn-secondary:hover {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(106, 17, 203, 0.3);
+}
+
+.modal-message {
+    text-align: center;
+    padding: 5px;
+}
+
+.modal-message i {
+    font-size: 5rem;
+    margin-bottom: 15px;
+}
+
+.success-modal i {
+    color: #4CAF50;
+}
+
+.error-modal i {
+    color: #f44336;
+}
+
+.modal-message h4 {
+    color: red;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+.success-modal h4 {
+    color: #4CAF50;
+}
+
+.modal-message p {
+    color:white;
+    font-size: 0.9rem;
+}
+
+        /* Top Navigation Bar */
+        .top-bar {
+    width: 100vw;
+    height: 45px;
+    background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(11,0,22,0.5) 15%, rgba(22,0,44,0.5) 20%, rgba(44,10,88,0.5) 30%, rgba(88,20,166,0.5) 40%, rgba(166,40,360,0.5) 50%, rgba(88,20,166,0.5) 60%, rgba(44,10,88,0.5) 70%, rgba(22,0,44,0.5) 80%, rgba(11,0,22,0.5) 85%, rgba(0,0,0,0.5) 100%);
+        border-bottom: 2px solid #2a2a2a;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+            padding: 5px;
+            position: sticky;
+            top: 0;
+            z-index: 1000000;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.16);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap:5px;
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color:#fdbd01;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn.active {
+            background:rgba(208,190,0,0.3);
+            color:#fdbd01;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #fdbd01;
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(253, 189, 1, 0.1);
+        }
+
+        .top-bar h1 {
+            font-size: 1rem;
+            color: white;
+            margin: 0;
+        }
+
+        .container {
+            padding: 10px;
+            padding-top: 20px;
+        }
+
+        /* Main Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .app-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-top: 10px;
+        }
+
+        .app-logo {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .app-header h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .app-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+
+        /* Status Messages */
+        .status-message {
+            display: none;
+        }
+
+        /* Main Form */
+        .feedback-form {
+            background:transparent;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .form-title {
+            color:rgba(160,25,190,0.9);
+            margin-bottom: 15px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-title i {
+            color: #6a11cb;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 900;
+            color:rgba(280,44,490,0.9);
+            font-size: 0.7rem;
+            margin-left: 10px;
+            font-family: Segoe UI;
+            text-shadow: 
+    0 0 0.5px #003366,
+    0 0 0.5px #003366,
+    0 0 0.5px #003366,
+    0 0 0.5px #003366;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 6px 10px;
+            border:none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: Segoe UI;
+            background:rgba(0,0,0,0.5);
+            color:rgba(255,255,255,0.8);
+  box-shadow: 
+    inset 0 2px 3px rgba(0, 0, 0, 0.2),
+    inset 0 3px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border:1px solid rgba(255,255,255,0.3);
+            color:white;
+        }
+/* Input + paste icon wrapper */
+.input-with-paste {
+    position: relative;
+}
+
+/* Space for icon */
+.input-with-paste input {
+    padding-right: 40px;
+}
+
+/* Paste button */
+.paste-btn {
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 26px;
+    width: 26px;
+    border: none;
+    border-radius: 6px;
+    background:transparent;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.paste-btn i {
+    font-size: 0.9rem;
+    color: rgba(200,255,230,0.95);
+}
+
+.paste-btn:active {
+    transform: translateY(-50%) scale(0.94);
+}
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Image Upload */
+        .image-upload-section {
+            height: 220px;
+            margin-bottom: 15px;
+            background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgZ-ysrrwGPM09PtD1bIalsLt2fKqCdibPasHx9hjhYEcSRVPUaGPhpBJx7vuY5BiVn9Bi9aE5CHVPCCeH5_6scooDG66IdrSrcm71cjZ4vafY0qQt73SR2GTMBv0_bqsUzWNg36ZPnFfHJE7gmXl-VXjxVRJzMmdiwDxOCxlHalgA-IJTTgMJR8qtfO90/s16000/1000111011.jpg"),rgba(255,255,255,1.99);
+            background-size: 100% 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+
+        .image-upload-section:active {
+            transform:scale(0.99);
+        }
+
+        .image-upload-info {
+            display: none;
+        }
+
+        .image-preview {
+            display: none;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .remove-image {
+            display: none;
+        }
+
+        .remove-image:hover {
+            background: #cc0000;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgblH1VThPIvWAyTLgZFEi67yZybhnsLRq5jpUivmnoIefVXw79_L_jqf-8DjCHi_y8JVf2CrlJvsXZNrj6CSIJWfjDENRVJKlPk9L_AAZrgq74b3pC_2CtAvPtMtr9sC5F8mRqmjLhcWPbqydsC1xy8LTYA4DNT35Ub28ZatyPSIUREf0vXy0ufLkF-J4/s16000/1000110830.png"),rgba(0,0,0,0.5);
+            background-size: 100% 100%;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-size: 1rem;
+            font-weight: 800;
+            border-radius: 30px;
+            cursor: pointer;
+            min-width:135px;
+            transition: all 0.3s;
+            display: flex;
+            align-self: center;
+            justify-self: center;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 2px 1px rgba(0, 0, 0, 1.3);
+            font-family: Segoe UI;
+  color: white; /* Your text color */
+  /* Primary method for modern browsers */
+  text-shadow: 
+    0 0 2px #003366,
+    0 0 2px #003366,
+    0 0 2px #003366,
+    0 0 2px #003366;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Feedback List */
+        .feedback-list-section {
+            background:;
+            border-radius: 12px;
+            padding: 0;
+            min-height: 500px;
+        }
+
+        .list-title {
+            color:rgba(280,44,490,0.9);
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+            font-family: Segoe UI;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .list-title i {
+            color: #6a11cb;
+        }
+
+        #feedbackList {
+            max-height: 75vh;
+            overflow-y: auto;
+            border-radius: 8px;
+        }
+
+        .feedback-item {
+            background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiqKwUlVGwORqJ_6HsT47KyFZhIlvtNqpNTbStGgQwJNyMbbrqgJtCjFtronQaDYzJIJE-16AAa-Ybbwg8wx2hJP7LqiBZIFMzoqezVnTpyAb2wARGxgvtnyAwsO5qtQyd-0sR_T_B7tLtJSv2HKgeItXZTOo5n4o4OBjmLCcg_fB3nu0Wr33ag4czKHZA/s16000/1000111708.png"),linear-gradient(180deg,#9d5cf0,#7b39c8);
+      background-size: 100% 100%; 
+            border-radius: 8px;
+            padding: 5px;
+            margin-bottom: 5px;
+            border:1px solid rgba(0,0,0,0.3);
+            font-size: 0.9rem;
+            overflow: hidden;
+        }
+
+        .feedback-header {
+            
+background: linear-gradient(70deg, #ffffff 60%, #f0f0f0 40%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding:5px;
+            margin:-5px;
+            margin-bottom: 5px;
+            box-shadow: 0 5px 10px -2px rgba(0, 0, 0, 0.3);
+        }
+
+        .feedback-user {
+            font-weight: 900;
+            color:#777;
+            font-size: 0.4rem;
+            font-family: Segoe UI;
+        }
+
+        .feedback-date {
+            font-weight: 900;
+            color: #777;
+            font-size: 0.4rem;
+            font-family: Segoe UI;
+        }
+        .category-status-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    margin-left:-5px;
+    margin-right: -5px;
+}
+
+        .feedback-text {
+            color:#fdbd01;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            font-size: 0.6rem;
+            font-family: Segoe UI;
+            background:rgba(20,0,50,0.5);
+            padding:5px;
+            min-height: 20px;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.1);
+            overflow-x:auto;
+        }
+.feedback-category {
+    display: inline-block;
+    background: #eef4ff;
+    color: #2575fc;
+    padding: 3px 10px;
+    border-radius: 0 10px 10px 0;
+    font-size: 0.65rem;
+    font-weight: 900;
+    margin-bottom: 1px;
+    font-family: Segoe UI;
+    border-bottom: 1px solid rgba(0,0,0,0.8);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.9);
+}
+.feedback-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius:10px 0 0 10px;
+    font-size: 0.65rem;
+    font-weight: 900;
+    font-family: Segoe UI;
+    border-bottom: 1px solid rgba(0,0,0,0.8);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.9);
+}
+
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .feedback-notes {
+            background:rgba(255,255,255,0.5);
+            border:none;
+            padding: 5px;
+            margin-top: 8px;
+            border-radius:0;
+            font-size: 0.6rem;
+            color:white;
+            font-family: Segoe UI;
+            margin-left: -5px;
+            margin-right: -5px;
+            margin-bottom: -5px;
+  box-shadow: 0 -5px 10px -2px rgba(0, 0, 0, 0.3);
+  font-weight: 900;
+        }
+
+        .feedback-notes-label {
+            font-weight: 600;
+            color:#F2A2E8;
+            margin-bottom:1px;
+            background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.6) 0%,
+    rgba(255,255,255,0.5) 20%,
+    rgba(255,255,255,0.3) 45%,
+    rgba(255,255,255,0.2) 60%,
+    rgba(255,255,255,0.1) 80%,
+    rgba(255,255,255,0.01) 100%
+  );
+  border-left:2px solid white;
+  padding: 3px;
+  font-family: Segoe UI;
+  margin-left: -5px;
+  text-shadow: 0 .2px .2px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+        }
+
+        .feedback-image {
+            margin-top: 2px;
+            font-size: 0.6rem;
+            color:rgba(0,0,0,0.9);
+            font-style: italic;
+        }
+
+        .empty-feedback {
+            text-align: center;
+            color:rgba(180,80,340,0.8);
+            padding: 30px 20px;
+            font-size: 0.9rem;
+            font-weight: 900;
+        }
+
+        /* User Info Display in Profile */
+        .profile-section {
+            background:transparent;
+            border-radius: 6px;
+            padding: 0px;
+            min-height: 300px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            background:rgba(0,0,0,0.5);
+            padding:5px;
+            border-radius: 5px;
+        }
+
+        .profile-icon {
+            font-size: 3rem;
+            color: #6a11cb;
+            background: #f0f4ff;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-info h3 {
+            color: #2575fc;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .user-details-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .user-detail-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        .user-detail-card h4 {
+            background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.6) 0%,
+    rgba(255,255,255,0.5) 20%,
+    rgba(255,255,255,0.3) 45%,
+    rgba(255,255,255,0.2) 60%,
+    rgba(255,255,255,0.1) 80%,
+    rgba(255,255,255,0.01) 100%
+  );
+  border-left:2px solid white;
+  padding: 3px;
+            color:white;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: Segoe UI;
+            font-size: 0.8rem;
+        }
+
+        .user-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            background:rgba(999,11,555,0.1);
+            padding: 5px;
+            padding-left: 10px;
+        }
+
+        .user-detail {
+            flex: 1;
+            min-width: 150px;
+            font-size: .6rem;
+            font-weight: 700;
+            color:rgba(255,255,255,0.4);
+            font-family: Segoe UI;
+        }
+
+        .user-detail strong {
+            color:rgba(256,255,255,0.6);
+            font-size: 0.6rem;
+            font-family: Segoe UI;
+        }
+
+        .user-detail span {
+            display: block;
+            color:rgba(255,255,255,0.7);
+            font-weight: 900;
+            font-size: 0.7rem;
+        }
+        .footer-section {
+    margin: 10px auto;
+    padding:5px;
+    background:rgba(0,0,0,0.5);
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.5);
+}
+
+/* Each row */
+.footer-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 7px;
+}
+
+.footer-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Diamond icon */
+.footer-icon {
+    width: 11px;
+    height: 12px;
+    background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhUnZxGQ7dyTSYkmsCKjrhMJMnmNl9PsZ0a1SjOBPfP9lXJk2n4jQUHikSqc7bV0Ks4nYsSIwrSyH-oBqFHNZAu5EwDaXJ0KiCzmRYHhA1PWdJFLSJG9mFH-Wi59ePNTjKbpFRs072teesh2ymtTEhdu7oNBJKhKaE7d7Fet9pOEiSad6d7kE5GeifUIcQ/s16000/1000111062.png");
+    background-size: 100% 100%;
+    flex-shrink: 0;
+}
+
+/* Text */
+.footer-item p {
+    margin: 0;
+    font-size: 0.6rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.2px;
+    font-family: Segoe UI;
+    font-weight: 500;
+}
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 0px;
+            height:1px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background:rgba(0,0,0,0.5);
+            border-radius: 2px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background:rgba(999,0,660,0.2);
+            border-radius: 0px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6a11cb;
+        }
+
+        /* Hidden field */
+        .hidden {
+            display: none;
+        }
+        /* Change all placeholders to a specific color */
+::placeholder {
+    color:rgba(255,255,255,0.8); /* Gray color */
+    opacity: 1; /* Firefox reduces opacity by default */
+}
+
+/* For specific browsers */
+::-webkit-input-placeholder { /* Chrome, Edge, Safari */
+    color:rgba(255,255,255,0.8);
+}
+::-moz-placeholder { /* Firefox */
+    color:rgba(255,255,255,0.8);
+    opacity: 1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: rgba(255,255,255,0.8);
+}
+    </style>
+</head>
+<body>
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <p>Verify Your Details</p>
+            </div>
+            <div class="modal-body">
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="regUserName" class="required">Name/UID</label>
+                        <input type="text" id="regUserName" placeholder="Enter your name or UID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regUserEmail" class="required">Registered Email ID</label>
+                        <input type="email" id="regUserEmail" placeholder="Enter your registered email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regUserWhatsApp" class="required">WhatsApp Number</label>
+                        <input type="tel" id="regUserWhatsApp" placeholder="Enter your WhatsApp number" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn modal-btn-primary" id="saveRegistrationBtn">
+                Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Details Modal -->
+    <div id="updateDetailsModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <p>Update Your Details</p>
+            </div>
+            <div class="modal-body">
+                <form id="updateDetailsForm">
+                    <div class="form-group">
+                        <label for="updateUserName" class="required">Name/UID</label>
+                        <input type="text" id="updateUserName" placeholder="Enter your name or UID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateUserEmail" class="required">Registered Email ID</label>
+                        <input type="email" id="updateUserEmail" placeholder="Enter your registered email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateUserWhatsApp" class="required">WhatsApp Number</label>
+                        <input type="tel" id="updateUserWhatsApp" placeholder="Enter your WhatsApp number" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn modal-btn-primary" id="saveUpdateDetailsBtn">
+                    Update
+                </button>
+                <button type="button" class="modal-btn modal-btn-secondary" id="cancelUpdateDetailsBtn">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-message success-modal">
+                <i class="fas fa-check-circle"></i>
+                <h4>Success!</h4>
+                <p>Feedback submitted successfully!</p>
+                <button type="button" class="modal-btn modal-btn-primary" style="margin-top: 20px;" id="closeSuccessModal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="errorModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-message error-modal">
+                <i class="fas fa-exclamation-circle"></i>
+                <h4>Error!</h4>
+                <p id="errorModalText">Error submitting feedback please try again</p>
+                <button type="button" class="modal-btn modal-btn-primary" style="margin-top: 20px;" id="closeErrorModal">
+                    ok
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <button class="back-btn" id="backBtn">
+                <i class="fas fa-reply"></i>
+            </button>
+            <h1 id="pageTitle">Feedback</h1>
+        </div>
+        <div class="top-bar-right">
+            <button class="nav-btn" id="profileBtn" title="Profile">
+                <i class="fas fa-user-cog"></i>
+            </button>
+            <button class="nav-btn" id="historyBtn" title="Feedback History">
+                <i class="fas fa-book"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Main Feedback Submit Section -->
+        <div class="section active" id="submitSection">
+            <!-- Feedback Form -->
+            <div class="feedback-form">
+                <form id="feedbackForm">
+                    <div class="form-group">
+    <label for="transactionId" class="required">UTR or UPI Ref NO</label>
+
+    <div class="input-with-paste">
+       <input type="number" 
+       id="transactionId"
+       pattern="^\d{12}$"
+       minlength="12"
+       maxlength="12"
+       placeholder="Please enter your UTR or UPI Ref NO."
+       required
+       oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12)"
+       title="Please enter exactly 12 digits (numbers only)">
+
+        <button type="button"
+                class="paste-btn"
+                data-target="transactionId"
+                aria-label="Paste">
+            <i class="fas fa-paste"></i>
+        </button>
+    </div>
+</div>
+                    <!-- Image Upload -->
+                    <div class="form-group">
+                        <label for="feedbackText" class="required">Upload Payment Proof</label>
+                        <div class="image-upload-section" id="imageUploadArea">
+                            <input type="file" id="imageInput" accept="image/*" style="display: none;" required>
+                            <div class="image-preview" id="imagePreview">
+                                <img id="previewImage" src="" alt="📸">
+                            </div>
+                        </div>
+                    </div>
+                     <div class="form-group">
+    <label for="whatsappNumber" class="required">Your WhatsApp Number</label>
+
+    <div class="input-with-paste">
+        <input type="tel" id="whatsappNumber"
+       placeholder="Please enter your whatsApp number"
+       required
+       pattern="^\d{10}$"
+       minlength="10"
+       maxlength="10"
+       title="Please enter exactly 10 digits">
+
+        <button type="button"
+                class="paste-btn"
+                data-target="whatsappNumber"
+                aria-label="Paste">
+            <i class="fas fa-paste"></i>
+        </button>
+    </div>
+</div>
+                    <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="section" id="profileSection">
+            <div class="profile-section">
+                
+                <div class="user-details-container">
+                    <div class="user-detail-card">
+                        <h4><i class="fas fa-info-circle"></i> Token Details</h4>
+                        <div class="user-details">
+                            <div class="user-detail">
+                            Token ID:
+                                <span id="profileUserId">Loading...</span>
+                            </div>
+                            <div class="user-detail">
+                              Name/UID:
+                                <span id="profileUserName">Loading...</span>
+                            </div>
+                            <div class="user-detail">
+                                Email:
+                                <span id="profileUserEmail">Loading...</span>
+                            </div>
+                            <div class="user-detail">
+                                WhatsApp:
+                                <span id="profileUserWhatsApp">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-detail-card">
+                        <h4><i class="fas fa-chart-bar"></i> Activity Summary</h4>
+                        <div class="user-details">
+                            <div class="user-detail">
+                                <strong>Total Feedbacks:</strong>
+                                <span id="profileTotalFeedbacks">0</span>
+                            </div>
+                            <div class="user-detail">
+                                <strong>Last Used:</strong>
+                                <span id="profileLastActivity">Never</span>
+                            </div>
+                            <div class="user-detail">
+                                <strong>Token Generated:</strong>
+                                <span id="profileAccountCreated">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                     <button type="button" class="submit-btn" id="editDetailsBtn">Edit Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback History Section -->
+        <div class="section" id="historySection">
+            <div class="feedback-list-section">
+                <h3 class="list-title">Feedback Records</h3>
+                <div id="feedbackList">
+                    <div class="empty-feedback">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                        <p>Retrieving please wait....</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+         <div class="footer-section">
+    <div class="footer-item">
+        <span class="footer-icon"></span>
+        <p>Make sure the UTR you input is correct</p>
+    </div>
+
+    <div class="footer-item">
+        <span class="footer-icon"></span>
+        <p>Upload the payment picture with UTR</p>
+    </div>
+
+    <div class="footer-item">
+        <span class="footer-icon"></span>
+        <p>Make Sure Your Whatsapp NO,Name & Email id is correct</p>
+    </div>
+</div>
+    </div>
+
+<script>
+    // Input Validation Functions
+    const InputValidator = {
+        // Validate WhatsApp number (10 digits, numbers only)
+        validateWhatsApp: function(number) {
+            const cleaned = number.replace(/\D/g, '');
+            return cleaned.length === 10 && /^\d+$/.test(cleaned);
+        },
+        
+        // Validate UTR number (18 digits, numbers only)
+        validateUTR: function(utr) {
+            const cleaned = utr.replace(/\D/g, '');
+            return cleaned.length === 18 && /^\d+$/.test(cleaned);
+        },
+        
+        // Validate UPI Ref NO (variable length but must be alphanumeric)
+        validateUPIRef: function(ref) {
+            return ref.length >= 8 && /^[A-Za-z0-9]+$/.test(ref);
+        },
+        
+        // Format WhatsApp number for display
+        formatWhatsApp: function(number) {
+            const cleaned = number.replace(/\D/g, '');
+            if (cleaned.length === 10) {
+                return cleaned;
+            }
+            return number;
+        },
+        
+        // Format UTR for display
+        formatUTR: function(utr) {
+            const cleaned = utr.replace(/\D/g, '');
+            if (cleaned.length === 18) {
+                return cleaned;
+            }
+            return utr;
+        }
+    };
+
+    // Navigation State Management
+    let currentSection = 'submit';
+    let userFeedbackCount = 0;
+    let userLastActivity = null;
+
+    // Initialize navigation
+    function initNavigation() {
+        const backBtn = document.getElementById('backBtn');
+        const profileBtn = document.getElementById('profileBtn');
+        const historyBtn = document.getElementById('historyBtn');
+        const pageTitle = document.getElementById('pageTitle');
+        
+        // Back button click handler
+        backBtn.addEventListener('click', function() {
+            if (currentSection === 'submit') {
+                // Go back to dashboard when in main section
+                window.location.href = 'deposit.html';
+            } else {
+                // Go back to main section when in profile/history
+                switchToSection('submit');
+            }
+        });
+        
+        // Profile button click handler
+        profileBtn.addEventListener('click', function() {
+            switchToSection('profile');
+            updateProfileInfo();
+        });
+        
+        // History button click handler
+        historyBtn.addEventListener('click', function() {
+            switchToSection('history');
+        });
+        
+        // Initialize active button
+        updateActiveNavButton();
+    }
+    
+    // Switch between sections
+    function switchToSection(section) {
+        // Hide all sections
+        document.getElementById('submitSection').classList.remove('active');
+        document.getElementById('profileSection').classList.remove('active');
+        document.getElementById('historySection').classList.remove('active');
+        
+        // Remove active class from all nav buttons
+        document.getElementById('profileBtn').classList.remove('active');
+        document.getElementById('historyBtn').classList.remove('active');
+        
+        // Show selected section
+        document.getElementById(section + 'Section').classList.add('active');
+        
+        // Update current section
+        currentSection = section;
+        
+        // Update page title
+        const pageTitle = document.getElementById('pageTitle');
+        switch(section) {
+            case 'submit':
+                pageTitle.textContent = 'Feedback';
+                break;
+            case 'profile':
+                pageTitle.textContent = 'Profile';
+                document.getElementById('profileBtn').classList.add('active');
+                break;
+            case 'history':
+                pageTitle.textContent = 'Records';
+                document.getElementById('historyBtn').classList.add('active');
+                break;
+        }
+        
+        // Update active nav button
+        updateActiveNavButton();
+    }
+    
+    // Update active navigation button
+    function updateActiveNavButton() {
+        const profileBtn = document.getElementById('profileBtn');
+        const historyBtn = document.getElementById('historyBtn');
+        
+        // Remove active class from all
+        profileBtn.classList.remove('active');
+        historyBtn.classList.remove('active');
+        
+        // Add active class to current section button
+        if (currentSection === 'profile') {
+            profileBtn.classList.add('active');
+        } else if (currentSection === 'history') {
+            historyBtn.classList.add('active');
+        }
+    }
+    
+    // Update profile information
+    function updateProfileInfo() {
+        if (!currentUserId || !userData) return;
+        
+        // Update basic info
+        document.getElementById('profileUserId').textContent = currentUserId;
+        document.getElementById('profileUserName').textContent = userData.name || 'Not set';
+        document.getElementById('profileUserEmail').textContent = userData.email || 'Not set';
+        document.getElementById('profileUserWhatsApp').textContent = userData.whatsapp || 'Not set';
+        
+        // Update activity info
+        document.getElementById('profileTotalFeedbacks').textContent = userFeedbackCount;
+        
+        if (userLastActivity) {
+            const lastActivityDate = new Date(userLastActivity);
+            document.getElementById('profileLastActivity').textContent = 
+                lastActivityDate.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+        } else {
+            document.getElementById('profileLastActivity').textContent = 'Never';
+        }
+        
+        // Update account created date
+        if (userData.created) {
+            const createdDate = new Date(userData.created);
+            document.getElementById('profileAccountCreated').textContent = 
+                createdDate.toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+        } else {
+            document.getElementById('profileAccountCreated').textContent = 'Unknown';
+        }
+    }
+
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUC9dI7I6ssJyj9a6MxNwt2UPlYvO8Eyk",
+        authDomain: "kimiapifirebase.firebaseapp.com",
+        databaseURL: "https://kimiapifirebase-default-rtdb.firebaseio.com",
+        projectId: "kimiapifirebase",
+        storageBucket: "kimiapifirebase.firebasestorage.app",
+        messagingSenderId: "982417347295",
+        appId: "1:982417347295:web:58a63f7eb9a49e6dc9cf6a",
+        measurementId: "G-KXZYPV6R1G"
+    };
+
+    // Initialize Firebase
+    let app;
+    let database;
+    let feedbackRef;
+    let usersRef;
+    
+    try {
+        app = firebase.initializeApp(firebaseConfig);
+        database = firebase.database();
+        feedbackRef = database.ref('feedbacks');
+        usersRef = database.ref('users');
+    } catch (error) {
+        console.error("Firebase initialization error:", error);
+    }
+
+    // DOM elements
+    const feedbackForm = document.getElementById('feedbackForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const editDetailsBtn = document.getElementById('editDetailsBtn');
+    const feedbackList = document.getElementById('feedbackList');
+    const imageInput = document.getElementById('imageInput');
+    const imageUploadArea = document.getElementById('imageUploadArea');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImage = document.getElementById('previewImage');
+    const registrationModal = document.getElementById('registrationModal');
+    const updateDetailsModal = document.getElementById('updateDetailsModal');
+    const successModal = document.getElementById('successModal');
+    const errorModal = document.getElementById('errorModal');
+    const registrationForm = document.getElementById('registrationForm');
+    const updateDetailsForm = document.getElementById('updateDetailsForm');
+    const saveRegistrationBtn = document.getElementById('saveRegistrationBtn');
+    const saveUpdateDetailsBtn = document.getElementById('saveUpdateDetailsBtn');
+    const cancelUpdateDetailsBtn = document.getElementById('cancelUpdateDetailsBtn');
+    const closeSuccessModal = document.getElementById('closeSuccessModal');
+    const closeErrorModal = document.getElementById('closeErrorModal');
+    const errorModalText = document.getElementById('errorModalText');
+
+    let selectedImage = null;
+    let currentUserId = null;
+    let userData = null;
+
+    // Generate cryptographically secure 10-digit user ID
+    function generateUserId() {
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        const randomNum = array[0] % 10000000000;
+        return randomNum.toString().padStart(10, '0');
+    }
+
+    // Get or create user ID from localStorage
+    function getOrCreateUserId() {
+        let userId = localStorage.getItem('feedbackUserId');
+        if (!userId) {
+            userId = generateUserId();
+            localStorage.setItem('feedbackUserId', userId);
+        }
+        return userId;
+    }
+
+    // Load user data from Firebase
+    async function loadUserData(userId) {
+        try {
+            const snapshot = await usersRef.child(userId).once('value');
+            if (snapshot.exists()) {
+                return snapshot.val();
+            }
+            return null;
+        } catch (error) {
+            console.error('Error loading user data:', error);
+            return null;
+        }
+    }
+
+    // Save user data to Firebase
+    async function saveUserData(userId, name, email, whatsapp) {
+        try {
+            const userData = {
+                name: name,
+                email: email,
+                whatsapp: whatsapp,
+                created: Date.now(),
+                lastUpdated: Date.now()
+            };
+            await usersRef.child(userId).set(userData);
+            return userData;
+        } catch (error) {
+            console.error('Error saving user data:', error);
+            return null;
+        }
+    }
+
+    // Update user data in Firebase
+    async function updateUserData(userId, name, email, whatsapp) {
+        try {
+            const updates = {
+                name: name,
+                email: email,
+                whatsapp: whatsapp,
+                lastUpdated: Date.now()
+            };
+            await usersRef.child(userId).update(updates);
+            return updates;
+        } catch (error) {
+            console.error('Error updating user data:', error);
+            return null;
+        }
+    }
+
+    // Show registration modal for new users
+    function showRegistrationModal() {
+        registrationModal.style.display = 'flex';
+        document.getElementById('regUserName').focus();
+    }
+
+    // Hide registration modal
+    function hideRegistrationModal() {
+        registrationModal.style.display = 'none';
+        registrationForm.reset();
+    }
+
+    // Show update details modal
+    function showUpdateDetailsModal() {
+        if (!userData) return;
+        
+        // Populate form with current data
+        document.getElementById('updateUserName').value = userData.name || '';
+        document.getElementById('updateUserEmail').value = userData.email || '';
+        document.getElementById('updateUserWhatsApp').value = userData.whatsapp || '';
+        
+        updateDetailsModal.style.display = 'flex';
+        document.getElementById('updateUserName').focus();
+    }
+
+    // Hide update details modal
+    function hideUpdateDetailsModal() {
+        updateDetailsModal.style.display = 'none';
+        updateDetailsForm.reset();
+    }
+
+    // Show success modal
+    function showSuccessModal() {
+        successModal.style.display = 'flex';
+    }
+
+    // Hide success modal
+    function hideSuccessModal() {
+        successModal.style.display = 'none';
+    }
+
+    // Show error modal
+    function showErrorModal(message) {
+        errorModalText.textContent = message;
+        errorModal.style.display = 'flex';
+    }
+
+    // Hide error modal
+    function hideErrorModal() {
+        errorModal.style.display = 'none';
+    }
+
+    // Initialize user session
+    async function initializeUser() {
+        currentUserId = getOrCreateUserId();
+        userData = await loadUserData(currentUserId);
+
+        if (!userData) {
+            // New user - show registration modal
+            setTimeout(() => {
+                showRegistrationModal();
+            }, 500);
+        }
+    }
+
+    // Handle registration form submission
+    saveRegistrationBtn.addEventListener('click', async function() {
+        const userName = document.getElementById('regUserName').value.trim();
+        const userEmail = document.getElementById('regUserEmail').value.trim();
+        const userWhatsApp = document.getElementById('regUserWhatsApp').value.trim();
+        
+        if (!userName) {
+            showErrorModal('Name/UID is required');
+            return;
+        }
+        
+        if (!userEmail) {
+            showErrorModal('Registered Email ID is required');
+            return;
+        }
+        
+        if (!userWhatsApp) {
+            showErrorModal('WhatsApp number is required');
+            return;
+        }
+        
+        if (!validateEmail(userEmail)) {
+            showErrorModal('Please enter a valid email address');
+            return;
+        }
+        
+        // Validate WhatsApp number (10 digits)
+        if (!InputValidator.validateWhatsApp(userWhatsApp)) {
+            showErrorModal('Please enter a valid 10-digit WhatsApp number');
+            return;
+        }
+        
+        // Disable button and show loading
+        saveRegistrationBtn.disabled = true;
+        saveRegistrationBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        
+        try {
+            userData = await saveUserData(currentUserId, userName, userEmail, userWhatsApp);
+            if (userData) {
+                hideRegistrationModal();
+            } else {
+                throw new Error('Failed to save user data');
+            }
+        } catch (error) {
+            console.error('Error saving registration:', error);
+            showErrorModal('Failed to save registration. Please try again.');
+        } finally {
+            // Re-enable button
+            saveRegistrationBtn.disabled = false;
+            saveRegistrationBtn.innerHTML = 'Continue';
+        }
+    });
+
+    // Handle update details form submission
+    saveUpdateDetailsBtn.addEventListener('click', async function() {
+        const userName = document.getElementById('updateUserName').value.trim();
+        const userEmail = document.getElementById('updateUserEmail').value.trim();
+        const userWhatsApp = document.getElementById('updateUserWhatsApp').value.trim();
+        
+        if (!userName) {
+            showErrorModal('Name/UID is required');
+            return;
+        }
+        
+        if (!userEmail) {
+            showErrorModal('Registered Email ID is required');
+            return;
+        }
+        
+        if (!userWhatsApp) {
+            showErrorModal('WhatsApp number is required');
+            return;
+        }
+        
+        if (!validateEmail(userEmail)) {
+            showErrorModal('Please enter a valid email address');
+            return;
+        }
+        
+        // Validate WhatsApp number (10 digits)
+        if (!InputValidator.validateWhatsApp(userWhatsApp)) {
+            showErrorModal('Please enter a valid 10-digit WhatsApp number');
+            return;
+        }
+        
+        // Disable button and show loading
+        saveUpdateDetailsBtn.disabled = true;
+        saveUpdateDetailsBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        
+        try {
+            const updatedData = await updateUserData(currentUserId, userName, userEmail, userWhatsApp);
+            if (updatedData) {
+                // Update local userData
+                userData.name = userName;
+                userData.email = userEmail;
+                userData.whatsapp = userWhatsApp;
+                userData.lastUpdated = Date.now();
+                
+                // Update profile display
+                updateProfileInfo();
+                
+                hideUpdateDetailsModal();
+            } else {
+                throw new Error('Failed to update user data');
+            }
+        } catch (error) {
+            console.error('Error updating details:', error);
+            showErrorModal('Failed to update details. Please try again.');
+        } finally {
+            // Re-enable button
+            saveUpdateDetailsBtn.disabled = false;
+            saveUpdateDetailsBtn.innerHTML = 'Update';
+        }
+    });
+
+    // Cancel update details
+    cancelUpdateDetailsBtn.addEventListener('click', function() {
+        hideUpdateDetailsModal();
+    });
+
+    // Edit details button click handler
+    editDetailsBtn.addEventListener('click', function() {
+        showUpdateDetailsModal();
+    });
+
+    // Email validation
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+$/;
+        return re.test(email);
+    }
+
+    // Image handling
+    imageUploadArea.addEventListener('click', function() {
+        imageInput.click();
+    });
+    
+    imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        // Validate file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+            showErrorModal('Image size must be less than 5MB');
+            return;
+        }
+        
+        // Validate file type
+        if (!file.type.match('image.*')) {
+            showErrorModal('Please select an image file');
+            return;
+        }
+        
+        selectedImage = file;
+        
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            imagePreview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    });
+
+    function removeImage() {
+        selectedImage = null;
+        imageInput.value = '';
+        imagePreview.style.display = 'none';
+    }
+
+    // Convert image to Base64 text
+    function convertImageToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Form submission
+    feedbackForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Check if user is registered
+        if (!userData) {
+            showErrorModal('Please complete your registration first');
+            showRegistrationModal();
+            return;
+        }
+        
+        // Get form values
+        const transactionId = document.getElementById('transactionId').value.trim();
+        const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
+        
+        // Validation
+        if (!currentUserId) {
+            showErrorModal('User ID not found. Please refresh the page.');
+            return;
+        }
+        
+        if (!transactionId) {
+            showErrorModal('UTR/UPI Reference Number is required');
+            return;
+        }
+        
+        // Validate UTR/UPI Ref NO
+        let isValidTransactionId = false;
+        if (InputValidator.validateUTR(transactionId)) {
+            isValidTransactionId = true;
+        } else if (InputValidator.validateUPIRef(transactionId)) {
+            isValidTransactionId = true;
+        }
+        
+        if (!isValidTransactionId) {
+            showErrorModal('Please enter a valid UTR (18 digits) or UPI Ref NO (minimum 8 alphanumeric characters)');
+            return;
+        }
+        
+        if (!whatsappNumber) {
+            showErrorModal('WhatsApp number is required');
+            return;
+        }
+        
+        // Validate WhatsApp number (10 digits)
+        if (!InputValidator.validateWhatsApp(whatsappNumber)) {
+            showErrorModal('Please enter a valid 10-digit WhatsApp number');
+            return;
+        }
+        
+        if (!selectedImage) {
+            showErrorModal('Payment proof image is required');
+            return;
+        }
+        
+        // Disable submit button and show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        
+        try {
+            let imageBase64 = null;
+            
+            // Convert image to base64 if selected
+            if (selectedImage) {
+                try {
+                    imageBase64 = await convertImageToBase64(selectedImage);
+                } catch (error) {
+                    console.error('Error converting image:', error);
+                    showErrorModal('Error processing image');
+                    return;
+                }
+            }
+            
+            // Create feedback object - ONLY DEPOSIT category now
+            const feedback = {
+                userId: currentUserId,
+                userName: userData.name,
+                userEmail: userData.email,
+                userWhatsApp: whatsappNumber,
+                category: 'deposit',
+                transactionId: transactionId,
+                text: null, // Removed feedback text field
+                timestamp: Date.now(),
+                date: new Date().toISOString(),
+                hasImage: !!selectedImage,
+                imageData: imageBase64,
+                status: 'processing',
+                adminNotes: null,
+                lastUpdated: Date.now()
+            };
+            
+            // Save to Firebase
+            if (feedbackRef) {
+                const newFeedbackRef = feedbackRef.push();
+                await newFeedbackRef.set(feedback);
+                
+                // Update activity tracking
+                userLastActivity = Date.now();
+                userFeedbackCount++;
+                
+                // Show success modal
+                showSuccessModal();
+                
+                // Reset form
+                feedbackForm.reset();
+                selectedImage = null;
+                imagePreview.style.display = 'none';
+                imageInput.value = '';
+                
+                // Add the new feedback to the list immediately
+                addFeedbackToUI({ id: newFeedbackRef.key, ...feedback });
+                
+                // Update profile info if needed
+                updateProfileInfo();
+            } else {
+                throw new Error('Firebase not initialized');
+            }
+        } catch (error) {
+            console.error('Error saving feedback:', error);
+            showErrorModal('Failed to submit feedback. Please try again.');
+        } finally {
+            // Re-enable submit button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Submit';
+        }
+    });
+
+    // Load user's feedback from Firebase
+    function loadUserFeedback() {
+        if (!feedbackRef || !currentUserId) return;
+        
+        feedbackRef.orderByChild('userId').equalTo(currentUserId).on('value', (snapshot) => {
+            const feedbacks = snapshot.val();
+            feedbackList.innerHTML = '';
+            userFeedbackCount = 0;
+            userLastActivity = null;
+            
+            if (!feedbacks) {
+                feedbackList.innerHTML = `
+                    <div class="empty-feedback">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                        <p>No feedback submitted yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Convert to array and sort by timestamp (newest first)
+            const feedbackArray = Object.entries(feedbacks).map(([id, data]) => ({
+                id,
+                ...data
+            })).sort((a, b) => b.timestamp - a.timestamp);
+            
+            // Update activity tracking
+            userFeedbackCount = feedbackArray.length;
+            if (feedbackArray.length > 0) {
+                userLastActivity = feedbackArray[0].timestamp;
+            }
+            
+            // Display each feedback
+            feedbackArray.forEach(feedback => {
+                addFeedbackToUI(feedback);
+            });
+            
+            // Update profile info if needed
+            if (currentSection === 'profile') {
+                updateProfileInfo();
+            }
+        });
+    }
+
+    // Add feedback to the UI
+    function addFeedbackToUI(feedback) {
+        // Remove empty message if present
+        const emptyMsg = feedbackList.querySelector('.empty-feedback');
+        if (emptyMsg) emptyMsg.remove();
+        
+        // Format date
+        const date = new Date(feedback.timestamp);
+        const formattedDate = date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        // Category display text - only deposit now
+        const categoryText = 'Deposit';
+        
+        // Status display
+        const statusText = feedback.status === 'completed' ? 'Completed' : 'Processing';
+        const statusClass = feedback.status === 'completed' ? 'status-completed' : 'status-processing';
+        
+        // Create feedback item
+        const feedbackItem = document.createElement('div');
+        feedbackItem.className = 'feedback-item';
+        
+        let notesSection = '';
+        if (feedback.adminNotes) {
+            notesSection = `
+                <div class="feedback-notes">
+                    <div class="feedback-notes-label">Reply:</div>
+                    ${feedback.adminNotes}
+                </div>
+            `;
+        }
+        
+        let transactionInfo = '';
+        if (feedback.transactionId) {
+            transactionInfo = `
+                <div class="feedback-text">
+                    <strong>Transaction ID:</strong> ${feedback.transactionId}
+                </div>
+            `;
+        }
+        
+        let whatsappInfo = '';
+        if (feedback.userWhatsApp) {
+            whatsappInfo = `
+                <div class="feedback-text">
+                    <strong>WhatsApp:</strong> ${feedback.userWhatsApp}
+                </div>
+            `;
+        }
+        
+        feedbackItem.innerHTML = `
+<div class="feedback-header">
+    <div class="feedback-user">Reference id: ${feedback.id}</div>
+    <div class="feedback-date">${formattedDate}</div>
+</div>
+<div class="category-status-container"> <!-- NEW CONTAINER -->
+    <div class="feedback-category">${categoryText}</div>
+    <span class="feedback-status ${statusClass}">${statusText}</span>
+</div>
+${transactionInfo}
+${whatsappInfo}
+${feedback.hasImage ? '<div class="feedback-image"><i class="fas fa-image"></i> Screenshot attached</div>' : ''}
+${notesSection}
+`;
+        
+        // Add to the top of the list
+        feedbackList.prepend(feedbackItem);
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Initialize navigation
+        initNavigation();
+        
+        // Initialize user session
+        await initializeUser();
+        
+        // Load user's feedback
+        loadUserFeedback();
+        
+        // Close modal handlers
+        closeSuccessModal.addEventListener('click', function() {
+            hideSuccessModal();
+        });
+        
+        closeErrorModal.addEventListener('click', function() {
+            hideErrorModal();
+        });
+        
+        // Close modals on overlay click
+        [successModal, errorModal, registrationModal, updateDetailsModal].forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    if (modal === registrationModal) return; // Don't close registration modal on overlay click
+                    modal.style.display = 'none';
+                }
+            });
+        });
+        
+        // Add paste button click handlers
+        document.querySelectorAll('.paste-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const targetId = btn.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+
+                try {
+                    const text = await navigator.clipboard.readText();
+                    if (text) {
+                        input.value = text.trim();
+                        
+                        // Auto-validate after paste
+                        if (targetId === 'whatsappNumber') {
+                            if (!InputValidator.validateWhatsApp(text.trim())) {
+                                input.style.border = '1px solid #f44336';
+                            } else {
+                                input.style.border = '1px solid #4CAF50';
+                            }
+                        } else if (targetId === 'transactionId') {
+                            if (!InputValidator.validateUTR(text.trim()) && !InputValidator.validateUPIRef(text.trim())) {
+                                input.style.border = '1px solid #f44336';
+                            } else {
+                                input.style.border = '1px solid #4CAF50';
+                            }
+                        }
+                    }
+                } catch (err) {
+                    showErrorModal('Clipboard access not allowed please try manually');
+                }
+            });
+        });
+        
+        // Add real-time validation for WhatsApp number input
+        document.getElementById('whatsappNumber').addEventListener('input', function(e) {
+            const value = e.target.value.trim();
+            if (value) {
+                if (!InputValidator.validateWhatsApp(value)) {
+                    e.target.style.border = '1px solid #f44336';
+                } else {
+                    e.target.style.border = '1px solid #4CAF50';
+                }
+            } else {
+                e.target.style.border = 'none';
+            }
+        });
+        
+        // Add real-time validation for UTR input
+        document.getElementById('transactionId').addEventListener('input', function(e) {
+            const value = e.target.value.trim();
+            if (value) {
+                if (!InputValidator.validateUTR(value) && !InputValidator.validateUPIRef(value)) {
+                    e.target.style.border = '1px solid #f44336';
+                } else {
+                    e.target.style.border = '1px solid #4CAF50';
+                }
+            } else {
+                e.target.style.border = 'none';
+            }
+        });
+        
+        // Add real-time validation for registration WhatsApp
+        document.getElementById('regUserWhatsApp').addEventListener('input', function(e) {
+            const value = e.target.value.trim();
+            if (value) {
+                if (!InputValidator.validateWhatsApp(value)) {
+                    e.target.style.border = '1px solid #f44336';
+                } else {
+                    e.target.style.border = '1px solid #4CAF50';
+                }
+            } else {
+                e.target.style.border = 'none';
+            }
+        });
+        
+        // Add real-time validation for update WhatsApp
+        document.getElementById('updateUserWhatsApp').addEventListener('input', function(e) {
+            const value = e.target.value.trim();
+            if (value) {
+                if (!InputValidator.validateWhatsApp(value)) {
+                    e.target.style.border = '1px solid #f44336';
+                } else {
+                    e.target.style.border = '1px solid #4CAF50';
+                }
+            } else {
+                e.target.style.border = 'none';
+            }
+        });
+    });
+</script>
+</body>
+</html>

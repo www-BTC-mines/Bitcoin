@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Settings | User Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <style>
+    /* ================= Reset & Globals ================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at center, rgba(125,44,155,0.99), rgba(128,11,155,0.99)),
+                  url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');
+      background-blend-mode: overlay;
+      background-size: 100% 100%;
+      background-attachment: fixed;   /* keeps background fixed */
+      font-family: 'Segoe UI', sans-serif;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 20px;
+      padding-top: 45px;
+    }
+
+    .main-wrapper {
+      width: 100%;
+      max-width: 480px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ================= Top Bar ================= */
+    .top-bar {
+        position:fixed;
+        top:0;
+        left:0;
+        padding:5px;
+        width:100%;
+        height:40px;
+        z-index: 10000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    background: linear-gradient(0deg, rgba(190,80,150,0.2) 0%, #893BFF 10%, #5539CC 100%);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    }
+
+    .back-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color:#fdbd01;
+      font-size: 24px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .reset-btn {
+      background: linear-gradient(90deg, #468c00 0%, #74bc14 50%, #468c00 100%);
+      color: rgba(45,98,10,1);
+      font-weight: 900;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      text-transform: capitalize;
+            border:1.5px solid rgba(44,98,10,0.5);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.0), inset 0 2px 0 rgba(255,255,255,0.2);
+            transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
+    }
+
+    /* ================= Profile Card ================= */
+    .profile-card {
+      background-color: #210235; /* Dark purple */
+      border-radius: 12px;
+      border:1px solid rgba(265,128,0,1);
+      box-shadow: 0 1px 1px rgba(0,0,0,0.4), inset 0 2px 2px 2px rgba(255,255,255,0.12);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .profile-info-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px solid #fdbd01;
+      background-color: #fff;
+      object-fit: cover;
+    }
+
+    .edit-icon {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 28px;
+      height: 28px;
+      background-color: #00d2c0;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: black;
+      font-size: 12px;
+      border: 2px solid #210235;
+      cursor: pointer;
+    }
+
+    .user-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .detail-box {
+      background-color: #381e4b;
+      padding: 5px 10px;
+      overflow-x: auto;
+      overflow: hidden;
+      border-radius: 4px;
+      font-size: 10px;
+      color: #e0d5e5;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .copy-btn {
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 5px;
+    }
+
+    .balance-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .balance-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .balance-amt {
+      font-size: 18px;
+      font-weight: 900;
+      color: #fdbd01; /* Gold */
+    }
+
+    .action-btn {
+      background: linear-gradient(90deg, #FFA600 0%, #fdbd01 50%, #FFA600 100%);
+      color: #310c49;
+      font-weight: 900;
+      padding: 5px 0;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      text-transform: capitalize;
+      margin-top: 5px;
+            border:1px solid rgba(0,0,0,0.5);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.2);
+            transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
+      
+    }
+    .action-btn2 {
+      background: linear-gradient(90deg, #468c00 0%, #74bc14 50%, #468c00 100%);
+      color: #310c49;
+      font-weight: 900;
+      padding: 5px 0;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      text-transform: capitalize;
+      margin-top: 5px;
+            border:1px solid rgba(0,0,0,0.5);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.2);
+            transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
+    }
+
+    /* ================= VIP Section ================= */
+    .vip-banner {
+      background-color: #210235;
+      border-radius: 12px;
+      border:1px solid rgba(265,128,0,1);
+      box-shadow: 0 1px 1px rgba(0,0,0,0.4), inset 0 2px 2px 2px rgba(255,255,255,0.2);
+      padding: 8px 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .vip-icon {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .vip-progress-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .vip-level-text {
+      color: #fdbd01;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .progress-bar-bg {
+      background-color: #4a3658;
+      height: 12px;
+      border-radius: 10px;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, rgba(285,120,10,1) 0%, rgba(22,130,453,1) 50%, #468c00 100%);
+      object-fit: cover;
+      height: 100%;
+      width: 0%; /* Dynamic */
+      border-radius: 10px;
+      transition: width 3s ease-in-out;
+    }
+
+    .vip-markers {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #9a86a5;
+      font-weight: 700;
+    }
+
+    .vip-chevron {
+      color: #fdbd01;
+      font-size: 30px;
+    }
+
+    /* ================= Stats Grid ================= */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stat-card {
+      background-color: #210235;
+      border-radius: 8px;
+      border:1px solid rgba(26,328,0,1);
+      box-shadow: 0 1px 1px rgba(0,0,0,0.4), inset 0 2px 2px 2px rgba(255,255,255,0.05);
+      padding: 8px 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .stat-amt {
+      color: #fdbd01;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .stat-label {
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ================= Banners ================= */
+    .promo-banner {
+      background-color: #210235;
+      border-radius: 8px;
+      padding: 12px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .promo-text-col h3 {
+      font-size: 18px;
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .promo-text-col p {
+      font-size: 12px;
+      color: #fdbd01;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .promo-img {
+      height: 50px;
+      object-fit: contain;
+      background:url("https://rmoneyindia.com/wp-content/themes/rmoney-8.14/assets/referral-program/images/BannerImages.png");
+      width:80px;
+      background-size:100% 100% ;
+    }
+
+    .apk-banner {
+      background-color: #210235;
+      border-radius: 8px;
+      padding: 12px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .apk-banner h3 {
+      color: #fdbd01;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .download-btn {
+      background: linear-gradient(180deg, #fceb9c, #d19a22);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      color: #3b1154;
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .apk-img {
+      height: 50px;
+      width:50px;
+      background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEidwNM6d568W4RtXYkC4V3TlzjO7QKiM2U9JqIqnqjC-QyBvfmx7AOWSO5djKHZZqUciA1rsd1x01ARz0rVI-p1a4YgGVbDYOaYVCc0yh5KnP7mMpV7ruSW-sHqZCvqSTxp0NqDoVYnyuzFPK__EoG5NUnenRDf_H4VuS_vK8P8qMbzbg3YrvCg9-IpXKQ/s500/1000112034.png");
+      background-size: 100% 100%;
+    }
+
+    /* ================= Social & Footer ================= */
+    .social-section {
+      background-color: #210235;
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .social-section p {
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .s-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .s-ig { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+    .s-wa { background-color: #25D366; }
+    .s-tg { background-color: #0088cc; }
+    .s-fb { background-color: #1877F2; }
+
+    .footer-links {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .brand {
+      color: #fff;
+      font-weight: 900;
+      font-size: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .brand img {
+      width: 20px;
+    }
+
+    .links {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .links a {
+      color: #e0d5e5;
+      text-decoration: underline;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .logout-btn {
+      width: 100%;
+      background: linear-gradient(90deg, #ff8a00, #ff2a00);
+      color: white;
+      border:1px solid rgba(265,128,0,1);
+      box-shadow: 0 1px 1px rgba(0,0,0,0.4), inset 0 2px 2px 2px rgba(255,255,255,0.2);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 900;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    /* ================= Modals ================= */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: #210235;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 12px;
+      padding: 20px;
+      border: 2px solid #fdbd01;
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: #fdbd01;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Edit Profile & Reset Password Modal Specifics */
+    .edit-form input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: none;
+      background: #381e4b;
+      color: white;
+    }
+    
+    .save-btn {
+      background: #fdbd01;
+      color: black;
+      font-weight: 900;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .reset-email-display {
+      background: #381e4b;
+      color: #fdbd01;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 15px 0;
+      font-weight: bold;
+      word-break: break-all;
+      text-align: center;
+      font-size: 16px;
+      border: 1px solid rgba(253, 189, 1, 0.3);
+    }
+
+    /* New Avatar Selection Grid Specifics */
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .avatar-option {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      object-fit: cover;
+      background-color: #fff;
+    }
+
+    .avatar-option.selected {
+      border-color: #5edb62;
+      box-shadow: 0 0 10px rgba(94, 219, 98, 0.5);
+    }
+
+    /* VIP Modal Specifics */
+    .vip-scroll-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding: 10px 0;
+      scroll-snap-type: x mandatory;
+    }
+    
+    .vip-scroll-container::-webkit-scrollbar {
+      height: 3px;
+    }
+    .vip-scroll-container::-webkit-scrollbar-thumb {
+      background: #fdbd01;
+      border-radius: 10px;
+    }
+
+    .vip-card-detail {
+      min-width: 100%;
+      background: #381e4b;
+      padding: 20px 10px;
+      border-radius: 8px;
+      text-align: center;
+      scroll-snap-align: center;
+      border: 2px solid transparent;
+    }
+
+    .vip-card-detail.active-vip {
+      border-color: #5edb62;
+      box-shadow: 0 0 15px rgba(94, 219, 98, 0.4);
+    }
+
+    .vip-card-detail h3 { color: #fdbd01; margin-bottom: 10px; }
+    .vip-card-detail p { color: white; font-size: 12px; margin-bottom: 5px; }
+
+    /* Toast with status border colors */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #381e4b;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      display: none;
+      z-index: 200000;
+      border: 2px solid transparent;
+      text-align: center;
+      min-width: 200px;
+    }
+    
+    .toast.success {
+      border-color: #5edb62; /* Green */
+    }
+    
+    .toast.error {
+      border-color: orange; /* Orange */
+    }
+    
+    .toast.warning {
+      border-color: red; /* Red */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-wrapper">
+    
+    <div class="top-bar">
+      <a href="home.html" class="back-btn"><i class="fas fa-reply"></i></a>
+      <button class="reset-btn" onclick="openResetPasswordModal()">Reset Password</button>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-info-row">
+        <div class="avatar-wrapper">
+          <img id="displayAvatar" src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" class="avatar">
+          <div class="edit-icon" onclick="openEditModal()"><i class="fas fa-pencil-alt"></i></div>
+        </div>
+        <div class="user-details">
+          <div class="detail-box" id="displayEmail">Registered Email address</div>
+          <div class="detail-box" id="displayName">Username</div>
+          <div class="detail-box">
+            <span id="displayReferCode">Referral Code</span>
+            <i class="far fa-copy copy-btn" onclick="copyReferCode()"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="balance-row">
+        <div class="balance-col">
+          <div class="balance-title">Balance</div>
+          <div class="balance-amt" id="displayBalance">₹0.00</div>
+          <button class="action-btn" onclick="window.open('deposit.html', '_blank')">Deposit</button>
+        </div>
+        <div class="balance-col">
+          <div class="balance-title">withdraw</div>
+          <div class="balance-amt" id="displayWithdrawable">₹0.00</div>
+          <button class="action-btn2" onclick="window.open('withdraw.html', '_blank')">withdraw</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vip-banner" onclick="openVipModal()">
+      <img id="vipBadgeIcon" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjvrR-1g8NgiwVrGrAHQ-Xg_KlyAzVqiMVo4thXTRrlIw-_4oRfzlr0sTiJBbeKYyvxLMZyas9iSnpmPU0P8mEdfPHIH0hut6q5QxyhL1PIPvGkYaTiiUK4vwhvwEs4JbhyphenhyphennmEI1JY0YkvM9fbx-ctLvxezRXzL_D_CDfRVVxH60bO2z37ytpwg7jE2ph8/s16000/1000120001.png" alt="VIP" class="vip-icon">
+      <div class="vip-progress-col">
+        <div class="vip-level-text" id="vipLevelTitle">VIP 0</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="vipProgressFill"></div>
+        </div>
+        <div class="vip-markers">
+          <span id="currentVipMarker">VIP 0</span>
+          <span id="nextVipMarker">VIP 1</span>
+        </div>
+      </div>
+      <div class="vip-chevron"><i class="fas fa-angle-double-right"></i></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-amt" id="statInvEarn">₹0.00</div>
+        <div class="stat-label">Investment Earning</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-amt" id="statRefEarn">₹0.00</div>
+        <div class="stat-label">Referral Earnings</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-amt" id="statTotalDep">₹0.00</div>
+        <div class="stat-label">Total Deposit</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-amt" id="statTotalWith">₹0.00</div>
+        <div class="stat-label">Total Withdraw</div>
+      </div>
+    </div>
+
+    <div class="promo-banner" onclick="window.location.href='games.html?section=promotion'">
+      <div class="promo-text-col">
+        <h3>REFER & EARN</h3>
+        <p>Invite Friends Win Together</p>
+      </div>
+      <div class="promo-img" alt="Refer"></div>
+    </div>
+
+    <div class="apk-banner">
+      <div>
+        <h3>Kamaai-Kendra.apk App</h3>
+        <button class="download-btn" onclick="window.location.href='https://apk.e-droid.net/apk/app3585761-irm0z3.apk?v=5'">DOWNLOAD APK</button>
+      </div>
+      <div class="apk-img"></div>
+    </div>
+
+    <div class="social-section">
+      <p>Follow us to get Gift codes!</p>
+      <div class="social-icons">
+<div class="s-icon s-ig" onclick="openLink('https://www.instagram.com/kamaaikendra_kimi?igsh=MTRzd2J4MHBhbm5ydg==')"><i class="fab fa-instagram"></i></div>
+<div class="s-icon s-wa" onclick="openLink('https://wa.me/916000025293')"><i class="fab fa-whatsapp"></i></div>
+<div class="s-icon s-tg" onclick="openLink('https://t.me/kamaaikendra777i')"><i class="fab fa-telegram-plane"></i></div>
+<div class="s-icon s-fb" onclick="openLink('#')"><i class="fab fa-facebook-f"></i></div>
+
+<script>
+function openLink(url) {
+    window.open(url, '_blank');
+}
+</script>
+      </div>
+    </div>
+
+    <div class="footer-links">
+      <div class="brand">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEidwNM6d568W4RtXYkC4V3TlzjO7QKiM2U9JqIqnqjC-QyBvfmx7AOWSO5djKHZZqUciA1rsd1x01ARz0rVI-p1a4YgGVbDYOaYVCc0yh5KnP7mMpV7ruSW-sHqZCvqSTxp0NqDoVYnyuzFPK__EoG5NUnenRDf_H4VuS_vK8P8qMbzbg3YrvCg9-IpXKQ/s500/1000112034.png" alt="logo">
+        Kamaaikendra.com
+      </div>
+      <div class="links">
+        <a href="privacypolicy.html">Privacy policy</a>
+        <a href="terms&conditions.html">Terms of service</a>
+      </div>
+    </div>
+
+    <button class="logout-btn" onclick="logout()">Log out</button>
+
+  </div>
+
+  <div class="modal-overlay" id="editModalOverlay">
+    <div class="modal-content">
+      <i class="fas fa-times close-modal" onclick="closeEditModal()"></i>
+      <h2 style="color:#fdbd01; margin-bottom: 15px; text-align: center;">Edit Profile</h2>
+      <div class="edit-form" style="text-align: center;">
+        <img id="editAvatarPreview" src="" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #fdbd01; margin-bottom: 10px; object-fit: cover; background: #fff;">
+        <br>
+        <button onclick="openAvatarSelectionModal()" style="background:#5edb62; color:#210235; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; cursor:pointer; font-size: 14px;">Change Profile Picture</button>
+        
+        <input type="text" id="editNameInput" placeholder="Enter your name" style="margin-top: 20px;">
+        <button class="save-btn" onclick="saveProfile()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="avatarSelectionModal" style="z-index: 1001;">
+    <div class="modal-content">
+      <i class="fas fa-times close-modal" onclick="closeAvatarSelectionModal()"></i>
+      <h2 style="color:#fdbd01; margin-bottom: 15px; text-align: center;">Choose Avatar</h2>
+      <div class="avatar-grid" id="avatarGrid">
+        </div>
+      <button class="save-btn" onclick="confirmAvatarSelection()">Ok</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="resetPasswordModal">
+    <div class="modal-content">
+      <i class="fas fa-times close-modal" onclick="closeResetPasswordModal()"></i>
+      <h2 style="color:#fdbd01; margin-bottom: 15px; text-align: center;">Reset Password</h2>
+      <p style="color: white; font-size: 14px; text-align: center; margin-bottom: 10px;">We will send a password reset link to your currently logged in email address:</p>
+      
+      <div class="reset-email-display" id="resetEmailDisplay">
+        Loading...
+      </div>
+      
+      <button class="save-btn" id="sendResetBtn" onclick="sendResetPasswordEmail()">Send Reset Password Email</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="vipModalOverlay">
+    <div class="modal-content" style="max-width: 90%;">
+      <i class="fas fa-times close-modal" onclick="closeVipModal()"></i>
+      <h2 style="color:#fdbd01; margin-bottom: 15px; text-align: center;">VIP Privileges</h2>
+      <p style="color: white; font-size: 12px; text-align: center; margin-bottom: 10px;">Your VIP level is based on Total Lifetime Deposit Amount.</p>
+      <div class="vip-scroll-container" id="vipScrollContainer">
+        </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">Message</div>
+
+  <script>
+    // ================= SOUND SYSTEM =================
+    const sfx = {
+      click: new Audio('https://audio.jukehost.co.uk/SOrgXYyuSDba9zvEdeTW8RrOGMrYd9y0'),
+      alert: new Audio('https://audio.jukehost.co.uk/Y5rExcLxu34GqVwjFykiJAU5SploYaGX')
+    };
+    function playSound(type) {
+      if(sfx[type]) {
+        sfx[type].currentTime = 0;
+        sfx[type].play().catch(e => console.log(e));
+      }
+    }
+
+    // ================= FIREBASE INIT =================
+    const firebaseConfig = {
+  apiKey: "AIzaSyAfVcC_wBMaarOExZVrUeqZf65NzT7BCfU",
+  authDomain: "kamaaikendra-546d6.firebaseapp.com",
+  databaseURL: "https://kamaaikendra-546d6-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "kamaaikendra-546d6",
+  storageBucket: "kamaaikendra-546d6.firebasestorage.app",
+  messagingSenderId: "878228615894",
+  appId: "1:878228615894:web:c3660d7510fb05d0d54f77"
+};
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // ================= VIP LOGIC & CONFIG =================
+    const VIP_LEVELS = [
+      { level: 0, minXp: 0, maxOrders: 0, maxAmount: 0, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjvrR-1g8NgiwVrGrAHQ-Xg_KlyAzVqiMVo4thXTRrlIw-_4oRfzlr0sTiJBbeKYyvxLMZyas9iSnpmPU0P8mEdfPHIH0hut6q5QxyhL1PIPvGkYaTiiUK4vwhvwEs4JbhyphenhyphennmEI1JY0YkvM9fbx-ctLvxezRXzL_D_CDfRVVxH60bO2z37ytpwg7jE2ph8/s1039/1000120001.png' },
+      { level: 1, minXp: 200, maxOrders: 2, maxAmount: 200, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi1ZuuaZxChZ2Wxol1zEc-yaXmjxFIedB3izOmlYc16ui573kUtujgjwnZvfrpY7EvMszJN8DrC4v5DKQryU-NY-XwTouehWiARv9ZAYAKpdnTYpEbLduaQJAY0hbGgEiYixy6H7S7zGKNQKaQMPmkWnFUiI9TforZlINMWzk5tqAqyfBN65kxYTGrk8uM/s1039/1000120002.png' },
+      { level: 2, minXp: 500, maxOrders: 2, maxAmount: 500, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgm8U-clMuQh5iX3BE6RCcwlnBXrArm53D2xDO5jB8ZPVjt7Ad1-bVsbveLG22HoFOEt5CmoV5MfnFgZCiEgjxE_x6oAwHMIJRLSw6n8vICMG80RSO0l_sY0ufXsqfpWsXYKvb_lxVULNX4eSr4w2RX9ZNt5Gp6wneC3zRHVj29yZzLiWAn0YsG4c7XGmY/s972/1000120013.png' },
+      { level: 3, minXp: 1000, maxOrders: 3, maxAmount: 1000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgifbI_zTOr_YIf4kBeay8pMWZcSSw1uJtdASllpNCg0hk8hokToBlVgfeKCrahHyP6WSNuX2U4du-OMp2fCGfmZmbQ6iG1R4DE6uWZ4CyfphgtGZvm-k7iPlXhTeDkm_lpTZiYL0axWUESX14RvJvfWTeBonsBxvsvoJmaTHDPVCYoNDiBkOp3AdP1GOw/s1200/1000120011.png' },
+      { level: 4, minXp: 2000, maxOrders: 3, maxAmount: 2000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrHaBSC2EvdcgM2t3Q1nxip31u4OcpnHt76DIr4g00gHQqtgs7fduo8thpD4V8lqR1C3M3fRoAm20V-X59rb15QhP9RyFyf_c7gwhyphenhyphennE-t9N85CHrbfq4-FHRCn4-qV4jQs4u7kJ3qFW-dI0dIbBDzVI2XqyrSFtyF2MtErCDQZgMg7sYfLtnFh-EeWVk/s1174/1000120004.png' },
+      { level: 5, minXp: 5000, maxOrders: 3, maxAmount: 5000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjyOTyqLvlaGZsrkKdWLNfYAx85FPOZiNpK276b72CJxRy8OGIka_TocjCe3WgMVULUaX2_pM9MaG6lEUduR4NcXEAjIba23VRX9PH-TCxdGZNtjakw2MjggOlM4Z9blJD4IVcTZuL5kcDZjYGPFVhfl_9LxogMNRCipnaoRQzUFYvHiA-OBnpcKH-PP8c/s1199/1000120005.png' },
+      { level: 6, minXp: 10000, maxOrders: 5, maxAmount: 10000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiw9Px5NxDNZsJiJG08LSUHzvnqu0HiJfh3aro387yruXdU7NJz79CodpIo9NsHrJo7NqWxceLlGNjrDQEt1Yn7HNLRkLXNo4q5z_ZJbIFCokg5B1FKZ_QUNW0fAR6Si_oKY8stpQZ9GH8pxIgq6YIxf0nPMsPQoXmyqzFUQUoykHcYprkXP5IlcVp5gds/s1017/1000120006.png' },
+      { level: 7, minXp: 30000, maxOrders: 15, maxAmount: 15000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjk9u19vhIWGcRs0OhuzEVq9QSTveDcH8BYlSVNSyPTz9E_y8uoiLh0JlzmISwUTKeYAQ4BVmmgU9piJX6TFXkxt1sZs70InlPXGup6xmStzZRdlamA_0PiRpblGmXBcE6rRuPRhnoUT0XGY0nHjocEMChnZyTSXVXrQRIMnXW_e5VueaBqOr4OoUsfkRQ/s1047/1000120007.png' },
+      { level: 8, minXp: 80000, maxOrders: 25, maxAmount: 20000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgSYv1LV6ZS_o7MSkaOiHip4uPjP95i55WNDFDg_-Wkw2gG4zTgEwLw97N9AtJT8bMZImqXHJ4sSWC3Zfe4_0VmkhGdaTxa1_etl9-kmzI2hmnmI1mJZEBbCtsw-DQBql9GzpK_7baD9ONoaM35p4y-sbVFEdYylQtppwwNfGex1CXBj2Bx36HWxbJmVbA/s1047/1000120008.png' },
+      { level: 9, minXp: 150000, maxOrders: 50, maxAmount: 20000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVWMISet1v5NnTLgtC_pG-3mr-qpa_iNSTQqmq-6zs5_CG_OCP7YZFEUyqVMCdAtXjUMe5QyESnUnHFtsd6CFj1BFM0vLl3LYl96FZUVTWNmnB79tdzk3wvmcURVk45AbafVhUnDl7ChzT2HCxaUsw_3j-NUDv-X1Fn-CH-MaTPp0n9yY1KgMtWR_uhW4/s1047/1000120009.png' },
+      { level: 10, minXp: 250000, maxOrders: 99, maxAmount: 20000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgw5674O7ala9xaJybyIHmCuHhpr3YaYRZvviMr5q48az532mfV1X00ppgIPIelEDQfHpmgoPPakR6D-IiSwZkdovmYGouhzotYeSdfvee4OzUGsHtdVkai3bbhXWlktXNHS6Cxi-qKbSL74v2lNIZJYS7GbUOsuQvViKTXScZ_W28NLt-kMnX13-S5zF4/s1024/1000120010.png' }
+    ];
+
+    let currentUserData = {};
+    let totalDepositGlobal = 0;
+
+    // ================= NEW AVATAR 20-GRID CONFIG =================
+    // Giving you 20 high-quality, pre-defined source URLs. 
+    // They are completely text/link based. NO Base64 text blobs!
+    const PREDEFINED_AVATARS = [
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjytAlnTftCqSbKlYnLieotfz6-NaPGPBSg2EgiHWqfUJOUf-3cUNC3aHqHnoB6rgg1YyG_x2q5eATtwRdwsdb0T5jQNd4I74casgLCJPxyHWkg8yq5O0lEGUYfjL8CKs8CVntMLVFvYvZTxqcxOVFPcOsyOhgwTM_bPC56icTvUjSE0Wxm7aHidVCtQ2U/s1280/1000120276.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5lO7ZGUDt4vhFZaNv_OyF3W0h4pl1IycquQwCnDCZo4RvmBs9fuSrDR3niwO0ZJhy3q5UwTORqOL5EZS_V4pjvIciarqYFJjP_ePsKYOku6PZilUJz18S1HE9kTvtHpGgIE0iHELTTABEEc7XwvkgU1pKQ7Z0j46gnVnve5y_unZwRTdOJMzUjiiQqlI/s1280/1000120277.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgty8vjBEMkRS4EFXgqPfuoWyGgczGYYi6xJB_k-slPjOfO6aL54zlpmAPtJOXw5D9CuuhUCoAEaELf5V5coOCFYyr8cQrtfZ6eC2vGntt-YFXKS-9BKS1iGDxPN1x-WMpaPLfyfI0ayRXzbEAHZuG1glIQGc_m1FKr4VO0ElKcSPLgmKddduvxbOR4gkI/s1024/1000120278.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiHIKROik-7itlDuB8d-egp6eJSSQK-FwE0Rw4ITOE9fEdmhs4a810IEWdCZ8sWnZaGrVvWdYlaRsZHKZeRgeK_gdLw_ZI3l7eMhU_o5CSa_L66kzvdRk9YsjCBIg9r-870AAM1yVQsWvrEXxUlGkDIfXN8W4c5X9NE0e8WiaE-xsB55V5O-Jf21D0VTgw/s626/1000120279.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiHe5TP-lx2tezFgl4_KY2yL3MnUHx7JTVxvDDWaeE_yRNZczzVj7NQMnhgrBoe47FdnzZqWDoBAbzcUqis46VqrQoenCrr_WXghajZAzogu3JXOr4aETknCpkPRSMICKzAqURSe3i1LwE-owWEV7bWzjKyFMItVKeC8VrJFinLhwiDbGORLNQBgDF4g24/s1536/1000120286.webp",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi1CGbFvy_-V3jxSqMWv7c3w_1ITXI3vQa_Ut54MFewo6YuAac3wb2vofkO2MHKgdpn7pH2vcWfCzFjPMs3gdP17JzvQ_vLbsPEkmIdpO3Vl5QKIRsACVpVrdH_7j7yi_1A64JR5N8LqMTCCShuqQPVmznsTCk2rCSLeh_G9tEQLTsqQXZTXulxMU_ePRQ/s1280/1000120287.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhHcedbU4ba5ET4BIjbKOpP7rLYJFl1OWnqYFS8kWk6c6Dta06fuW0qM-86tx_lJAQLrHZPoirtXiU8uv2hhS-QfSy2hXpfQmMJxo5c3Lg1Sul570y5HsuFgGqkPI-SumMDmQD9celRFYJJO_qsOyLbX-mjU_zPgFPz7ZWsnmWvYCYZlSGZDiYuX_o7j-Q/s1280/1000120288.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEikgg9qHFWtC8sox3ehYoy4vJ4KFmIinR1jIf2LrNYaNxH24M9QYzaL8UcvRGrqF0TrRlodYdno5UzZ2BbNeEUCOZjDxQOQBuuv-_c7hPAFU4QNphUIQWN2veuZ8B6efjcySxS_56k5w5tX3pnru1ku48w_hePo39gBfiVjAA7gFgotloadxfQp1XqUEsg/s736/1000120289.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh8z-C0Nnwxg6MpDcY8BMiKeI-sJQyguzXhLhl87TyiO9gD6zLJz8Rm_FDMDCm2p-e9kFHJqvGpXcAthVcQWV4nhTn50jZ5UVyPtwksOWNfGhKd73Hg-5Sto3yqJs1gYryfgSMHLOjE0y6w5LL4m9H-6po9ZWH5CmTYvfCf9rq5J2HkzETVXv2_gjlyi8U/s626/1000120296.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjEZoH-CEWtoLPeynJe6PJEOwr0RA4b5VX50SQzej2SA-1sgziUu_xP-pdC0bLOKY-KZt-4ChpuIWn5shU54SSyPbnMAxhrZqtya05yKylBtCKy7uF9_jSUsVTcM29y0hnQ1W3J-qAfHZCEpNiURBeZ7fWmlABumrptppkFJt9q0QIneeqgiFOPP9oheTA/s1280/1000120297.png",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiP08KbCKixBwlIkAWUydFK4bLMthQxCpy3wCzL0wj9waMonAA4Q2dyKlknOkPNdEjAEpq-8YBZBYz1Zp2A7HvYOw-Zc3-psrECIHEhQUbimoqCqDsr7tpjoqPGBm9GUaLTSDpYY4boyQIsriUCwcIHP99_Gzg-IsPX9yDE_96SXjJ285d945oGIVt1Q4k/s420/1000120272.webp",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDwyYw9wQ_uGhZejPv1Jjj6dUb_-uOTRkTgdPAKwQBajpJ4DcDuylUH5Q-A0rckducHUF6KzNS88DVNEPZ2Jjp7C1b1wiWOQ4B_RZjFnJ7cXazonH7I2vX9T-4lTtF5N90g2T4CcaFCkXXPn_BpCDq1dvqLogrYZHogS51-XWveizZZDWC7qIZGkR_IG0/s1280/1000120282.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuanxKK9X_JiSsz9VvrzgZuNCmv6Z95vVzNPt_JRRKGqgP2k5jmdepby-oJCTcVDjBzYmZOV2jRCXKm5D8JOHEziwHEPlLCgXLNzWng4A1pKFDkO8IWCjGVFthCUhKdaHJxfc8L1IvfShIDgDUSs91TAfoXRhQSHUHPiekwCPKNd1X1Zgqyxa0OhSPB6c/s450/1000120283.webp",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgpywepOAVvECLbekaRq-onPjhqiZnGWGc4CkcQWs7VKwWmOW7-U1buXn0uL9ZCMZ6CeVTAyU3kBxOIvnQ94OzG3ooLgvBBUaMUNg9ZjpjLi3F_esFI53oadhoeVjWjz_J68iPrQFBFbsRLU-XHoqDGUxCpbNdNO2KprPmUJRbWsXaKbeuxnb0A-Vu6UD4/s2048/1000120285.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiFM7greMJAElO7YEPpc5KAn85cOVrU0BflRnShz_czrnYoAvyUw35yt0smbYclKVoYloc4a1aU_3uEBbA0jL0cx73rAgPU1CowrdJVFHLllxR3f05pr_OLfbrTt56whHXd1RHRc_qhpTTBtfmAmkh6yUy4gmbcElF2r5BlPfSgUadGK4syrBLT4iXIZFA/s1960/1000120290.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgh81C662ldFV-sOzWp-iywAdhUDiGja4rFlK8hO_ZBIBDRmysJa8uITr1pi_sKYsgf46Oe6oYtZ-xnNKyEasGcS4W6GXXK-5hszYxSfHYXNmzzZ4KX40xVCqgFSrJxkE_6LDBSFw4sXRT7ZD2-edi3_DiABfXlRQOSoandSe7BdUexjoUB_fvKtGe1l-4/s740/1000120291.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg530Kl2Z-8M8Saj9Ao2lfCzoVoaoBSsbFV0vcvCsUMxUkVhk85_yAbIvh5_gK9n_6KOSt0uKhJMb08jeY-QrbKCwoZwlZCkA7gm4JGuWe5FNDgQZ7AUeAtpZTM9CJS4mCr2ASZK4iYf7mQTYgEXlyo5qq0TCaJbu52M7T1B5KrLa0GWT7AEmHqENblj4c/s1280/1000120292.jpg",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgBJdKr-gOcwTG-QTskfvHaXm0DcsQcZhXPvZSUodiSwDiakk8JLGHyqbXXA9HU_lQvC3s8Zh7fgPvQN2fBgVzpFaieTIUozTqPB0wttm29Re05eVRw7hm4fFr0m9czhV-A5M9an5DHLMxJqPaUx6iIvCO_vDcjnEWtZId1GMWvfyAdRJJbwri7LchyubM/s800/1000120293.webp",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhpgaHROMNTnXkk1AYepsCq9zB2yVQPnRlB97xlNk05P7BNhpBH5LyyGXp-d_C7h-oL5Tg2-kjWhktgx4L4L9ArkFPm26ByY87iLGVbY_CZcLx-VnQw_lOvXWG9Rk5F2GxcAovzp1it6UyNFFI7DH8-s37sa94qV83-EYqltzjl-lHTr1JpWhEOnGXXCr4/s800/1000120294.webp",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhezjfZs82v0OBtTLeP8C0RKZ0EIMVNo2OlmcQJa85O8tikjvr2yQNH1Q9b7iYs_1GbDpND6fVX0NnGylcVCHLutK0ELUNOja-c1loNe_ho0boqoUgkcqovC5_cNz6hdhviG9J28T_Gt9iY7uzUEPySY9jh3Vs30wrDovzrmPXHRJP8udBE8mVPdR0bfFM/s626/1000120295.jpg"
+    ];
+
+    let tempAvatarUrl = "";
+    let gridSelectedAvatarUrl = "";
+
+    // ================= AUTH CHECK & DATA FETCH =================
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        fetchUserData(user.uid);
+      } else {
+        window.location.href = 'index.html';
+      }
+    });
+
+    function fetchUserData(uid) {
+      db.ref(`appusers/${uid}`).on('value', snap => {
+        const data = snap.val() || {};
+        currentUserData = { ...data, uid };
+        
+        // Populate static display
+        document.getElementById('displayEmail').innerText = data.email || 'Email not found';
+        document.getElementById('displayName').innerText = data.profile?.name || data.email?.split('@')[0] || 'User';
+        document.getElementById('displayReferCode').innerText = data.referralCode || 'Not generated';
+        document.getElementById('displayAvatar').src = data.profile?.profilePic || 'https://cdn-icons-png.flaticon.com/512/9203/9203764.png';
+        
+        document.getElementById('displayBalance').innerText = `₹${(data.totalBalance || 0).toFixed(2)}`;
+        document.getElementById('displayWithdrawable').innerText = `₹${(data.withdrawableBalance || 0).toFixed(2)}`;
+        document.getElementById('statRefEarn').innerText = `₹${(data.referralEarnings || 0).toFixed(2)}`;
+
+        calculateAggregates(uid);
+      });
+    }
+
+    function calculateAggregates(uid) {
+      // Total Deposit Success
+      db.ref('depositRequests').orderByChild('uid').equalTo(uid).once('value', snap => {
+        let totalDep = 0;
+        snap.forEach(child => {
+          let val = child.val();
+          if (val.status === 'success' || val.status === 'approved') {
+            totalDep += Number(val.amount) || 0;
+          }
+        });
+        totalDepositGlobal = totalDep;
+        document.getElementById('statTotalDep').innerText = `₹${totalDep.toFixed(2)}`;
+        updateVipUI(totalDep);
+      });
+
+      // Total Withdraw Success
+      db.ref(`appusers/${uid}/withdrawalHistory`).once('value', snap => {
+        let totalWith = 0;
+        snap.forEach(child => {
+          let val = child.val();
+          if (val.status === 'success') {
+            totalWith += Number(val.amount) || 0;
+          }
+        });
+        document.getElementById('statTotalWith').innerText = `₹${totalWith.toFixed(2)}`;
+      });
+
+      // Investment Earnings (Sum of daily returns received)
+      db.ref(`appusers/${uid}/dailyReturnInvestments`).once('value', snap => {
+        let totalInv = 0;
+        snap.forEach(child => {
+          let val = child.val();
+          totalInv += Number(val.totalReturnsReceived) || 0;
+        });
+        document.getElementById('statInvEarn').innerText = `₹${totalInv.toFixed(2)}`;
+      });
+    }
+
+    function updateVipUI(xp) {
+      let currentLvl = VIP_LEVELS[0];
+      let nextLvl = VIP_LEVELS[1];
+      
+      for (let i = 0; i < VIP_LEVELS.length; i++) {
+        if (xp >= VIP_LEVELS[i].minXp) {
+          currentLvl = VIP_LEVELS[i];
+          nextLvl = VIP_LEVELS[i + 1] || VIP_LEVELS[i]; // Cap at max
+        } else {
+          break;
+        }
+      }
+
+      document.getElementById('vipLevelTitle').innerText = `VIP ${currentLvl.level}`;
+      document.getElementById('currentVipMarker').innerText = `VIP ${currentLvl.level}`;
+      document.getElementById('nextVipMarker').innerText = currentLvl.level === 10 ? 'MAX' : `VIP ${nextLvl.level}`;
+      
+      // Setting dynamic icon for the active VIP level banner
+      document.getElementById('vipBadgeIcon').src = currentLvl.icon;
+
+      let progressPct = 100;
+      if (currentLvl.level < 10) {
+        const xpNeeded = nextLvl.minXp - currentLvl.minXp;
+        const xpEarned = xp - currentLvl.minXp;
+        progressPct = (xpEarned / xpNeeded) * 100;
+      }
+      document.getElementById('vipProgressFill').style.width = `${progressPct}%`;
+      
+      buildVipModal(currentLvl.level);
+    }
+
+    // ================= MODAL & UI ACTIONS =================
+    
+    // Toast Notification logic with Dynamic styling 
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.className = 'toast ' + type; // Applies success, warning, or error borders
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+    
+    function copyReferCode() {
+      playSound('click');
+      const code = document.getElementById('displayReferCode').innerText;
+      if (code && code !== 'Not generated') {
+        navigator.clipboard.writeText(code);
+        showToast('Refer code copied!', 'success');
+      }
+    }
+
+    // === Edit Profile Actions ===
+    function openEditModal() {
+      playSound('click');
+      document.getElementById('editModalOverlay').style.display = 'flex';
+      document.getElementById('editNameInput').value = document.getElementById('displayName').innerText;
+      tempAvatarUrl = document.getElementById('displayAvatar').src; // sync up
+      document.getElementById('editAvatarPreview').src = tempAvatarUrl;
+    }
+
+    function closeEditModal() {
+      playSound('click');
+      document.getElementById('editModalOverlay').style.display = 'none';
+    }
+
+    // === NEW: 20-Grid Selection Actions ===
+    function openAvatarSelectionModal() {
+      playSound('click');
+      document.getElementById('avatarSelectionModal').style.display = 'flex';
+      const grid = document.getElementById('avatarGrid');
+      grid.innerHTML = ''; // clear previous
+      
+      // Load the 20 pre-defined images
+      PREDEFINED_AVATARS.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.className = 'avatar-option';
+        
+        // Highlight if it's the currently chosen one
+        if (url === tempAvatarUrl) img.classList.add('selected');
+        
+        img.onclick = () => {
+          playSound('click');
+          // Remove selected class from all
+          document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+          // Add to current clicked
+          img.classList.add('selected');
+          gridSelectedAvatarUrl = url;
+        };
+        grid.appendChild(img);
+      });
+
+      // default failsafe
+      if(!gridSelectedAvatarUrl) gridSelectedAvatarUrl = PREDEFINED_AVATARS[0];
+    }
+
+    function closeAvatarSelectionModal() {
+      playSound('click');
+      document.getElementById('avatarSelectionModal').style.display = 'none';
+    }
+
+    function confirmAvatarSelection() {
+      playSound('click');
+      if (gridSelectedAvatarUrl) {
+        tempAvatarUrl = gridSelectedAvatarUrl;
+        document.getElementById('editAvatarPreview').src = tempAvatarUrl;
+      }
+      closeAvatarSelectionModal();
+    }
+
+    // === Saving Updates to Firebase Database ===
+    function saveProfile() {
+      playSound('click');
+      const newName = document.getElementById('editNameInput').value.trim();
+      const finalAvatar = tempAvatarUrl || document.getElementById('displayAvatar').src;
+      
+      db.ref(`appusers/${currentUserData.uid}/profile`).update({
+        name: newName,
+        profilePic: finalAvatar
+      }).then(() => {
+        showToast("Profile Updated!", "success");
+        closeEditModal();
+      });
+    }
+
+    // === Reset Password Actions ===
+    function openResetPasswordModal() {
+      playSound('click');
+      const user = auth.currentUser;
+      const userEmail = user ? user.email : (currentUserData.email || 'Email not found');
+      
+      document.getElementById('resetEmailDisplay').innerText = userEmail;
+      document.getElementById('resetPasswordModal').style.display = 'flex';
+    }
+
+    function closeResetPasswordModal() {
+      playSound('click');
+      document.getElementById('resetPasswordModal').style.display = 'none';
+      const btn = document.getElementById('sendResetBtn');
+      btn.disabled = false;
+      btn.innerText = "Send Reset Password Email";
+    }
+
+    function sendResetPasswordEmail() {
+      playSound('click');
+      const user = auth.currentUser;
+      
+      if (!user || !user.email) {
+        showToast("error sending reset password email: No user email found", "error");
+        return;
+      }
+
+      const btn = document.getElementById('sendResetBtn');
+      btn.disabled = true;
+      btn.innerText = "Sending...";
+
+      auth.sendPasswordResetEmail(user.email)
+        .then(() => {
+          showToast("reset password email sent successful", "success");
+          closeResetPasswordModal();
+        })
+        .catch((error) => {
+          btn.disabled = false;
+          btn.innerText = "Send Reset Password Email";
+          
+          if (error.code === 'auth/too-many-requests') {
+             showToast("Unable To Send Reset password Email so frequently", "warning");
+          } else {
+             showToast("error sending reset password email", "error");
+          }
+        });
+    }
+
+    // === VIP Modal Actions ===
+    function openVipModal() {
+      playSound('click');
+      document.getElementById('vipModalOverlay').style.display = 'flex';
+      // Auto-scroll to active card
+      setTimeout(() => {
+        const activeCard = document.querySelector('.active-vip');
+        if (activeCard) activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }, 100);
+    }
+
+    function closeVipModal() {
+      playSound('click');
+      document.getElementById('vipModalOverlay').style.display = 'none';
+    }
+
+    function buildVipModal(currentLvlIndex) {
+      const container = document.getElementById('vipScrollContainer');
+      container.innerHTML = '';
+      
+      VIP_LEVELS.forEach(v => {
+        const isActive = v.level === currentLvlIndex ? 'active-vip' : '';
+        const card = document.createElement('div');
+        card.className = `vip-card-detail ${isActive}`;
+        // Injected the VIP image tag using the new independent URL system
+        card.innerHTML = `
+          <img src="${v.icon}" alt="VIP ${v.level}" style="width: 200px; height: 200px; margin-bottom: 5px; object-fit: contain;">
+          <h3>VIP ${v.level}</h3>
+          <p><strong>Required XP:</strong> ${v.minXp}</p>
+          <hr style="border-color:#4a3658; margin:8px 0;">
+          <p><strong>Max Orders per day:</strong> ${v.maxOrders}</p>
+          <p><strong>Max Withdrawl per Order:</strong> ₹${v.maxAmount}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function logout() {
+      playSound('click');
+      auth.signOut().then(() => {
+        window.location.href = 'index.html';
+      });
+    }
+    
+    // Global clicks sound
+    document.addEventListener('click', (e) => {
+        if(e.target.tagName === 'A' || e.target.classList.contains('s-icon')) {
+            playSound('click');
+        }
+    });
+
+  </script>
+</body>
+</html>

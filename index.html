@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="og:locale" content="en_US" >
+    <meta id="mateurl" name="og:url">
+    <meta name="og:type" content="website">
+    <meta name="og:site_name" content="INDIA Mines BTC">
+    <meta name="og:title" content="Mine Bitcoins In INR Daily, become a rich man ">
+    <meta id="description" name="og:description" content="1. Invest On Bitcoin Minning Machines
+2.Earn INR On every part of BTC your Machine Mines From the Comfort Of Your Home 
+3.Invite Friends They get rewards and you will get too">
+    <meta id="secureurl" property="og: image:secure_url" content="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/330px-Bitcoin.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail">
+    <meta id="imges" property="og:image" content="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/330px-Bitcoin.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail">
+    <title>BTC MINE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div class="signup-bonus-modal" id="signupBonusModal">
+  <div class="signup-bonus-container">
+    <div class="signup-bonus-icon"></div>
+    <h2 class="signup-bonus-title">Congratulations</h2>
+    <p class="signup-bonus-subtitle">You've received a special signup Bonus!</p>
+    <div class="signup-bonus-amount" id="signupBonusAmountDisplay">₹0.00</div>
+    <button class="signup-bonus-claim-btn" id="claimBonusBtn" onclick="claimSignupBonus()"> Claim </button>
+  </div>
+</div>
+
+<button class="support-fab" id="supportFab"></button>
+<script>
+const fab = document.getElementById('supportFab');
+let isDragging = true;
+let isTouch = true;
+let dragStartX, dragStartY, fabStartX, fabStartY;
+
+// Mouse events
+fab.addEventListener('mousedown', startDrag);
+document.addEventListener('mousemove', drag);
+document.addEventListener('mouseup', stopDrag);
+
+// Touch events for mobile
+fab.addEventListener('touchstart', startDragTouch);
+document.addEventListener('touchmove', dragTouch);
+document.addEventListener('touchend', stopDragTouch);
+
+function startDrag(e) {
+    isDragging = true;
+    isTouch = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    const rect = fab.getBoundingClientRect();
+    fabStartX = rect.left;
+    fabStartY = rect.top;
+    
+    // Small delay to differentiate between click and drag
+    setTimeout(() => {
+        if (!isDragging) {
+            isDragging = true;
+        }
+    }, 50);
+    
+    e.preventDefault();
+}
+
+function startDragTouch(e) {
+    isDragging = false;
+    isTouch = true;
+    dragStartX = e.touches[0].clientX;
+    dragStartY = e.touches[0].clientY;
+    const rect = fab.getBoundingClientRect();
+    fabStartX = rect.left;
+    fabStartY = rect.top;
+    
+    // Small delay to differentiate between click and drag
+    setTimeout(() => {
+        if (!isDragging) {
+            isDragging = true;
+        }
+    }, 50);
+    
+    e.preventDefault();
+}
+
+function drag(e) {
+    if (!isDragging) return;
+    
+    const deltaX = e.clientX - dragStartX;
+    const deltaY = e.clientY - dragStartY;
+    
+    // Only start actual dragging if movement exceeds threshold (to distinguish from click)
+    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+        updatePosition(deltaX, deltaY);
+    }
+    e.preventDefault();
+}
+
+function dragTouch(e) {
+    if (!isDragging) return;
+    
+    const deltaX = e.touches[0].clientX - dragStartX;
+    const deltaY = e.touches[0].clientY - dragStartY;
+    
+    // Only start actual dragging if movement exceeds threshold
+    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+        updatePosition(deltaX, deltaY);
+        e.preventDefault();
+    }
+}
+
+function updatePosition(deltaX, deltaY) {
+    let newX = fabStartX + deltaX;
+    let newY = fabStartY + deltaY;
+    
+    // Constrain to viewport
+    const fabWidth = fab.offsetWidth;
+    const fabHeight = fab.offsetHeight;
+    const maxX = window.innerWidth - fabWidth;
+    const maxY = window.innerHeight - fabHeight;
+    
+    newX = Math.max(0, Math.min(newX, maxX));
+    newY = Math.max(0, Math.min(newY, maxY));
+    
+    fab.style.left = newX + 'px';
+    fab.style.top = newY + 'px';
+    fab.style.right = 'auto';
+    fab.style.bottom = 'auto';
+}
+
+function stopDrag(e) {
+    if (isDragging && !isTouch) {
+        isDragging = false;
+    }
+}
+
+function stopDragTouch(e) {
+    if (isDragging && isTouch) {
+        isDragging = false;
+        
+        // Check if it was a tap (not a drag)
+        const touch = e.changedTouches[0];
+        const deltaX = Math.abs(touch.clientX - dragStartX);
+        const deltaY = Math.abs(touch.clientY - dragStartY);
+        
+        // If movement was very small, treat it as a click
+        if (deltaX < 10 && deltaY < 10) {
+            handleClick();
+        }
+    }
+}
+
+function handleClick() {
+    window.location.href = 'chat.html';
+}
+
+// Click handler for mouse
+fab.addEventListener('click', (e) => {
+    // Only handle click if not dragging and not on touch device
+    if (!isDragging && !isTouch) {
+        handleClick();
+    }
+});
+
+// Prevent default touch behavior
+fab.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+}, { passive: false });
+</script>
+  <script>
+    // Create loading screen elements
+    const loadingScreenHTML = `
+    <div class="loading-screen">
+      <div class="logo-area">
+        <img src="https://cdn-icons-png.flaticon.com/512/6557/6557081.png" alt="BTC"/>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar">0%</div>
+      </div>
+      <div class="bottom-text" id="loadingText">Loading...</div>
+      <div class="footer">©BTC mine CORPORATION ALL RIGHTS RESERVED.</div>
+    </div>
+    `;
+
+    // Add loading screen to the body
+    document.body.insertAdjacentHTML('afterbegin', loadingScreenHTML);
+
+    // Apply the same styles
+    const loadingStyles = document.createElement('style');
+    loadingStyles.textContent = `
+      /* Loading screen styles */
+      .loading-screen {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          180deg,
+          #1a1a1a 20%,
+          #2a2a2a 100%
+        );
+        background-size: 100% 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 60px 20px 30px;
+        box-sizing: border-box;
+        z-index: 9999;
+        text-shadow:0 1px 1px rgba(0,0,0,0.99);
+      }
+
+      .logo-area {
+        text-align: center;
+        color: yellow;
+      }
+
+      .logo-area img {
+        max-height: 220px;
+        max-width: 220px;
+        min-height:220px;
+        background-color: transparent;
+        border-radius: 50%;
+        filter: drop-shadow(0 0 5px rgba(222,0,555,0.15)) 
+              drop-shadow(0 0 1000px rgba(155, 5, 548, 0.19));
+        transition: transform 0.01s ease-out;
+        pointer-events: auto;
+        transform:rotate(17deg);
+      }
+
+      .logo-subtitle {
+        color: #bfff80;
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .progress-container {
+        height:20px;
+        width: 90%;
+        background-color: #222;
+        border-radius: 30px;
+        overflow: hidden;
+        position: fixed;
+        bottom:10%;
+        border:1px solid #000;
+        outline:none;
+        pointer-events: auto;
+      }
+
+      .progress-bar {
+        position: relative;
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          #00ff3b 0%,
+          #00cc2e 25%,
+          #00b82a 50%,
+          #00cc2e 75%,
+          #00ff3b 100%
+        );
+        border-radius: 30px;
+        transition: width 0s ease;
+        box-shadow: inset 0 0 4px 2px rgba(255, 255, 255, 0.1);
+        transition: width 0.2s ease;
+        display: flex;
+        align-items: center;
+        padding-left: 10px;
+        color: white;
+        font-weight: 900;
+        font-size: 12px;
+        font-family:UI;
+      }
+
+      .coin-icon {
+        position: absolute;
+        height: 40px;
+      }
+
+      .bottom-text {
+        position:fixed;
+        bottom:5%;
+        color:#fdbd01;
+        font-size: 11px;
+        font-weight:900;
+        font-family:UI;
+        text-shadow:none;
+      }
+
+      .footer {
+        font-size: 10px;
+        color: white;
+        font-weight: 900;
+        transition: text-shadow 0.3s ease-out;
+        font-family:UI;
+        position:fixed;
+        bottom:2%;
+      }
+
+      .footer:hover {
+        text-shadow: 
+          0 0 10px green,
+          0 0 20px limegreen,
+          0 0 30px lime;
+      }
+
+      /* Responsive styles */
+      @media (min-width: 600px) {
+        .logo-area img {
+          height: 350px;
+          width: 350px;
+        }
+        
+        .progress-container {
+          width: 70%;
+          margin-top: 50%;
+        }
+        
+        .logo-subtitle,
+        .bottom-text,
+        .footer {
+          font-size: 16px;
+        }
+        
+        .progress-bar {
+          height: 25px;
+          font-size: 16px;
+        }
+        
+        .coin-icon {
+          height: 45px;
+        }
+      }
+
+      @media (min-width: 900px) {
+        .loading-screen {
+          padding: 80px 40px 40px;
+        }
+        
+        .logo-area img {
+          height: 400px;
+          width: 400px;
+        }
+        
+        .progress-container {
+          width: 60%;
+          margin-top: 30%;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .loading-screen {
+          padding: 100px 60px 60px;
+          max-width: 1200px;
+          margin: 0 auto;
+          left: 0;
+          right: 0;
+        }
+        
+        .logo-area img {
+          height: 450px;
+          width: 450px;
+        }
+        
+        .progress-container {
+          width: 50%;
+          margin-top: 20%;
+        }
+        
+        .logo-subtitle,
+        .bottom-text,
+        .footer {
+          font-size: 18px;
+        }
+        
+        .progress-bar {
+          height: 30px;
+          font-size: 18px;
+        }
+        
+        .coin-icon {
+          height: 50px;
+        }
+      }
+
+      @media (min-width: 1600px) {
+        .logo-area img {
+          height: 500px;
+          width: 500px;
+        }
+        
+        .progress-container {
+          width: 40%;
+        }
+      }
+
+      @media (max-height: 600px) and (orientation: landscape) {
+        .loading-screen {
+          padding: 20px;
+          flex-direction: row;
+          justify-content: space-around;
+          align-items: center;
+        }
+        
+        .logo-area {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 50%;
+        }
+        
+        .logo-area img {
+          height: 200px;
+          width: 200px;
+        }
+        
+        .progress-container {
+          width: 40%;
+          margin-top: 0;
+          margin-left: 20px;
+        }
+        
+        .logo-subtitle {
+          margin-top: 5px;
+          font-size: 12px;
+        }
+        
+        .bottom-text {
+          position: absolute;
+          bottom: 10px;
+          right: 20px;
+          margin-top: 0;
+          font-size: 12px;
+        }
+        
+        .footer {
+          position: absolute;
+          bottom: 10px;
+          left: 20px;
+          font-size: 12px;
+        }
+      }
+
+      @media (min-width: 900px) and (orientation: landscape) and (max-height: 600px) {
+        .logo-area img {
+          height: 250px;
+          width: 250px;
+        }
+        
+        .progress-container {
+          width: 35%;
+        }
+        
+        .logo-subtitle,
+        .bottom-text,
+        .footer {
+          font-size: 14px;
+        }
+        
+        .progress-bar {
+          height: 25px;
+          font-size: 14px;
+        }
+        
+        .coin-icon {
+          height: 40px;
+        }
+      }
+
+      @media (max-height: 400px) and (orientation: landscape) {
+        .logo-area img {
+          height: 150px;
+          width: 150px;
+        }
+        
+        .progress-container {
+          width: 45%;
+        }
+        
+        .progress-bar {
+          height: 18px;
+          font-size: 10px;
+        }
+        
+        .coin-icon {
+          height: 30px;
+        }
+        
+        .logo-subtitle,
+        .bottom-text,
+        .footer {
+          font-size: 10px;
+        }
+      }
+    `;
+    document.head.appendChild(loadingStyles);
+
+    let isAuthReady = false;
+    let loadingComplete = false;
+
+    // Loading animation logic
+    const progressBar = document.getElementById('progressBar');
+    const loadingText = document.getElementById('loadingText');
+    const minDuration = 2000; // 2 seconds
+    const maxDuration = 5000; // 5 seconds
+    const duration = Math.random() * (maxDuration - minDuration) + minDuration;
+    const interval = 100;
+    const steps = duration / interval;
+    let progress = 0;
+    let count = 0;
+
+    const messages = [
+      "Safe, secure & easy payment methods",
+      "Safe and Secure IMPS/UPI withdrawls ",
+      "Best value and top Rewards",
+      "Best Mining Machines, Top Miners",
+      "24/7 customer Service Support",
+      "India's #1 Trusted platform",
+      "Fair and Responsible Platform",
+      "#1 Trusted and Easy to use Platform"
+    ];
+
+    function checkAndRedirectSignedInUser() {
+      const user = auth.currentUser;
+      
+      if (user) {
+        if (user.providerData[0].providerId === 'password' && !user.emailVerified) {
+            // Unverified User: Hide loading screen to show verification modal
+            document.querySelector('.loading-screen').style.display = 'none';
+            document.getElementById('mainAuthContainer').style.display = 'block';
+            unverifiedUser = user;
+            showVerificationModal(user.email);
+        } else {
+            // User is signed in and verified. Loading screen REMAINS VISIBLE during checks.
+            database.ref('appusers/' + user.uid + '/hasReceivedSignupBonus').once('value')
+              .then(snapshot => {
+                const hasReceivedSignupBonus = snapshot.exists() ? snapshot.val() : false;
+                
+                if (hasReceivedSignupBonus) {
+                  // Bonus already claimed, Instant Redirect, loading screen stays until page unloads
+                  saveToLocalStorage(user, user.providerData[0].providerId);
+                  window.location.replace(REDIRECT_URL);
+                } else {
+                  database.ref('appusers/' + user.uid + '/pendingSignupBonusAmount').once('value')
+                    .then(bonusSnapshot => {
+                      if (bonusSnapshot.exists() && !hasShownSignupBonusModal) {
+                        pendingSignupBonusAmount = bonusSnapshot.val();
+                        
+                        // Handle invalid bonus (< 1.0) instantly behind the scenes
+                        if (pendingSignupBonusAmount < 1) {
+                            database.ref('appusers/' + user.uid).update({
+                                hasReceivedSignupBonus: true,
+                                pendingSignupBonusAmount: null
+                            }).then(() => {
+                                saveToLocalStorage(user, user.providerData[0].providerId);
+                                window.location.replace(REDIRECT_URL); // Instant Redirect
+                            });
+                        } else {
+                            // Valid Bonus: Hide loading screen and show the bonus modal overlay
+                            document.querySelector('.loading-screen').style.display = 'none';
+                            document.getElementById('mainAuthContainer').style.display = 'block';
+                            showSignupBonusModal(pendingSignupBonusAmount);
+                        }
+                      } else {
+                        // No pending bonus, Instant Redirect
+                        saveToLocalStorage(user, user.providerData[0].providerId);
+                        window.location.replace(REDIRECT_URL);
+                      }
+                    });
+                }
+              });
+        }
+      }
+    }
+
+    const intervalId = setInterval(() => {
+      count++;
+      progress = Math.min((count / steps) * 100, 100);
+      progressBar.style.width = progress + '%';
+      progressBar.innerText = Math.floor(progress) + '%';
+
+      if (progress >= 100) {
+        clearInterval(intervalId);
+        
+        // Ensure firebase auth state has fired at least once before making routing decisions
+        const finalizeLoading = () => {
+            if (!isAuthReady) {
+                setTimeout(finalizeLoading, 50);
+                return;
+            }
+            
+            loadingComplete = true;
+            const user = auth.currentUser;
+            
+            if (user) {
+                // If user exists, we do NOT hide the loading screen immediately.
+                // We keep it up as a game loader while verifying background stats.
+                checkAndRedirectSignedInUser();
+            } else {
+                // Not logged in. Hide loading screen and reveal auth forms smoothly.
+                document.querySelector('.loading-screen').style.display = 'none';
+                document.getElementById('mainAuthContainer').style.display = 'block';
+                showDefaultAuth();
+            }
+        };
+        
+        finalizeLoading();
+      } else if (count % 10 === 0) {
+        const msgIndex = Math.floor(Math.random() * messages.length);
+        loadingText.textContent = messages[msgIndex];
+      }
+    }, interval);
+    
+    // Removed the window 'load' listener that prematurely hides the loading screen
+    // This ensures the 100% progress strictly completes every single time.
+  </script>
+
+  <div class="auth-container" id="mainAuthContainer" style="display: none;">
+    <div class="auth-header">
+      <div class="auth-logo"></div>
+    </div>
+
+    <div class="auth-body">
+      <div class="auth-tabs" id="authTabs">
+        <div class="auth-tab active" onclick="showTab('login')">Sign In</div>
+        <div class="auth-tab" onclick="showTab('signup')">Sign Up</div>
+      </div>
+
+      <div id="login" class="auth-form active">
+        <div class="spinner" id="loginSpinner"></div>
+        <div class="form-group">
+          <i class="fas fa-envelope form-icon"></i>
+          <input type="email" id="loginEmail" class="form-control" placeholder="Enter your Gmail address">
+        </div>
+        <div class="form-group">
+          <i class="fas fa-lock form-icon"></i>
+          <input type="text" id="loginPassword" class="form-control" placeholder="Enter your password">
+        </div>
+        
+        <button class="btn btn-primary" onclick="signIn()">Sign In</button>
+          <a href="#" onclick="showPasswordReset()" style="display: block; text-align: center; font-size: 14px; font-family:Segoe UI; margin: 20px; color:white;">Forgot password?</a>
+      </div>
+
+      <div id="signup" class="auth-form">
+        <div class="spinner" id="signupSpinner"></div>
+        <div class="form-group">
+          <i class="fas fa-envelope form-icon"></i>
+          <input type="email" id="signupEmail" class="form-control" placeholder="Enter your Gmail address">
+        </div>
+        <div class="form-group">
+          <i class="fas fa-lock form-icon"></i>
+          <input type="text" id="signupPassword" class="form-control" placeholder="Create a password (min 6 characters)" oninput="checkPasswordStrength()">
+        </div>
+        
+        <div class="form-group">
+          <i class="fas fa-lock form-icon"></i>
+          <input type="text" id="confirmPassword" class="form-control" placeholder="Confirm your password">
+          <div class="password-strength">
+            <div class="password-strength-fill" id="passwordStrength"></div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <i class="fas fa-user-plus form-icon"></i>
+          <input type="text" id="signupReferralCode" class="form-control" placeholder="Enter referral code if any (optional)" maxlength="10">
+        </div>
+        
+        <button class="btn btn-primary" onclick="signUp()">Signup and Claim ₹300</button>
+      </div>
+
+      <button class="help-tutorial-btn" id="helpTutorialBtn">Need Help?</button>
+
+      <div id="verificationSuccess" style="display: none; text-align: center; padding: 30px;">
+        <div style="width: 100px; height: 100px; background: #4CAF50; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px;">
+          <i class="fas fa-check" style="font-size: 40px; color: white;"></i>
+        </div>
+        <h2 style="color: #005530; margin-bottom: 10px;">Email Verified!</h2>
+        <p style="color: #005530; margin-bottom: 20px;">Your email has been successfully verified. You can now access your account.</p>
+        <button class="btn btn-primary" onclick="showDefaultAuth()">
+          <i class="fas fa-sign-in-alt"></i> Continue to Login
+        </button>
+      </div>
+    </div>
+
+    <div id="userInfo">
+      <div class="user-avatar">
+        <i class="fas fa-user"></i>
+      </div>
+      <p class="user-email">Logged in as: <span id="userEmail"></span></p>
+    </div>
+  </div>
+
+  <div class="verification-modal" id="verificationModal">
+    <div class="verification-container">
+      <button class="modal-close-btn" onclick="closeVerificationModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="verification-icon"></div>
+      <h2 class="verification-title">Verify Your Email</h2>
+      <p class="verification-message" id="verificationMessage">
+        A verification link has been sent to your email address. Please check your inbox or spam folder and click the link to verify your account before proceeding.
+      </p>
+      <div class="verification-buttons">
+        <button class="verification-button verification-primary" onclick="resendVerificationEmail()">Resend</button>
+        <button class="verification-button verification-secondary" onclick="checkEmailVerification()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="help-modal" id="helpModal">
+    <div class="help-modal-content" onclick="event.stopPropagation()">
+      <div class="help-modal-body">
+        <h3><i class="fas fa-question-circle"></i> Help & Tutorial</h3>
+        
+        <div class="help-step">
+          <h4>How To create account?</h4>
+          <p>Step 1.Click on the signup tab button</p>
+          <p>Step 2.Enter your gmail and set a password</p>
+          <p>Step 3.Click Create account button To Create account</p>
+          <p>Step 4.Verify Your Gmail And Claim Your Bonus.</p>
+          <div class="step-image"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEin4Xv6Fz7ZKzK3DTRDTTwfG5Ehj57apSJjtuh_5FyKTNRlU4ZQaiNLCOCSbSC5vbqB2VVaWACd8I1SigqBbES0RSX2cv6vHmVEJV1Ylm7q5a_5wgkL9KPLgW8XF9ScFzUriIeiZhalEOFPZqiHNqkBc7GBlQ-q3z7f0_neP_y_kAvNgtMNJQbzcpTNvSg/s2000/1000117183.png"></div>
+        </div>
+
+        <div class="help-step">
+          <h4>How To Find verification Mail?</h4>
+          <p>Step 1.Open Your Gmail App</p>
+          <p>Step 2.Click The Threelined Menu icon on the top left</p>
+          <p>Step 3.Scroll The Menu untill You See The Spam category</p>
+          <p>Step 4.Find The mail From Kimi And Click The Mail to Open</p>
+          <p>Step 5.Click On The Link And Verify Your Gmail</p>
+          <p>Click on REPORT NOT SPAM to avoid Delays in The Future</p>
+          <div class="step-image"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgftVX-GeMkL0tm8Gp6ssrUlXN5H_4fAAVXlL8GZqdP1PdIyy7B3HKQYaYs9Fk70-bsW6fqHKwIjZoclDN95R1_h-XV36XMSlu_35oHLGNXY4r147mI86-vhRK4eHv5KGol0BJW1ZB1R6cEE2e7JQ58AWwyu5f4J7RWJq3z3bjKljhSQs2sBOSeRXtPEYU/s16000/1000117112.png"></div>
+        </div>
+
+        <div class="help-step">
+          <h4>How To Sign-in To my Account?</h4>
+          <p>Step 1. Enter Your Gmail address</p>
+          <p>Step 2. Enter Your Password</p>
+          <p>Step 3. Click On The Sign in Button</p>
+          <div class="step-image"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjJQKlFzK9GSHc4Ejgwgl-Zp1wJeocW0U1CqUaHXxQ1PYHjLSebocMogAtBtnCcVGi6Ey6Hg96KRcBlVhPFlr7K7ZHB7gjr9oKj0iscPZw536PcwPfDJ5t5QzfVJS1bQEsrmFcqDDlskypdB82rrJuOXjkrQcvNHaH3CGW1O1Uj7ng_1uEQ23BhTHuOKos/s16000/1000117186.png"></div>
+        </div>
+
+        <div class="help-step">
+          <h4>How To Reset Password?</h4>
+          <p>Step 1.Enter Your Gmail Address</p>
+          <p>Step 2.Click On The Forgot Password</p>
+          <p>Step 3.Open The Password Reset Mail On The Gmail App</p>
+          <p>Step 4.Click On The Password Reset Button and Set A new Password</p>
+         <div class="step-image"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-F7sxOq2wp_oJHddW_cdUqEdbU9piJKM48CHGb8VtrMLV5ckH2UdXl0yqAW-u1gLEn2reaT_yD4laN9qltbqNotXkNvNKip58uzQmZ7lAlTkJtxVTFBmtE2tbGSR42A1XVJrYsXb5LPKC2BSA-dWzhUzlI8sgjSwYf5VQ4_VSDgn17uqLrVvwY1eSzM8/s16000/1000117192.png"></div>
+        </div>
+
+        <div class="help-faq">
+          <h4>Frequently Asked Questions</h4>
+          <div class="help-faq-item">
+            <strong> Why Only Gmail ?</strong>
+            <p>We use Gmail for secure and reliable Security Verification. Other providers may Not Be Supported By All Countries and Thier Laws.</p>
+          </div>
+          <div class="help-faq-item">
+            <strong> Didn't get verification email?</strong>
+            <p>Check your spam folder. If not there, click "Resend" in the verification popup.</p>
+          </div>
+          <div class="help-faq-item">
+            <strong> How much bonus will I get?</strong>
+            <p>New users get ₹100–999 randomly, Fixed ₹300 if you use a referral code.</p>
+          </div>
+          <div class="help-faq-item">
+            <strong> Where is my money?</strong>
+            <p>After claiming bonus, funds appear in your wallet. You can play Games and invest The Money To Withdraw them.</p>
+          </div>
+        </div>
+      </div>
+      <div class="help-modal-close">
+        <button class="close-modal-btn" onclick="closeHelpModal()"><i class="fas fa-chevron-left"></i> Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Success message</span>
+  </div>
+ <script>
+     // Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAfVcC_wBMaarOExZVrUeqZf65NzT7BCfU",
+  authDomain: "kamaaikendra-546d6.firebaseapp.com",
+  databaseURL: "https://kamaaikendra-546d6-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "kamaaikendra-546d6",
+  storageBucket: "kamaaikendra-546d6.firebasestorage.app",
+  messagingSenderId: "878228615894",
+  appId: "1:878228615894:web:c3660d7510fb05d0d54f77"
+};
+
+const REDIRECT_URL = "home.html";
+const NEW_USER_REFERRAL_BONUS = 300; 
+const REFERRER_MISSION_REWARD = 251; 
+
+const SIGNUP_BONUS_MIN = 300; 
+const SIGNUP_BONUS_MAX = 300; 
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const database = firebase.database();
+
+// Flag auth status initially
+auth.onAuthStateChanged(() => {
+    isAuthReady = true;
+});
+
+// User-friendly error messages
+const errorMessages = {
+    "auth/invalid-email": "Please enter a valid Gmail address",
+    "auth/user-disabled": "This account has been banned",
+    "auth/user-not-found": "No account found with this email",
+    "auth/wrong-password": "Incorrect password",
+    "auth/email-already-in-use": "This email is already registered",
+    "auth/operation-not-allowed": "This operation is not allowed",
+    "auth/weak-password": "Password must be 6-50 characters",
+    "auth/too-many-requests": "Too many attempts. Please try again later",
+    "auth/network-request-failed": "Network error. Please check your connection",
+    "auth/expired-action-code": "The action code has expired. Please try again",
+    "auth/invalid-action-code": "Invalid action code. Please try again",
+    "default": "Please enter a valid Gmail address/password. or Please try again later"
+};
+
+// Current user waiting for verification
+let unverifiedUser = null;
+let currentMode = 'default'; // default, resetPassword, verifyEmail
+let authStateListener = null;
+let pendingSignupData = null; // Store signup data for later processing
+
+// NEW: Variables for signup bonus modal
+let pendingSignupBonusAmount = 0;
+let hasShownSignupBonusModal = false;
+let isClaimingBonus = false;
+let referralCodeUsed = null; // Store referral code used
+let isRedirecting = false; // Flag to prevent multiple redirects
+let isProcessingVerification = false; // Flag to prevent multiple verification processing
+
+// Transaction ID Generator for authentication script
+class TransactionIDGenerator {
+    constructor() {
+        this.incomeSerial = 1;
+        this.outgoingSerial = 1;
+    }
+    
+    generateCryptoNumber() {
+        // Generate 10-digit cryptographically secure random number
+        const array = new Uint32Array(3);
+        window.crypto.getRandomValues(array);
+        const randomNum = (array[0] * array[1] + array[2]) % 10000000000;
+        return randomNum.toString().padStart(10, '0');
+    }
+    
+    generateIncomeID() {
+        const cryptoNum = this.generateCryptoNumber();
+        const serial = this.incomeSerial.toString().padStart(2, '0');
+        this.incomeSerial++;
+        if (this.incomeSerial > 99) this.incomeSerial = 1;
+        return `IBR${cryptoNum}${serial}`;
+    }
+}
+
+const transactionIDGen = new TransactionIDGenerator();
+
+// NEW: Function to extract referral code from URL
+function extractReferralCodeFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get('ref');
+    
+    if (refCode && refCode.length === 10 && /^[A-Z0-9]+$/.test(refCode)) {
+        console.log("Referral code found in URL:", refCode);
+        return refCode.toUpperCase();
+    }
+    
+    // Also check for other common referral parameter names
+    const referralCode = urlParams.get('referral') || urlParams.get('referral_code') || urlParams.get('refcode');
+    if (referralCode && referralCode.length === 10 && /^[A-Z0-9]+$/.test(referralCode)) {
+        console.log("Referral code found in URL (alternative parameter):", referralCode);
+        return referralCode.toUpperCase();
+    }
+    
+    return null;
+}
+
+// NEW: Function to prefill referral code and switch to signup tab
+function prefillReferralCodeAndSwitchTab() {
+    const refCode = extractReferralCodeFromURL();
+    
+    if (refCode) {
+        // Switch to signup tab
+        showTab('signup');
+        
+        // Prefill the referral code input field
+        const referralInput = document.getElementById('signupReferralCode');
+        if (referralInput) {
+            referralInput.value = refCode;
+            console.log("Referral code prefilled:", refCode);
+            
+            // Show a notification
+            setTimeout(() => {
+                showToast(`Referral code ${refCode} has been prefilled!`, 'success');
+            }, 500);
+        }
+        
+        return true;
+    }
+    
+    return false;
+}
+
+// NEW: Function to create confetti effect
+function createConfetti() {
+    const modal = document.getElementById('signupBonusModal');
+    const colors = ['#ffd700', '#ff9800', '#ff5722', '#4caf50', '#2196f3', '#9c27b0'];
+    
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = Math.random() * 10 + 5 + 'px';
+        confetti.style.height = Math.random() * 10 + 5 + 'px';
+        confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        modal.appendChild(confetti);
+        
+        // Remove confetti after animation
+        setTimeout(() => {
+            if (confetti.parentNode) {
+                confetti.parentNode.removeChild(confetti);
+            }
+        }, 5000);
+    }
+}
+
+// Check URL parameters on page load
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Check for email verification mode
+    if (urlParams.has('mode') && urlParams.get('mode') === 'verifyEmail') {
+        handleEmailVerification();
+        return;
+    }
+    
+    // Default auth page setup
+    showDefaultAuth();
+    
+    // Check for referral code and prefill if present
+    const hasReferralCode = prefillReferralCodeAndSwitchTab();
+    
+    // Set up auth state listener
+    setupAuthStateListener();
+    
+    // Bonus logic check moved entirely behind the loading screen
+};
+
+// Helper function to check and redirect to home
+function checkAndRedirectToHome(user) {
+    if (isRedirecting) return;
+    
+    // Don't redirect if verification modal is active
+    if (document.getElementById('verificationModal').classList.contains('active')) {
+        return;
+    }
+    
+    // Don't redirect if signup bonus modal is active
+    if (document.getElementById('signupBonusModal').classList.contains('active')) {
+        return;
+    }
+    
+    isRedirecting = true;
+    saveToLocalStorage(user, user.providerData[0] ? user.providerData[0].providerId : "unknown");
+    // Zero Delay Redirection
+    window.location.replace(REDIRECT_URL);
+}
+
+// Show signup bonus modal
+function showSignupBonusModal(bonusAmount) {
+    hasShownSignupBonusModal = true;
+    document.getElementById('signupBonusAmountDisplay').textContent = '₹' + bonusAmount.toFixed(2);
+    document.getElementById('signupBonusModal').classList.add('active');
+    createConfetti();
+    
+    // Disable claim button if already claiming
+    if (isClaimingBonus) {
+        document.getElementById('claimBonusBtn').disabled = true;
+        document.getElementById('claimBonusBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    }
+}
+
+// Hide signup bonus modal
+function hideSignupBonusModal() {
+    document.getElementById('signupBonusModal').classList.remove('active');
+    // Clear confetti
+    const confettiElements = document.querySelectorAll('.confetti');
+    confettiElements.forEach(confetti => confetti.remove());
+}
+
+// Claim signup bonus function
+function claimSignupBonus() {
+    if (isClaimingBonus) return;
+    
+    isClaimingBonus = true;
+    const claimBtn = document.getElementById('claimBonusBtn');
+    claimBtn.disabled = true;
+    claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    
+    const user = auth.currentUser;
+    if (!user) {
+        showToast("User not found. Please try again.", 'error');
+        isClaimingBonus = false;
+        claimBtn.disabled = false;
+        claimBtn.innerHTML = 'Claim';
+        return;
+    }
+    
+    const userId = user.uid;
+    const bonusAmount = pendingSignupBonusAmount;
+    
+    if (!bonusAmount || bonusAmount <= 0) {
+        showToast("No signup bonus available.", 'error');
+        isClaimingBonus = false;
+        claimBtn.disabled = false;
+        claimBtn.innerHTML = 'Claim';
+        return;
+    }
+    
+    // Get current balance to calculate balance after
+    database.ref('appusers/' + userId + '/totalBalance').once('value')
+        .then(snapshot => {
+            const currentBalance = snapshot.exists() ? Number(snapshot.val()) : 0;
+            const balanceAfter = currentBalance + bonusAmount;
+            
+            // Generate transaction record - ONLY NOW CREATING TRANSACTION
+            const transactionRecord = saveTransactionRecord(
+                userId, 
+                'signup_bonus', 
+                bonusAmount,
+                balanceAfter,
+                referralCodeUsed ? `Referral signup bonus using code: ${referralCodeUsed}` : `Welcome Signup Bonus`, 
+                referralCodeUsed ? 'Referral Bonus' : 'Signup Bonus', 
+                true
+            );
+            
+            const updates = {};
+            updates[`appusers/${userId}/withdrawableBalance`] = firebase.database.ServerValue.increment(bonusAmount);
+            updates[`appusers/${userId}/totalBalance`] = firebase.database.ServerValue.increment(bonusAmount);
+            updates[`appusers/${userId}/hasReceivedSignupBonus`] = true;
+            updates[`appusers/${userId}/pendingSignupBonusAmount`] = null; // Remove pending amount
+            
+            // Add history - ONLY NOW CREATING HISTORY
+            const historyKey = referralCodeUsed ? `referral_bonus_${Date.now()}` : `signup_bonus_${Date.now()}`;
+            updates[`appusers/${userId}/history/${historyKey}`] = {
+                type: referralCodeUsed ? 'referral_bonus' : 'signup_bonus',
+                amount: bonusAmount,
+                timestamp: Date.now(),
+                description: referralCodeUsed ? `Referral signup bonus using code: ${referralCodeUsed}` : `signup bonus claimed`,
+                transactionId: transactionRecord.value.transactionId
+            };
+            
+            // Add transaction record to updates - ONLY NOW CREATING TRANSACTION RECORD
+            updates[transactionRecord.path] = transactionRecord.value;
+
+            return database.ref().update(updates);
+        })
+        .then(() => {
+            showToast(`Congratulations! You claimed ₹${bonusAmount} signup bonus!`, 'success');
+            
+            // Show success animation
+            claimBtn.innerHTML = '<i class="fas fa-check"></i> Bonus Claimed!';
+            claimBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+            
+            // Zero delay redirect
+            hideSignupBonusModal();
+            saveToLocalStorage(user, "email/password");
+            window.location.replace(REDIRECT_URL);
+        })
+        .catch(error => {
+            console.error("Error claiming signup bonus:", error);
+            showToast("Error claiming signup bonus. Please try again.", 'error');
+            isClaimingBonus = false;
+            claimBtn.disabled = false;
+            claimBtn.innerHTML = 'Claim';
+        });
+}
+
+// Set up auth state listener with proper logic UI detachment
+function setupAuthStateListener() {
+    if (authStateListener) {
+        authStateListener(); // Unsubscribe previous listener
+    }
+    
+    authStateListener = auth.onAuthStateChanged(user => {
+        console.log("Auth state changed, user:", user ? "Logged in" : "Not logged in");
+        isAuthReady = true;
+
+        if (loadingComplete) {
+            // Loading screen is done. If user signs out post-load, show forms.
+            if (!user) {
+                document.getElementById('mainAuthContainer').style.display = 'block';
+                document.querySelector(".auth-body").style.display = "block";
+                document.getElementById("userInfo").style.display = "none";
+                isRedirecting = false;
+            }
+        }
+    });
+}
+
+// Show default authentication page
+function showDefaultAuth() {
+    currentMode = 'default';
+    document.getElementById('authTabs').style.display = 'flex';
+    document.getElementById('verificationSuccess').style.display = 'none';
+    
+    showTab('login');
+}
+
+// Handle email verification from URL
+function handleEmailVerification() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const oobCode = urlParams.get('oobCode');
+    
+    if (!oobCode) {
+        showToast("Invalid verification link", "error");
+        showDefaultAuth();
+        return;
+    }
+    
+    auth.applyActionCode(oobCode)
+        .then(() => {
+            // Email verified successfully
+            document.getElementById('mainAuthContainer').style.display = 'block';
+            document.getElementById('authTabs').style.display = 'none';
+            document.getElementById('login').classList.remove('active');
+            document.getElementById('signup').classList.remove('active');
+            document.getElementById('verificationSuccess').style.display = 'block';
+            
+            document.getElementById('pageTitle').textContent = 'Email Verified!';
+            document.getElementById('pageSubtitle').textContent = 'Your email has been successfully verified';
+            
+            // Reload user to get updated verification status
+            return auth.currentUser.reload();
+        })
+        .then(() => {
+            console.log("User reloaded after verification");
+            
+            // Check if this is a user who just signed up (has pendingSignupData)
+            const user = auth.currentUser;
+            
+            if (user && pendingSignupData) {
+                // This is a user who just signed up, process their bonus
+                processVerifiedUserAfterEmailVerification(user);
+            }
+        })
+        .catch(error => {
+            showToast(getErrorMessage(error), 'error');
+            showDefaultAuth();
+        });
+}
+
+// New function to process verified user after email verification
+function processVerifiedUserAfterEmailVerification(user) {
+    if (isProcessingVerification) return;
+    isProcessingVerification = true;
+    
+    // Store the referral code used
+    referralCodeUsed = pendingSignupData?.referralCode;
+    
+    // Generate unique referral code and complete user setup
+    generateAndAssignUniqueReferralCode(user)
+        .then(() => {
+            // Process referral code and determine bonus amount
+            return processVerifiedUserForBonus(user);
+        })
+        .then((bonusAmount) => {
+            // Store pending bonus amount - NO TRANSACTION CREATED HERE
+            pendingSignupBonusAmount = bonusAmount;
+            
+            // Save pending bonus to database - STORE ONLY PENDING AMOUNT
+            return database.ref('appusers/' + user.uid).update({
+                pendingSignupBonusAmount: bonusAmount,
+                hasReceivedSignupBonus: false
+            });
+        })
+        .then(() => {
+            isProcessingVerification = false;
+            // Handle invalid bonus (< 1.0)
+            if (pendingSignupBonusAmount < 1) {
+                database.ref('appusers/' + user.uid).update({
+                    hasReceivedSignupBonus: true,
+                    pendingSignupBonusAmount: null
+                }).then(() => {
+                    checkAndRedirectToHome(user);
+                });
+            } else {
+                // Show signup bonus modal
+                showSignupBonusModal(pendingSignupBonusAmount);
+            }
+        })
+        .catch(error => {
+            isProcessingVerification = false;
+            console.error("Error in user setup:", error);
+            showToast("Error setting up your account. Please try again.", 'error');
+        });
+}
+
+// Show verification modal
+function showVerificationModal(email) {
+    document.getElementById('verificationMessage').textContent = 
+        `A verification link has been sent to ${email}. You must verify your email to get started.`;
+    document.getElementById('verificationModal').classList.add('active');
+    
+    // Clear localStorage to prevent main platform from thinking user is authenticated
+    localStorage.removeItem('uid');
+    localStorage.removeItem('email');
+    localStorage.removeItem('login_method');
+    
+    // Make sure the modal stays visible and doesn't get auto-redirected
+    isRedirecting = false;
+}
+
+// Hide verification modal with close button
+function closeVerificationModal() {
+    document.getElementById('verificationModal').classList.remove('active');
+    unverifiedUser = null;
+    pendingSignupData = null;
+    
+    // Clear the signup form if user wants to enter different email
+    document.getElementById('signupEmail').value = '';
+    document.getElementById('signupPassword').value = '';
+    document.getElementById('confirmPassword').value = '';
+    document.getElementById('signupReferralCode').value = '';
+    
+    // Sign out the user when they close verification modal
+    if (auth.currentUser) {
+        auth.signOut().then(() => {
+            showToast("You must verify yourself to get started", 'warning');
+        });
+    } else {
+        showToast("You must verify yourself to get started", 'warning');
+    }
+}
+
+// Hide verification modal (original function)
+function hideVerificationModal() {
+    document.getElementById('verificationModal').classList.remove('active');
+}
+
+// Resend verification email
+function resendVerificationEmail() {
+    if (unverifiedUser) {
+        unverifiedUser.sendEmailVerification()
+            .then(() => {
+                showToast("Verification email resent successfully!", 'success');
+            })
+            .catch(error => {
+                showToast(getErrorMessage(error), 'error');
+            });
+    }
+}
+
+// Check if email is verified
+function checkEmailVerification() {
+    if (unverifiedUser) {
+        unverifiedUser.reload()
+            .then(() => {
+                if (unverifiedUser.emailVerified) {
+                    hideVerificationModal();
+                    showToast("Email verified successfully! Here's your welcome bonus!", 'success');
+                    
+                    // Process the verified user
+                    processVerifiedUserAfterEmailVerification(unverifiedUser);
+                } else {
+                    showToast("Email not verified yet. Please check your inbox.", 'warning');
+                }
+            })
+            .catch(error => {
+                showToast(getErrorMessage(error), 'error');
+            });
+    }
+}
+
+// Generate unique referral code by checking entire Firebase database
+async function generateAndAssignUniqueReferralCode(user) {
+    let attempts = 0;
+    const maxAttempts = 20;
+    
+    while (attempts < maxAttempts) {
+        attempts++;
+        
+        // Generate a referral code
+        const referralCode = generateReferralCode();
+        
+        try {
+            // Check if this code already exists in the entire database
+            const snapshot = await database.ref('referralCodes/' + referralCode).once('value');
+            
+            if (!snapshot.exists()) {
+                // Code doesn't exist, create user data with this unique code
+                const userId = user.uid;
+                const email = user.email || "Guest Account";
+                const timestamp = firebase.database.ServerValue.TIMESTAMP;
+
+                const userData = {
+                    email: email,
+                    referralCode: referralCode,
+                    BankDetails: {
+                        accountNumber: "",
+                        accountName: "",
+                        bankName: "",
+                        ifscCode: ""
+                    },
+                    totalBalance: 0, 
+                    withdrawableBalance: 0, 
+                    depositHistory: {},
+                    withdrawalHistory: {},
+                    Referrals: {},
+                    referralEarnings: 0,
+                    notifications: {},
+                    transactionRecords: {}, 
+                    history: {}, 
+                    createdAt: timestamp,
+                    lastLogin: timestamp,
+                    hasUsedReferral: false,
+                    hasReceivedSignupBonus: false,
+                    pendingSignupBonusAmount: 0, 
+                    emailVerified: user.emailVerified || false
+                };
+
+                // Create transaction to ensure atomic update
+                const updates = {};
+                updates['appusers/' + userId] = userData;
+                updates['referralCodes/' + referralCode] = userId;
+
+                await database.ref().update(updates);
+                
+                console.log("Unique referral code assigned:", referralCode);
+                return referralCode;
+            }
+        } catch (error) {
+            console.error("Error checking/assigning referral code:", error);
+            throw error;
+        }
+    }
+    
+    throw new Error("Failed to generate unique referral code after " + maxAttempts + " attempts");
+}
+
+// Function to save transaction record
+function saveTransactionRecord(userId, type, amount, balanceAfter, description, transactionName, isIncome = true) {
+    const transactionId = transactionIDGen.generateIncomeID();
+    const timestamp = Date.now();
+    
+    const transactionRecord = {
+        type: type,
+        transactionId: transactionId,
+        amount: amount,
+        description: description,
+        transactionName: transactionName,
+        timestamp: timestamp,
+        balanceAfter: balanceAfter,
+        isIncome: isIncome,
+        transactionType: isIncome ? 'added' : 'deducted'
+    };
+    
+    const recordKey = `transaction_${timestamp}_${Math.random().toString(36).substr(2, 9)}`;
+    return {
+        path: `appusers/${userId}/transactionRecords/${recordKey}`,
+        value: transactionRecord
+    };
+}
+
+// Process verified user for bonus 
+async function processVerifiedUserForBonus(user) {
+    try {
+        const userId = user.uid;
+        
+        const snapshot = await database.ref('appusers/' + userId + '/hasReceivedSignupBonus').once('value');
+        
+        if (snapshot.exists() && snapshot.val() === true) {
+            return 0;
+        }
+        
+        const referralCode = pendingSignupData?.referralCode;
+        
+        if (referralCode && referralCode.length === 10) {
+            const result = await processSignupReferralCode(userId, referralCode);
+            return result.bonusAmount;
+        } else {
+            const randomBonus = generateRandomSignupBonus();
+            return randomBonus;
+        }
+    } catch (error) {
+        console.error("Error in processVerifiedUserForBonus:", error);
+        return SIGNUP_BONUS_MIN;
+    }
+}
+
+// Generate random signup bonus
+function generateRandomSignupBonus() {
+    const randomAmount = (Math.random() * (SIGNUP_BONUS_MAX - SIGNUP_BONUS_MIN) + SIGNUP_BONUS_MIN).toFixed(2);
+    return parseFloat(randomAmount);
+}
+
+// Process referral code from signup form 
+async function processSignupReferralCode(userId, referralCode) {
+    if (!referralCode || referralCode.length !== 10 || !/^[A-Z0-9]+$/.test(referralCode)) {
+        const randomBonus = generateRandomSignupBonus();
+        return { bonusAmount: randomBonus, isReferral: false };
+    }
+    
+    try {
+        const snapshot = await database.ref('referralCodes/' + referralCode).once('value');
+        
+        if (!snapshot.exists()) {
+            const randomBonus = generateRandomSignupBonus();
+            return { bonusAmount: randomBonus, isReferral: false };
+        }
+        
+        const refereeId = snapshot.val();
+        
+        if (refereeId === userId) {
+            const randomBonus = generateRandomSignupBonus();
+            return { bonusAmount: randomBonus, isReferral: false };
+        }
+        
+        const hasUsedSnapshot = await database.ref(`appusers/${userId}/hasUsedReferral`).once('value');
+        if (hasUsedSnapshot.exists() && hasUsedSnapshot.val() === true) {
+            const randomBonus = generateRandomSignupBonus();
+            return { bonusAmount: randomBonus, isReferral: false };
+        }
+        
+        const timestamp = Date.now();
+        const updates = {};
+
+        updates[`appusers/${userId}/hasUsedReferral`] = true;
+        updates[`appusers/${userId}/referredVia`] = referralCode;
+        
+        // Registering the Referral under Inviter in pending_mission state
+        updates[`appusers/${refereeId}/Referrals/${userId}`] = {
+            email: auth.currentUser?.email || "Guest Account",
+            timestamp: timestamp,
+            status: 'pending_mission',
+            earned: 0,
+            pendingCommission: 0,
+            collectedCommission: 0,
+            code: referralCode,
+            missionCompleted: false,
+            totalDeposit: 0,
+            totalInvestments: 0,
+            loginDays: 1
+        };
+        
+        await database.ref().update(updates);
+        
+        console.log(`Referral processed: ${userId} registered under ${refereeId}. Referee will earn reward upon mission completion.`);
+        
+        return { bonusAmount: NEW_USER_REFERRAL_BONUS, isReferral: true, refereeId: refereeId };
+        
+    } catch (error) {
+        console.error("Error processing referral:", error);
+        const randomBonus = generateRandomSignupBonus();
+        return { bonusAmount: randomBonus, isReferral: false };
+    }
+}
+
+// Securely generate a random 10-character referral code
+function generateReferralCode(length = 10) {
+    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    const values = new Uint32Array(length);
+    window.crypto.getRandomValues(values);
+    for (let i = 0; i < length; i++) {
+        result += charset[values[i] % charset.length];
+    }
+    return result;
+}
+
+// Create user data in Realtime Database WITHOUT referral code initially
+async function createUserData(user) {
+    const userId = user.uid;
+    const email = user.email || "Guest Account";
+    const timestamp = firebase.database.ServerValue.TIMESTAMP;
+
+    const userData = {
+        email: email,
+        referralCode: "", 
+        BankDetails: {
+            accountNumber: "",
+            accountName: "",
+            bankName: "",
+            ifscCode: ""
+        },
+        totalBalance: 0, 
+        withdrawableBalance: 0, 
+        depositHistory: {},
+        withdrawalHistory: {},
+        Referrals: {},
+        referralEarnings: 0,
+        notifications: {},
+        transactionRecords: {}, 
+        history: {}, 
+        createdAt: timestamp,
+        lastLogin: timestamp,
+        hasUsedReferral: false,
+        hasReceivedSignupBonus: false,
+        pendingSignupBonusAmount: 0, 
+        emailVerified: user.emailVerified || false
+    };
+
+    await database.ref('appusers/' + userId).set(userData);
+    console.log("User data created without referral code (will be set after verification)");
+    return userData;
+}
+
+// Update last login timestamp
+function updateLastLogin(userId) {
+    return database.ref('appusers/' + userId + '/lastLogin').set(firebase.database.ServerValue.TIMESTAMP);
+}
+
+// Check if user exists in database, if not create
+function ensureUserExists(user) {
+    return database.ref('appusers/' + user.uid).once('value')
+        .then(snapshot => {
+            if (!snapshot.exists()) {
+                return createUserData(user);
+            } else {
+                return updateLastLogin(user.uid);
+            }
+        });
+}
+
+// Show toast notification
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    const toastIcon = toast.querySelector('i');
+
+    toast.className = `toast ${type}`;
+    toastMessage.textContent = message;
+
+    if (type === 'success') {
+        toastIcon.className = 'fas fa-check-circle';
+    } else if (type === 'error') {
+        toastIcon.className = 'fas fa-exclamation-circle';
+    } else if (type === 'warning') {
+        toastIcon.className = 'fas fa-exclamation-triangle';
+    }
+
+    toast.classList.add('show');
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// Get user-friendly error message
+function getErrorMessage(error) {
+    const code = error.code || error.message;
+    return errorMessages[code] || errorMessages.default;
+}
+
+// Tab switching
+function showTab(tabId) {
+    document.querySelectorAll('.auth-form').forEach(form => {
+        form.classList.remove('active');
+    });
+    document.querySelectorAll('.auth-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+
+    document.getElementById(tabId).classList.add('active');
+    document.querySelector(`.auth-tab[onclick="showTab('${tabId}')"]`).classList.add('active');
+    
+    // Check for referral code in URL when switching to signup tab
+    if (tabId === 'signup') {
+        const refCode = extractReferralCodeFromURL();
+        if (refCode) {
+            const referralInput = document.getElementById('signupReferralCode');
+            if (referralInput && !referralInput.value) {
+                referralInput.value = refCode;
+                showToast(`Referral code ${refCode} has been prefilled!`, 'success');
+            }
+        }
+    }
+}
+
+// Save to localStorage
+function saveToLocalStorage(user, method) {
+    if (method === "email/password") {
+        if (user.emailVerified) {
+            localStorage.setItem("uid", user.uid);
+            localStorage.setItem("email", user.email || "Guest Account");
+            localStorage.setItem("login_method", method);
+            console.log("User data saved to localStorage (email verified)");
+        } else {
+            console.log("User data NOT saved to localStorage (email not verified)");
+            localStorage.removeItem('uid');
+            localStorage.removeItem('email');
+            localStorage.removeItem('login_method');
+        }
+    } else {
+        localStorage.setItem("uid", user.uid);
+        localStorage.setItem("email", user.email || "Guest Account");
+        localStorage.setItem("login_method", method);
+        console.log("User data saved to localStorage for method: " + method);
+    }
+}
+
+// Check password strength
+function checkPasswordStrength() {
+    const password = document.getElementById('signupPassword').value;
+    const strengthBar = document.getElementById('passwordStrength');
+    
+    strengthBar.style.width = '0%';
+    strengthBar.style.backgroundColor = '#e74c3c';
+    
+    if (password.length === 0) return;
+    
+    let strength = 0;
+    
+    if (password.length >= 6) strength += 70;
+    if (password.length >= 10) strength += 10;
+    if (password.length >= 15) strength += 5;
+    if (password.length >= 20) strength += 5;
+    if (/\d/.test(password)) strength += 5;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 5;
+    
+    strength = Math.min(strength, 100);
+    strengthBar.style.width = strength + '%';
+    
+    if (strength < 40) {
+        strengthBar.style.backgroundColor = '#e74c3c';
+    } else if (strength < 70) {
+        strengthBar.style.backgroundColor = '#f39c12';
+    } else {
+        strengthBar.style.backgroundColor = '#2ecc71';
+    }
+}
+
+// Validate email
+function validateEmail(email) {
+    const re = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    return re.test(email.toLowerCase());
+}
+
+// Validate password
+function validatePassword(password) {
+    return password.length >= 6 && password.length <= 50;
+}
+
+// Show password reset using Firebase default
+function showPasswordReset() {
+    const email = document.getElementById('loginEmail').value;
+    
+    if (!validateEmail(email)) {
+        showToast("Please Enter a Valid Gmail Address To Reset Password", 'error');
+        return;
+    }
+    
+    auth.sendPasswordResetEmail(email)
+        .then(() => {
+            showToast("Password Reset link sent to your Email. Check Your Inbox.", 'success');
+        })
+        .catch(error => {
+            showToast(getErrorMessage(error), 'error');
+        });
+}
+
+// Redirect after login via form
+function redirectAfterLogin(user, method) {
+    const spinnerId = method === 'email/password' ? 'loginSpinner' : 'signupSpinner';
+    document.getElementById(spinnerId).style.display = 'block';
+    
+    if (method === 'email/password') {
+        if (!user.emailVerified) {
+            unverifiedUser = user;
+            document.getElementById(spinnerId).style.display = 'none';
+            showVerificationModal(user.email);
+            return;
+        }
+    }
+    
+    database.ref('appusers/' + user.uid + '/hasReceivedSignupBonus').once('value')
+        .then(snapshot => {
+            const hasReceivedSignupBonus = snapshot.exists() ? snapshot.val() : false;
+            
+            if (!hasReceivedSignupBonus) {
+                return database.ref('appusers/' + user.uid + '/pendingSignupBonusAmount').once('value')
+                    .then(bonusSnapshot => {
+                        if (bonusSnapshot.exists() && !hasShownSignupBonusModal && !isRedirecting) {
+                            pendingSignupBonusAmount = bonusSnapshot.val();
+                            if (pendingSignupBonusAmount < 1) {
+                                database.ref('appusers/' + user.uid).update({
+                                    hasReceivedSignupBonus: true,
+                                    pendingSignupBonusAmount: null
+                                }).then(() => {
+                                    completeLoginRedirect(user, method, spinnerId);
+                                });
+                            } else {
+                                document.getElementById(spinnerId).style.display = 'none';
+                                showSignupBonusModal(pendingSignupBonusAmount);
+                            }
+                        } else if (!bonusSnapshot.exists() && !isRedirecting) {
+                            completeLoginRedirect(user, method, spinnerId);
+                        } else {
+                            document.getElementById(spinnerId).style.display = 'none';
+                        }
+                    });
+            } else {
+                completeLoginRedirect(user, method, spinnerId);
+            }
+        })
+        .catch(error => {
+            console.error("Error checking signup bonus:", error);
+            completeLoginRedirect(user, method, spinnerId);
+        });
+}
+
+// Helper function to complete login redirect with Zero Delay
+function completeLoginRedirect(user, method, spinnerId) {
+    saveToLocalStorage(user, method);
+    
+    ensureUserExists(user)
+        .then(() => {
+            showToast(`Welcome ${user.email || 'Dear Guest'}!`, 'success');
+            window.location.replace(REDIRECT_URL);
+        })
+        .catch(error => {
+            showToast("Error setting up your account. Please try again.", 'error');
+            console.error("Error ensuring user exists:", error);
+            document.getElementById(spinnerId).style.display = 'none';
+        });
+}
+
+// Email/Password Sign Up
+function signUp() {
+    const email = document.getElementById("signupEmail").value;
+    const password = document.getElementById("signupPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const referralCode = document.getElementById("signupReferralCode").value.trim().toUpperCase();
+    
+    if (!email || !password || !confirmPassword) {
+        showToast("Please fill in all fields", 'error');
+        return;
+    }
+    
+    if (!validateEmail(email)) {
+        showToast("Please enter a valid Gmail address", 'error');
+        return;
+    }
+    
+    if (!validatePassword(password)) {
+        showToast("Password must be 6-50 characters", 'error');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        showToast("Passwords don't match!", 'error');
+        return;
+    }
+    
+    document.getElementById('signupSpinner').style.display = 'block';
+    
+    pendingSignupData = {
+        referralCode: referralCode
+    };
+    
+    auth.createUserWithEmailAndPassword(email, password)
+        .then(result => {
+            return createUserData(result.user)
+                .then(() => {
+                    return result.user.sendEmailVerification();
+                })
+                .then(() => {
+                    unverifiedUser = result.user;
+                    showVerificationModal(email);
+                    document.getElementById('signupSpinner').style.display = 'none';
+                    showToast("Verification email sent! Please check your inbox.", 'success');
+                    
+                    document.getElementById('signupEmail').value = '';
+                    document.getElementById('signupPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                    document.getElementById('signupReferralCode').value = '';
+                });
+        })
+        .catch(error => {
+            document.getElementById('signupSpinner').style.display = 'none';
+            pendingSignupData = null;
+            showToast(getErrorMessage(error), 'error');
+        });
+}
+
+// Email/Password Sign In
+function signIn() {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+    
+    if (!email || !password) {
+        showToast("Please fill in all fields", 'error');
+        return;
+    }
+    
+    if (!validateEmail(email)) {
+        showToast("Please enter a valid Gmail address", 'error');
+        return;
+    }
+    
+    document.getElementById('loginSpinner').style.display = 'block';
+    
+    auth.signInWithEmailAndPassword(email, password)
+        .then(result => {
+            if (!result.user.emailVerified) {
+                unverifiedUser = result.user;
+                showVerificationModal(email);
+                document.getElementById('loginSpinner').style.display = 'none';
+                
+                auth.signOut().then(() => {
+                    showToast("Please verify your email before logging in", 'warning');
+                });
+            } else {
+                redirectAfterLogin(result.user, "email/password");
+            }
+        })
+        .catch(error => {
+            document.getElementById('loginSpinner').style.display = 'none';
+            showToast(getErrorMessage(error), 'error');
+        });
+}
+
+// Check if user is already logged in via localStorage as a quick fallback check
+function checkExistingAuth() {
+    const storedUid = localStorage.getItem('uid');
+    if (storedUid) {
+        // Firebase handles state validation through onAuthStateChanged
+    }
+}
+
+// Initial check on page load
+checkExistingAuth();
+
+// ========== NEW: Help/Tutorial Modal Functions ==========
+const helpModal = document.getElementById('helpModal');
+const helpBtn = document.getElementById('helpTutorialBtn');
+
+// Open modal when button is clicked
+helpBtn.addEventListener('click', function() {
+    helpModal.classList.add('active');
+});
+
+// Close modal when clicking outside the modal content
+helpModal.addEventListener('click', function() {
+    closeHelpModal();
+});
+
+// Close modal function (called by Close button)
+function closeHelpModal() {
+    helpModal.classList.remove('active');
+}
+// ========== End New Functions ==========
+ </script>
+</body>
+</html>

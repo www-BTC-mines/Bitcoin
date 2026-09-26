@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>kamaaikendra corporation Bank Withdrawal page</title>
+  <link rel="preload" as="image" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png" fetchpriority="high">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <style>
+        /* Disable text selection */
+    * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+ /* Reset and base */
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { min-height: 100%; }
+    body {
+      font-family:fantasy;
+      color: #0b2a22;
+      background:#1a1a1a;
+  background-attachment: fixed;
+  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+      max-width: 100vw;
+      margin: 0 auto;
+      padding: 8px 12px 16px;
+      line-height: 1.35;
+    }
+
+    :root{
+      --bg: #0f3d33;
+      --bg-2:#10463a;
+      --surface:#f7faf9;
+      --surface-2:#ffffff;
+      --muted:#5a6b67;
+      --brand:#12b886; /* mint */
+      --brand-2:#0fa678;
+      --accent:#ffd166; /* soft amber */
+      --error:#e05666;
+      --ok:#19b36b;
+      --ring: 0 0 0 3px rgba(18,184,134,.18);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 6px 20px rgba(0,0,0,.10);
+      --shadow-soft: 0 2px 10px rgba(0,0,0,.08);
+      --trans: 180ms cubic-bezier(.2,.8,.2,1);
+      --gap: 10px;
+    }
+
+    /* Layout */
+    .container { 
+        display: flex;
+        flex-direction:
+        column; gap: 10px; 
+        
+    }
+
+    header{
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between;
+            background:#1a1a1a;
+            border-bottom: 1px solid #000;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
+      padding: 6px 12px;
+      margin: 0 -12px;
+      border-radius: 0;
+      position: sticky; top: 0;
+      margin-top: -10px;
+      z-index: 9900;
+      height: 50px;
+    }
+
+    .logo{
+      display:flex; 
+      align-items:center;
+      gap:8px;
+      color: #e9fbf3; 
+      font-weight: 800; 
+      letter-spacing:.3px; 
+      font-size: 12px;
+    }
+    .logo img{ 
+        height: 36px;
+        width: 36px; 
+        border-radius: 10px;
+        object-fit: cover; 
+        
+    }
+
+    .header-actions{ 
+        display:flex; gap:8px;
+        }
+
+    .header-btn,
+    .records-button,
+    .back-button{
+      display:inline-flex; 
+      align-items:center;
+      justify-content:center;
+      padding:8px;
+      width:40px;
+      height:40px;
+      border-radius: 30px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.06);
+      color:#eafbf3; 
+      font-size:18px;
+      cursor:pointer;
+      transition: var(--trans);
+      text-decoration:none;
+      box-shadow:
+        inset 0 3px 6px rgba(255, 255, 255, 0.4),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+    }
+    .header-btn:hover,
+    .records-button:hover,
+    .back-button:hover{ 
+        transform: translateY(-1px);
+        background: rgba(255,255,255,.1);
+    }
+
+    .back-button{ 
+        position: fixed;
+        right: 60px;
+        top: 5px; 
+        z-index: 10000;
+    }
+    .records-button{
+        position: fixed; 
+        right: 10px;
+        top: 5px; 
+        z-index: 10000; 
+    }
+
+    /* Balance split container */
+    .balance-split-container {
+      display: flex;
+      gap: 8px;
+      margin: -5px;
+      margin-top: 15px;
+    }
+
+    /* Balance card */
+    .balance-display{
+      position: relative;
+      background:#1a1a1a;
+      border: 1px solid black;
+      outline:1px solid #fdbd01;
+      color: #0e5a49;
+      border-radius:4px;
+      padding: 10px 5px;
+      text-align:center;
+      box-shadow:
+        inset 0 3px 6px rgba(255, 255, 255, 0.8),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+      overflow:hidden;
+      flex: 1;
+      margin: 0;
+    }
+    .balance-label{ 
+        font-size: 10px; 
+        font-weight: 800;
+        color:white;
+        font-family: Segoe UI;
+        letter-spacing:.2px;
+        margin-bottom: 4px;
+        }
+    .balance-amount{ 
+        font-size: 18px;
+    font-weight: 900;
+    font-family:Segoe UI;
+    background: linear-gradient(0deg, #fdbd01, #fff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+     -webkit-text-stroke:.5px #fdbd01;
+        }
+    .balance-subtext{ 
+        font-size: 10px; 
+        color: #4b5a56; 
+        margin-top: 2px;
+        font-family: Monospace;
+        font-weight: 900;
+        }
+
+    /* Cards */
+    .card {
+  border-radius: 2px;
+  overflow-y: auto; 
+  overflow-x: hidden; 
+  height: 100%; 
+  margin-top: 10px;
+  width: 100%; 
+  scrollbar-width: thin; 
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent; 
+}
+
+.card::-webkit-scrollbar { width: 0px; }
+.card::-webkit-scrollbar-track { background: transparent; }
+.card::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.3); border-radius: 3px; }
+.card::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.5); }
+    
+    .card-title{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:White;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.99);
+      background: #fdbd01;
+      margin:-15px;
+      font-weight:900; 
+      font-size:14px;
+      margin-bottom: 10px;
+      padding-left:15px;
+      padding-top: 8px;
+      padding-bottom: 5px;
+      padding-right: 15px;
+      box-shadow:
+        inset 0 3px 6px rgba(255, 255, 255, 0.8),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+    }
+    .card-title i{ color: var(--brand); }
+
+    /* Form */
+    .form-group{ margin-bottom: 5px; }
+    label{ 
+        display:block;
+        font-size: 11px; 
+        color:rgba(255,255,255,0.8);
+        font-weight: 600; 
+        font-family: Segoe UI;
+        margin-bottom: 3px;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.9);
+    }
+    input, select{
+      width:100%;
+      padding: 5px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.2);
+      background: 
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+      box-shadow: inset 0 1px 2px rgba(205, 25, 355, 0.5), inset 0 -1px 2px rgba(180, 20, 350, 0.4);
+      color:rgba(255,255,255,0.9);
+      font-size: 12px;
+      text-shadow: 0 1px 1px rgba(0,0,20,0.9);
+      font-family: Segoe UI;
+      font-weight: 900;
+      transition: var(--trans);
+      -webkit-user-select: text; user-select:text;
+    }
+    input:focus, select:focus{ 
+        outline: none;
+         box-shadow: inset 0 2px 4px rgba(205, 25, 355, 0.5), inset 0 -2px 4px rgba(180, 20, 350, 0.4);
+    }
+
+    .saved-accounts{ display:flex; align-items:center; gap:8px; }
+    .saved-accounts select{
+      flex: 1; background: #f7fffc; border-color: #c8efe4; color:#0e5a49; font-weight:700; font-size: 8px; display: none;
+    }
+    .button-container { display: flex; justify-content: center; align-items: center; }
+
+    .btn {
+      min-width: 150px;
+      padding: 11px;
+      border: none;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 12px;
+      font-family: fantasy;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: var(--trans);
+      text-shadow: 0 1px 1px rgba(0,0,0,0.99);
+    }
+    .btn:active{ transform: scale(.98); }
+
+    .btn-success{
+      background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgiytFIDLtbbPKgECWA1xfzCIimG9BR41xaF9yAWAwza4KZX5y4Xbf1yLwfEPwoCQeqmMQk_Ut98dM5DqhVmVQOnRWFJad6cFjn41S53TKEA6-EM-SoIjkU2kD8RI_kEQfGLgtHEjSYYXXCMqsXifUKW33_cHaSiUl24wNWXOWQ5Pzl16jUkNHlJBYY7sc/s16000/1000111663.png");
+      background-size: 100% 100%;
+      color:white;
+    }
+    .btn-success:hover{ filter: brightness(1.03); }
+
+    .btn-primary{
+      background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgblH1VThPIvWAyTLgZFEi67yZybhnsLRq5jpUivmnoIefVXw79_L_jqf-8DjCHi_y8JVf2CrlJvsXZNrj6CSIJWfjDENRVJKlPk9L_AAZrgq74b3pC_2CtAvPtMtr9sC5F8mRqmjLhcWPbqydsC1xy8LTYA4DNT35Ub28ZatyPSIUREf0vXy0ufLkF-J4/s16000/1000110830.png");
+      background-size: 100% 100%;
+      color: white;
+    }
+
+    /* Amount grid */
+    .amount-options{
+      display:grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .withdraw-option{
+      position: relative; /* For VIP Tag */
+      background: 
+    radial-gradient(
+      circle at center,
+      rgba(85, 33, 5, 0.99),
+      rgba(88, 31, 5, 0.99)
+    );
+      border: 1px solid rgba(255,255,255,1);
+      border-radius: 4px;
+      padding: 10px;
+      text-align:center;
+      cursor:pointer;
+      color:white;
+      font-size: 15px;
+      font-weight: 900;
+      transition: var(--trans);
+    }
+    .withdraw-option.selected{
+        color:#fdbd01;
+        border-color: #fdbd01;
+        transition: transform 0.01s ease-out;
+        pointer-events: auto;
+    }
+    /* NEW: VIP Exclusive Tag CSS */
+    .vip-exclusive-tag {
+      position: absolute;
+      top:0px;
+      right: 0px;
+      background: linear-gradient(90deg, #fceb9c, #d19a22);
+      color: #3b1154;
+      font-size: 6px;
+      font-family: Segoe UI, sans-serif;
+      font-weight: 900;
+      padding: 0px 4px;
+      border-top-right-radius: 3px;
+      border-bottom-left-radius: 6px;
+      box-shadow: -1px 1px 3px rgba(0,0,0,0.5);
+      z-index: 2;
+      text-shadow: 0 0.5px 0.5px rgba(255,255,255,0.3);
+    }
+
+    /* Tax calc */
+    .tax-calculation{
+      display:none;
+      background:#1a1a1a;
+      color:rgba(255,255,255,0.7);
+      border: 1px solid rgba(180,22,210,0.3);
+      border-radius: 6px;
+      padding: 5px;
+      margin-top: 12px;
+      margin-bottom: 8px;
+      animation: fadeIn .2s ease;
+      font-size: 10px;
+      font-weight: 400;
+      font-family: Segoe UI;
+    }
+    .tax-row{ 
+        display:flex; justify-content:space-between; padding: 5px 0; border-bottom: 1px dashed #dff5ee;
+    }
+    .tax-row:last-child{ border-bottom: none; }
+    .tax-total{ font-weight: 700; color:rgba(255,255,255,0.9); }
+
+    /* Method Selection Tabs */
+    .method-tabs {
+      display: flex; gap:0; margin: 0; padding: 0; overflow-x: auto;
+      border-top-left-radius: 4px; border-top-right-radius: 4px;
+    }
+    .method-tab {
+      flex: 1; padding: 5px 2px; text-align: center; font-size: 11px; font-weight: 900;
+      font-family: Segoe UI; background: linear-gradient(135deg, white 50%, silver 50% 100%);
+      background-size: 100% 100%; box-shadow: inset 0 0 10px rgba(0,0,0,0.3); color: #5a6b67;
+      border:none; border-radius: 0px; cursor: pointer; transition: var(--trans); white-space: nowrap; min-width: 50px;
+    }
+    .method-tab.active {
+      color:rgba(555,455,55,0.99); text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.4);
+      background: radial-gradient(circle at center, rgba(155, 44, 255, 0.9), rgba(128, 11, 255, 0.9));      
+    }
+
+/* MAIN CARD */
+.bank-details-display {
+  background: #f1d21b; border-radius: 6px; padding-left: 10px; padding-right: 10px;
+  padding-bottom: 10px; padding-top: 3px;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.6), inset 0 -2px 4px rgba(0,0,0,0.3), 0 4px 10px rgba(0,0,0,0.4);
+  position: relative;
+}
+.bank-card-body {
+  background: #fbf4df; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;
+  padding-left:0px; padding-top: 10px; padding-bottom: 2px; padding-right: 25px;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.8), inset 0 -2px 3px rgba(0,0,0,0.2), 0 6px 10px rgba(0,0,0,0.5), 0 -3px 8px rgba(0,0,0,0.6);
+  position: relative;
+}
+.bank-row { display: flex; align-items: center; margin-bottom: 10px; }
+.bank-label { width: 80px; text-align: right; font-weight: 900; font-size: 12px; color: #4b2b10; padding-right: 5px; font-family: Segoe UI; }
+.bank-value { flex: 1; background: #54405e; color: #ffffff; font-family: Segoe UI; font-size: 10px; font-weight: 900; padding: 5px 12px; border-radius: 4px; text-align: left; box-shadow: inset 0 2px 3px rgba(0,0,0,0.2), inset 0 -2px 3px rgba(0,0,0,0.3); }
+.edit-bank-btn { position: absolute; right: 8px; bottom: 10px; background: transparent; border: none; font-size: 15px; color: #5a3216; cursor: pointer; }
+
+    /* Bank/UPI Details Update Modal */
+    .bank-update-modal {
+      display: none;
+      position: fixed; 
+      top:0; left:0;
+      right:0; height:100vh;
+      width:100vw;
+      padding: 10px; 
+      padding-top: 60px;
+      background:#1a1a1a;
+      background-size: 100% 100%;
+      z-index: 10001; overflow-y: auto;
+    }
+    .bank-update-container { width: 100%; margin: 0 auto; }
+    .bank-update-header {
+      position: fixed; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between;
+      background:#1a1a1a;
+      border:1px solid #000;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.16); padding: 6px 12px; z-index: 9900; height: 50px;
+    }
+    .bank-update-back {
+      display:inline-flex; align-items:center; justify-content:center; padding:8px; width:40px; height:40px;
+      border-radius: 30px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06);
+      color:#eafbf3; font-size:18px; cursor:pointer; transition: var(--trans);
+      box-shadow: inset 0 3px 6px rgba(255, 255, 255, 0.4), inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+    }
+    .bank-update-form1 {
+      width: 100%; margin-top: 10%; margin-bottom: 100%; border-radius: 8px; padding: 14px; padding-right: 40px;
+      background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiqKwUlVGwORqJ_6HsT47KyFZhIlvtNqpNTbStGgQwJNyMbbrqgJtCjFtronQaDYzJIJE-16AAa-Ybbwg8wx2hJP7LqiBZIFMzoqezVnTpyAb2wARGxgvtnyAwsO5qtQyd-0sR_T_B7tLtJSv2HKgeItXZTOo5n4o4OBjmLCcg_fB3nu0Wr33ag4czKHZA/s16000/1000111708.png"),linear-gradient(180deg,#9d5cf0,#7b39c8);
+      background-size: 100% 100%; box-shadow: inset 0 3px 6px rgba(255,255,255,0.35), inset 0 -3px 6px rgba(0,0,0,0.35), 0 8px 20px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.25); font-family: Segoe UI;
+    }
+    .imps-header1 {
+      text-align: center; font-size: 15px; font-weight: 900; color: #ffffff; letter-spacing: 1px;
+      padding: 5px 0; margin-top: -14px; margin-bottom: 10px; margin-right: -40px; margin-left: -14px;
+      background: linear-gradient(180deg,#6d2f9c,#5b237f); text-shadow: 0 2px 3px rgba(0,0,0,0.8);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+    }
+    .bank-row1 { display: grid; grid-template-columns: 30% 70%; align-items: center; margin-bottom: 5px; }
+    .bank-label1 { font-size: 11px; font-weight: 800; color: #ffeaa7; text-align:right; padding-right: 10px; text-shadow: 0 1px 1px rgba(0,0,0,0.6); }
+    .bank-row1 input { border-radius: 4px; border: none; outline: none; padding: 5px 10px; font-size: 10px; font-weight: 900; color: #ffffff; background:rgba(100,51,145,0.99); box-shadow: inset 0 1px 2px rgba(0,0,0,0.15), inset 0 -1px 2px rgba(0,0,0,0.2); }
+
+    /* Records section (updated to section format) */
+    .records-modal{
+      display: none; position: fixed; top:0; left:0; right:0; height:100vh; width:100vw;
+      padding: 10px; padding-top: 60px;
+      background:#1a1a1a;    
+      background-blend-mode: overlay; background-size: 100% 100%;
+      z-index: 10001; overflow-y: hidden;
+    }
+    .records-tabs { display: flex; gap:3.5px; margin: 9px 0; padding:2px; padding-bottom: 3px; padding-top: 3px; overflow-x: auto; flex-shrink: 0; }
+    .records-tab {
+      flex: 1; padding: 12px 2px; text-align: center; font-size: 10px; font-weight: 900; font-family: fantasy;
+      background:#1a1a1a; white; background-size: 100% 100%;
+      box-shadow: inset 0 0 10px rgba(0,0,0, 0.3); color: #fdbd01; border: 0.3px solid black; border-radius: 8px;
+      cursor: pointer; transition: var(--trans); white-space: nowrap; min-width: 50px; outline:1.7px solid #fdbd01;
+    }
+    .records-tab.active { color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); box-shadow: inset 0 3px 6px rgba(255, 255, 255, 0.5), inset 0 -3px 6px rgba(255,255,255, 0.3); }
+    .records-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 2px; height: calc(100vh - 120px); padding-bottom: 30px; }
+    .withdrawal-record { display: flex; flex-direction: column; background:transparent; border-radius: 10px; padding:0; }
+    .record-section .record-label { font-family: "Segoe UI", sans-serif; font-size: 14px; font-weight: 900; color: rgba(398,569,0,0.8); text-transform: capitalize; margin-bottom: 4px; }
+    .record-section .record-value { font-family: "Segoe UI", sans-serif; font-size: 14px; font-weight: 900; color: #fdbd01; text-align: right; margin-top: -22px; }
+    .record-time { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.75); font-family: "Segoe UI", sans-serif; }
+    .record-divider { width: 100%; height: 0.6px; background: linear-gradient(to right, rgba(253,189,1,0), rgba(0,0,1,0.9), rgba(253,189,1,0)); margin: 5px 0 5px; }
+    .record-divider2{ width: 100%; height: 0.7px; background: linear-gradient(to right, rgba(253,189,1,0.2), rgba(253,189,1,0.9), rgba(253,189,1,0.2)); margin: 6px 0 8px; }
+    .record-row { display: flex; justify-content: space-between; align-items: center; padding: 0; }
+    .record-row .record-label { font-size: 11px; font-weight: 700; color: #ffffff; font-family: "Segoe UI", sans-serif; }
+    .record-row .record-value { font-size: 10px; font-weight: 500; color: #58d6c9; font-family: "Segoe UI", sans-serif; text-align: right; }
+    .no-records{ margin-top: 70%; text-align:center; padding: 18px; font-size: 12px; font-family: Segoe UI; color:white; font-weight: 900; }
+
+/* Existing VIP Info Section Styles */
+.vip-info-section {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(253, 189, 1, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+}
+.vip-info-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px dashed rgba(255,255,255,0.2);
+  padding-bottom: 5px;
+}
+.vip-info-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 10px;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
+.vip-stat-row {
+  display: flex;
+  justify-content: space-between;
+}
+.vip-stat-val { color: #fdbd01; }
+.vip-stat-used { color: #12b886; }
+
+/* NEW: UPGRADE NOW Button Styles */
+.upgrade-btn {
+  margin-left: auto; /* Pushes the button to the far right */
+  background-color: #fdbd01;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  transition: background-color 0.2s ease;
+}
+
+.upgrade-btn:active {
+  background-color: #e0a800;
+  transform:scale(1.05);
+}
+
+
+    /* Popup Modal for Confirmations */
+    .popup-container{ position: fixed; inset:0; background:rgba(0,0,0,0.55); z-index: 100000; display:none; align-items:center; justify-content:center; padding: 5px; }
+    .popup-content{ 
+        width:100%;
+        max-width: 420px;
+        background: 
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+        border-radius: 8px;
+        padding: 14px;
+        border:2px solid black;
+        outline:2px solid rgba(245,208,0,1); 
+        box-shadow: var(--shadow); 
+        animation: pop .18s ease; 
+    }
+    .popup-title{ text-align:center; font-size: 14px; font-weight: 900; color:white; margin-bottom: 6px; text-transform: uppercase; border-radius: 4px; padding: 3px; text-shadow: 0 1px 1px rgba(0,0,0,0.9); }
+    .popup-message{ text-align:center; color:white; font-size: 11px; font-family: Segoe UI; background:rgba(0,0,0,0.7); border-radius: 6px; padding:5px; }
+    .popup-buttons{ display:flex; gap:8px; justify-content: center; }
+    .popup-close{ position: absolute; right: 8px; top: 8px; background: transparent; border: none; font-size: 1px; color:#0f3d33; cursor:pointer; opacity: 0; }
+
+    /* Center Toast Message */
+    .toast-center {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.9) 50%, rgba(0, 0, 0, 0.1) 100%);
+        padding: 6px 16px; 
+        color: white;
+        border-radius: 4px;
+        z-index: 1000000;
+        text-align: center;
+        font-family: Segoe UI;
+        font-size: 12px;
+        font-weight: 900;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        width: 100%;
+        max-width: 100%;
+        display: none;
+    }
+    .toast-center.show {
+        display: block;
+        opacity: 1;
+    }
+
+    /* Loading overlay */
+    .loading-screen{ position: fixed; inset:0; background:#1a1a1a; color:#eafbf3; display:flex; flex-direction:column; align-items:center; justify-content:center; gap: 14px; z-index: 20000; transition: opacity 0.3s ease; }
+    .loading-logo{ width: 220px; height: 200px; object-fit: contain; animation: pulse 1.8s ease-in-out infinite; position: fixed; top:20%; }
+    .loading-message{ font-size: 14px; color:white; font-family: Segoe UI; font-weight: 900; }
+    .loading-progress{ position: fixed; bottom:10%; width: 80%; height: 24px; background-color: #36454F; border-radius: 30px; overflow: hidden; border: 1px solid black; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.6), inset 0 3px 20px rgba(0, 0, 0, 0.6), inset 0 -1px 0 rgba(255, 255, 255, 0.3); }
+    .loading-progress-bar{ position: relative; width: 0%; height: 100%; background: linear-gradient(to bottom, #00ff3b 0%, #00cc2e 25%, #00b82a 50%, #00cc2e 75%, #00ff3b 100%); border-radius: 30px; transition: width 0.3s ease-out; box-shadow: inset 0 0 4px 2px rgba(255, 255, 255, 0.1); }
+    .loading-ads{ position:absolute; bottom: 10px; left:0; width:100%; text-align:center; font-size: 11px; color:#dff8ef; font-family: Segoe UI; padding: 0 8px; }
+
+    /* FAB */
+    .fab-container{ position: fixed; z-index: 12000; touch-action: auto; }
+    .fab-button{ width: 40px; height: 40px; border-radius:30px; border:1px solid rgba(219,22,987,0.9); background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEifffG-8z1R1pNtzLOttJfZyZvbHwT54Gi_pb8aufQ0x3yGjsC9NJZGH3tu3_JDWDLEv_YqfvN6NzpoDXbCydlebRwV2p8c7glfG-8lgOL-QvQVzcr3URGygbSfUArhIA1NSxXebwDTNgouCLphxd-kn2hrnW8V3Lav2lA3xMvlShxcPq9iqwNbfSLPMxs/s16000/1000110664.gif"); color: #eafbf3; background-size: 100% 100%; font-size: 20px; display:flex; align-items:center; justify-content:center; position: fixed; cursor:pointer; transition: var(--trans); box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.3), inset 0 9px 18px rgba(319, 25, 705, 0.1), inset 0 -6px 12px rgba(398, 0, 656, 0.1); animation: gentlePulse 2.2s ease-in-out infinite; }
+    .fab-button:active{ transform: scale(.96); }
+
+    /* Animations */
+    @keyframes pulse{ 0%,100%{ transform: scale(1)} 50%{ transform: scale(1.06)} }
+    @keyframes gentlePulse{ 0%,100%{ transform: scale(.96) } 50%{ transform: scale(1) } }
+    @keyframes pop{ from{ opacity:0; transform: translateY(8px)} to{opacity:1; transform:none} }
+    @keyframes fadeIn{ from{ opacity:0 } to{ opacity:1 } }
+    
+    /* ----------------------------------------------------
+       NEW SECTIONS CSS ADDED BELOW EXACTLY AS REQUESTED
+       ---------------------------------------------------- */
+    .info-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .processing-protection {
+      position: relative;
+background-color: #6d1b2d;
+background-image: radial-gradient(
+  circle at 75% 40%, 
+  #9e0a2b 0%,    /* The brighter crimson highlight near the center-right */
+  #6d1b2d 45%,   /* Your mid-tone rich red blending outward */
+  #3a0410 100%   /* The deep, dark burgundy at the very edges/corners */
+);
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .shield-icon {
+      position: absolute;
+      top: 15px;
+      right: 5px;
+      width: 70px;
+      height: 80px;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+      z-index: 1;
+    }
+
+    .pp-header {
+      font-size: 18px;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 900;
+      margin-bottom: 8px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+      position: relative;
+      z-index: 2;
+    }
+
+    .pp-desc {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pp-subtitle {
+      font-size: 13px;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 900;
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pp-item {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Segoe UI', sans-serif;
+      margin-bottom: 2px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pp-hl {
+      color: #fdbd01;
+      font-weight: 900;
+    }
+
+    .commission-note-section {
+      background: transparent;
+      padding: 0 5px;
+    }
+
+    .cn-title {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.8);
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: normal;
+      margin-bottom: 8px;
+      margin-top: 10px;
+    }
+
+    .cn-list {
+      padding-left: 14px;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.65);
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .cn-list li {
+      margin-bottom: 4px;
+      padding-left: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="centerToast" class="toast-center"></div>
+
+  <div class="fab-container">
+    <button class="fab-button" id="fab"></button>
+  </div>
+
+  <a class="back-button" href="#"><i class="fas fa-angle-left"></i></a>
+  <button class="records-button" id="viewRecordsBtn"><i class="fas fa-book"></i></button>
+
+  <div class="loading-screen" id="loadingScreen">
+    <img src="https://media.baamboozle.com/uploads/images/1338290/1ba6973c-bb20-4948-9dfb-ddbdfd0ee74b.gif" alt="App Logo" class="loading-logo">
+    <div class="loading-message">Loading your withdrawal dashboard...</div>
+    <div class="loading-progress"><div class="loading-progress-bar" id="loadingProgress"></div></div>
+    <div class="loading-ads">Fast withdrawals processed within minutes<br>Trusted by millions worldwide.</div>
+  </div>
+
+  <div class="container" id="mainContainer">
+    <header>
+      <div class="logo">
+        <img src="https://media.baamboozle.com/uploads/images/1338290/1ba6973c-bb20-4948-9dfb-ddbdfd0ee74b.gif" alt="🏦">
+        BANK WITHDRAWALS
+      </div>
+      <div class="header-actions"></div>
+    </header>
+
+    <div class="bank-details-display" id="bankDetailsDisplay">
+      <div class="method-tabs" id="methodTabs">
+        <button class="method-tab active" data-method="imps">IMPS</button>
+        <button class="method-tab" data-method="upi">UPI</button>
+      </div>
+
+      <div class="bank-card-body" id="bankDetailsContent">
+        <div class="bank-row imps-details">
+          <div class="bank-label">Account No</div>
+          <div class="bank-value" id="displayAccountNumber">Not Set Yet</div>
+        </div>
+        <div class="bank-row imps-details">
+          <div class="bank-label">Name</div>
+          <div class="bank-value" id="displayAccountName">Not Set Yet</div>
+        </div>
+        <div class="bank-row imps-details">
+          <div class="bank-label">IFSC</div>
+          <div class="bank-value" id="displayIfsc">Not Set Yet</div>
+        </div>
+
+        <div class="bank-row upi-details" style="display: none;">
+          <div class="bank-label">UPI ID</div>
+          <div class="bank-value" id="displayUpiId">Not Set Yet</div>
+        </div>
+        <div class="bank-row upi-details" style="display: none;">
+          <div class="bank-label">Name</div>
+          <div class="bank-value" id="displayUpiName">Not Set Yet</div>
+        </div>
+
+        <button class="edit-bank-btn" id="editBankBtn">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="balance-split-container animate__animated">
+      <div class="balance-display">
+        <div class="balance-label">TOTAL BALANCE</div>
+        <div class="balance-amount" id="totalBalance">₹0.00</div>
+      </div>
+      <div class="balance-display">
+        <div class="balance-label">WITHDRAWABLE</div>
+        <div class="balance-amount" id="withdrawableBalance">₹0.00</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <div class="amount-options" id="amountOptionsGrid">
+          <div class="withdraw-option" data-amt="100" onclick="selectAmount(100)">₹100</div>
+          <div class="withdraw-option" data-amt="200" onclick="selectAmount(200)">₹200</div>
+          <div class="withdraw-option" data-amt="300" onclick="selectAmount(300)">₹300</div>
+          <div class="withdraw-option" data-amt="500" onclick="selectAmount(500)">₹500</div>
+          <div class="withdraw-option" data-amt="1000" onclick="selectAmount(1000)">₹1000</div>
+          <div class="withdraw-option" data-amt="2000" onclick="selectAmount(2000)">₹2000</div>
+          <div class="withdraw-option" data-amt="5000" onclick="selectAmount(5000)">₹5000</div>
+          <div class="withdraw-option" data-amt="10000" onclick="selectAmount(10000)">₹10000</div>
+          <div class="withdraw-option" data-amt="20000" onclick="selectAmount(20000)">₹20000</div>
+        </div>
+      </div>
+
+      <div class="tax-calculation" id="taxCalculation">
+        <div class="tax-row"><span>Withdrawal Amount:</span><span id="calcAmount">₹0.00</span></div>
+        <div class="tax-row"><span>Service Fees:</span><span id="calcFee">₹0.00</span></div>
+        <div class="tax-row"><span>Tax (3%):</span><span id="calcTax">₹0.00</span></div>
+        <div class="tax-row tax-total"><span>Net Amount:</span><span id="calcNet">₹0.00</span></div>
+      </div>
+      
+     <div class="vip-info-section" id="vipInfoSection">
+  <div class="vip-info-header">
+    <img id="vipInfoIcon" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjvrR-1g8NgiwVrGrAHQ-Xg_KlyAzVqiMVo4thXTRrlIw-_4oRfzlr0sTiJBbeKYyvxLMZyas9iSnpmPU0P8mEdfPHIH0hut6q5QxyhL1PIPvGkYaTiiUK4vwhvwEs4JbhyphenhyphennmEI1JY0YkvM9fbx-ctLvxezRXzL_D_CDfRVVxH60bO2z37ytpwg7jE2ph8/s1039/1000120001.png" style="width: 35px; height: 35px; object-fit: contain;">
+    <span id="vipInfoLevel" style="color: #fdbd01; font-weight: 900; font-size: 16px;">VIP 0</span>
+    
+    <button onclick="window.location.href='deposit.html'" class="upgrade-btn">UPGRADE</button>
+  </div>
+  <div class="vip-info-stats">
+    <div class="vip-stat-row">
+      <span>Max orders per day: <b id="vipMaxOrders" class="vip-stat-val">1</b></span>
+      <span>Usage today: <b id="vipUsedOrders" class="vip-stat-used">0</b></span>
+    </div>
+    <div class="vip-stat-row">
+      <span>Max amount per order: <b id="vipMaxAmount" class="vip-stat-val">₹100</b></span>
+      <span>Usage today: <b id="vipUsedAmount" class="vip-stat-used">₹0</b></span>
+    </div>
+  </div>
+</div>
+
+      
+    </div>
+    <div class="button-container">
+      <button class="btn btn-primary" onclick="initiateWithdrawal()" id="withdrawBtn">Withdraw</button>
+    </div>
+
+    <div class="info-sections">
+      <div class="processing-protection">
+        <svg class="shield-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="url(#shieldGrad)" stroke="#fdbd01" stroke-width="1.5"/>
+          <path d="M8.5 11.5L11 14l4.5-4.5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="shieldGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#ff4b4b"/>
+              <stop offset="1" stop-color="#800000"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="pp-header">Processing Protection</div>
+        <p class="pp-desc">Under Processing Protection,<br> your deposits and withdrawals are safeguarded.</p>
+        <p class="pp-desc" style="max-width: 72%;">Eligible transaction delays will be compensated with a Delay Credit based on the amounts listed below.</p>
+        
+        <div class="pp-subtitle">Deposit:</div>
+        <div class="pp-item"><span class="pp-hl">10%</span> Delay Credit of payment amount for <span class="pp-hl">12-hour</span> delay.</div>
+        <div class="pp-item"><span class="pp-hl">100%</span> Delay Credit of payment amount for <span class="pp-hl">24-hour</span> delay.</div>
+        
+        <div class="pp-subtitle" style="margin-top: 6px;">Withdrawal:</div>
+        <div class="pp-item"><span class="pp-hl">10%</span> Delay Credit of payment amount for <span class="pp-hl">72-hour</span> delay.</div>
+        <div class="pp-item"><span class="pp-hl">100%</span> Delay Credit of payment amount for <span class="pp-hl">120-hour</span> delay.</div>
+        
+        <p class="pp-desc" style="margin-top: 8px;">Once the eligibility criteria are met, the Delay Credit will be automatically sent to your Gift Center.</p>
+      </div>
+
+      <div class="commission-note-section">
+        <div class="cn-title">Commission</div>
+        <ol class="cn-list">
+          <li>To ensure your account security, please verify your account number before withdrawing.</li>
+          <li>3% of Request Amount & processing fee.</li>
+          <li>For a withdrawal amount of ₹100, you will receive ₹100, and ₹113 will be deducted in your game balance.</li>
+        </ol>
+
+        <div class="cn-title">Note</div>
+        <ol class="cn-list">
+          <li>You can only make one order at a time. Please confirm your withdrawal amount before submitting your request.</li>
+          <li>If you need help while adding cash or withdrawing, please contact us.</li>
+        </ol>
+      </div>
+    </div>
+    </div>
+
+  <div class="bank-update-modal" id="bankUpdateModal">
+    <div class="bank-update-container">
+      <div class="bank-update-header">
+        <div class="logo">
+          <img src="https://media.baamboozle.com/uploads/images/1338290/1ba6973c-bb20-4948-9dfb-ddbdfd0ee74b.gif" alt="🏦">
+          Account Update
+        </div>
+        <div class="header-actions">
+          <button class="records-button" id="bankUpdateRecordsBtn" style="display:none;"><i class="fas fa-book"></i></button>
+          <button class="bank-update-back" id="bankUpdateBackBtn"><i class="fas fa-angle-left"></i></button>
+        </div>
+      </div>
+
+      <div class="method-tabs" id="updateMethodTabs">
+        <button class="method-tab active" data-method="imps">IMPS</button>
+        <button class="method-tab" data-method="upi">UPI</button>
+      </div>
+
+      <div class="balance-display animate__animated">
+        <div class="balance-label">TOTAL BALANCE</div>
+        <div class="balance-amount" id="updateTotalBalance">₹0.00</div>
+      </div>
+
+      <div class="bank-update-form1" id="impsUpdateForm">
+        <div class="imps-header1">IMPS</div>
+        <div class="bank-row1">
+          <div class="bank-label1">Account No</div>
+          <input type="text" id="updateAccountNumber" placeholder="Enter Account No">
+        </div>
+        <div class="bank-row1">
+          <div class="bank-label1">Name</div>
+          <input type="text" id="updateAccountName" placeholder="Enter Ac Holder Name">
+        </div>
+        <div class="bank-row1">
+          <div class="bank-label1">IFSC</div>
+          <input type="text" id="updateIfsc" placeholder="Enter IFSC Code">
+        </div>
+      </div>
+
+      <div class="bank-update-form1" id="upiUpdateForm" style="display: none;">
+        <div class="imps-header1">UPI</div>
+        <div class="bank-row1">
+          <div class="bank-label1">UPI ID</div>
+          <input type="text" id="updateUpiId" placeholder="Enter UPI ID (e.g., user@upi)">
+        </div>
+        <div class="bank-row1">
+          <div class="bank-label1">Name</div>
+          <input type="text" id="updateUpiName" placeholder="Enter UPI Holder Name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="button-container">
+          <button class="btn btn-success" onclick="confirmBankUpdateModal()" id="updateBankBtn" style="margin-top: 10px;">
+            <i class="fas fa-check-circle"></i> Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="records-modal" id="recordsModal">
+    <div class="bank-update-container">
+      <div class="bank-update-header">
+        <div class="logo">
+          <img src="https://media.baamboozle.com/uploads/images/1338290/1ba6973c-bb20-4948-9dfb-ddbdfd0ee74b.gif" alt="🏦">
+          WITHDRAW RECORDS
+        </div>
+        <div class="header-actions">
+          <button class="bank-update-back" id="closeRecords"><i class="fas fa-angle-left"></i></button>
+        </div>
+      </div>
+      <div class="records-tabs" style="margin-top: 0;">
+        <button class="records-tab active" data-status="pending">processing</button>
+        <button class="records-tab" data-status="processing">Transfering</button>
+        <button class="records-tab" data-status="success">Success</button>
+        <button class="records-tab" data-status="failed">Failed</button>
+      </div>
+      <div class="records-container">
+        <div id="recordsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup-container" id="popupContainer">
+    <div class="popup-content">
+      <button class="popup-close" id="popupClose">×</button>
+      <div class="popup-title" id="popupTitle">Confirm Withdrawal</div>
+      <div class="popup-message" id="popupMessage">Review your details before confirming.</div>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="popupCancel">Cancel</button>
+        <button class="btn btn-success" id="popupConfirm">Confirm</button>
+        <button class="btn btn-primary" id="popupCloseBtn" style="display:none;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="successSound" src="https://audio.jukehost.co.uk/OLGDJHjxIY9cMiUPOYPGkGavKoFDVVwY" preload="auto"></audio>
+  <audio id="errorSound" src="https://audio.jukehost.co.uk/7h9Ng4dbLQkq49TkwVVjBJXAtkzYUXSs" preload="auto"></audio>
+  <audio id="clickSound" src="https://audio.jukehost.co.uk/SOrgXYyuSDba9zvEdeTW8RrOGMrYd9y0" preload="auto"></audio>
+  <audio id="notificationSound" src="https://audio.jukehost.co.uk/esNyil7go7uL10qtRvxEtb8yLwwm7iFC" preload="auto"></audio>
+  <audio id="cashSound" src="https://audio.jukehost.co.uk/n8rlkq38J4IS24A1ajbgMewJx7HeswHz" preload="auto"></audio>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <script>
+  // Firebase configuration
+  const firebaseConfig = {
+      apiKey: "AIzaSyAfVcC_wBMaarOExZVrUeqZf65NzT7BCfU",
+      authDomain: "kamaaikendra-546d6.firebaseapp.com",
+      databaseURL: "https://kamaaikendra-546d6-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "kamaaikendra-546d6",
+      storageBucket: "kamaaikendra-546d6.firebasestorage.app",
+      messagingSenderId: "878228615894",
+      appId: "1:878228615894:web:c3660d7510fb05d0d54f77"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const database = firebase.database();
+
+  // Variables
+  let currentAction = null;
+  let currentTab = 'pending'; 
+  let currentMethod = 'imps';
+  let selectedWithdrawalAmount = 100;
+  
+  // App Ready Flags
+  let isAppReady = false;
+  let isInitialLoadDone = false;
+
+  // Track constraints globally
+  let hasPendingWithdrawal = false;
+  let lastBankUpdate = null;
+  
+  // NEW: VIP logic Variables
+  const VIP_LEVELS = [
+      { level: 0, minXp: 0, maxOrders: 0, maxAmount: 0, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjvrR-1g8NgiwVrGrAHQ-Xg_KlyAzVqiMVo4thXTRrlIw-_4oRfzlr0sTiJBbeKYyvxLMZyas9iSnpmPU0P8mEdfPHIH0hut6q5QxyhL1PIPvGkYaTiiUK4vwhvwEs4JbhyphenhyphennmEI1JY0YkvM9fbx-ctLvxezRXzL_D_CDfRVVxH60bO2z37ytpwg7jE2ph8/s1039/1000120001.png' },
+      { level: 1, minXp: 200, maxOrders: 2, maxAmount: 200, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi1ZuuaZxChZ2Wxol1zEc-yaXmjxFIedB3izOmlYc16ui573kUtujgjwnZvfrpY7EvMszJN8DrC4v5DKQryU-NY-XwTouehWiARv9ZAYAKpdnTYpEbLduaQJAY0hbGgEiYixy6H7S7zGKNQKaQMPmkWnFUiI9TforZlINMWzk5tqAqyfBN65kxYTGrk8uM/s1039/1000120002.png' },
+      { level: 2, minXp: 500, maxOrders: 2, maxAmount: 500, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgm8U-clMuQh5iX3BE6RCcwlnBXrArm53D2xDO5jB8ZPVjt7Ad1-bVsbveLG22HoFOEt5CmoV5MfnFgZCiEgjxE_x6oAwHMIJRLSw6n8vICMG80RSO0l_sY0ufXsqfpWsXYKvb_lxVULNX4eSr4w2RX9ZNt5Gp6wneC3zRHVj29yZzLiWAn0YsG4c7XGmY/s972/1000120013.png' },
+      { level: 3, minXp: 1000, maxOrders: 3, maxAmount: 1000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgifbI_zTOr_YIf4kBeay8pMWZcSSw1uJtdASllpNCg0hk8hokToBlVgfeKCrahHyP6WSNuX2U4du-OMp2fCGfmZmbQ6iG1R4DE6uWZ4CyfphgtGZvm-k7iPlXhTeDkm_lpTZiYL0axWUESX14RvJvfWTeBonsBxvsvoJmaTHDPVCYoNDiBkOp3AdP1GOw/s1200/1000120011.png' },
+      { level: 4, minXp: 2000, maxOrders: 3, maxAmount: 2000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrHaBSC2EvdcgM2t3Q1nxip31u4OcpnHt76DIr4g00gHQqtgs7fduo8thpD4V8lqR1C3M3fRoAm20V-X59rb15QhP9RyFyf_c7gwhyphenhyphennE-t9N85CHrbfq4-FHRCn4-qV4jQs4u7kJ3qFW-dI0dIbBDzVI2XqyrSFtyF2MtErCDQZgMg7sYfLtnFh-EeWVk/s1174/1000120004.png' },
+      { level: 5, minXp: 5000, maxOrders: 3, maxAmount: 5000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjyOTyqLvlaGZsrkKdWLNfYAx85FPOZiNpK276b72CJxRy8OGIka_TocjCe3WgMVULUaX2_pM9MaG6lEUduR4NcXEAjIba23VRX9PH-TCxdGZNtjakw2MjggOlM4Z9blJD4IVcTZuL5kcDZjYGPFVhfl_9LxogMNRCipnaoRQzUFYvHiA-OBnpcKH-PP8c/s1199/1000120005.png' },
+      { level: 6, minXp: 10000, maxOrders: 5, maxAmount: 10000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiw9Px5NxDNZsJiJG08LSUHzvnqu0HiJfh3aro387yruXdU7NJz79CodpIo9NsHrJo7NqWxceLlGNjrDQEt1Yn7HNLRkLXNo4q5z_ZJbIFCokg5B1FKZ_QUNW0fAR6Si_oKY8stpQZ9GH8pxIgq6YIxf0nPMsPQoXmyqzFUQUoykHcYprkXP5IlcVp5gds/s1017/1000120006.png' },
+      { level: 7, minXp: 30000, maxOrders: 15, maxAmount: 15000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjk9u19vhIWGcRs0OhuzEVq9QSTveDcH8BYlSVNSyPTz9E_y8uoiLh0JlzmISwUTKeYAQ4BVmmgU9piJX6TFXkxt1sZs70InlPXGup6xmStzZRdlamA_0PiRpblGmXBcE6rRuPRhnoUT0XGY0nHjocEMChnZyTSXVXrQRIMnXW_e5VueaBqOr4OoUsfkRQ/s1047/1000120007.png' },
+      { level: 8, minXp: 80000, maxOrders: 25, maxAmount: 20000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgSYv1LV6ZS_o7MSkaOiHip4uPjP95i55WNDFDg_-Wkw2gG4zTgEwLw97N9AtJT8bMZImqXHJ4sSWC3Zfe4_0VmkhGdaTxa1_etl9-kmzI2hmnmI1mJZEBbCtsw-DQBql9GzpK_7baD9ONoaM35p4y-sbVFEdYylQtppwwNfGex1CXBj2Bx36HWxbJmVbA/s1047/1000120008.png' },
+      { level: 9, minXp: 150000, maxOrders: 50, maxAmount: 20000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVWMISet1v5NnTLgtC_pG-3mr-qpa_iNSTQqmq-6zs5_CG_OCP7YZFEUyqVMCdAtXjUMe5QyESnUnHFtsd6CFj1BFM0vLl3LYl96FZUVTWNmnB79tdzk3wvmcURVk45AbafVhUnDl7ChzT2HCxaUsw_3j-NUDv-X1Fn-CH-MaTPp0n9yY1KgMtWR_uhW4/s1047/1000120009.png' },
+      { level: 10, minXp: 250000, maxOrders: 99, maxAmount: 20000, icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgw5674O7ala9xaJybyIHmCuHhpr3YaYRZvviMr5q48az532mfV1X00ppgIPIelEDQfHpmgoPPakR6D-IiSwZkdovmYGouhzotYeSdfvee4OzUGsHtdVkai3bbhXWlktXNHS6Cxi-qKbSL74v2lNIZJYS7GbUOsuQvViKTXScZ_W28NLt-kMnX13-S5zF4/s1024/1000120010.png' }
+    ];
+  let currentUserVip = VIP_LEVELS[0];
+  let todayOrdersCount = 0;
+  let todayWithdrawalAmount = 0;
+
+  function updateProgressBar(percent) {
+      document.getElementById('loadingProgress').style.width = percent + '%';
+  }
+
+  function finishLoading() {
+      updateProgressBar(100);
+      setTimeout(() => {
+          document.getElementById('loadingScreen').style.opacity = '0';
+          setTimeout(() => { 
+              document.getElementById('loadingScreen').style.display = 'none'; 
+              isAppReady = true; 
+          }, 300);
+      }, 500); 
+  }
+
+  function generateSecureRandom12Digits() {
+    const digits = new Uint8Array(12);
+    window.crypto.getRandomValues(digits);
+    let result = '';
+    for (let i = 0; i < 12; i++) {
+      result += (digits[i] % 10).toString();
+    }
+    return result;
+  }
+
+  function generateOrderId() {
+    const prefix = 'WOR';
+    const randomDigits = generateSecureRandom12Digits();
+    const now = new Date();
+    const indianDate = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+    const dayOfMonth = indianDate.getDate();
+    const dayString = dayOfMonth.toString().padStart(2, '0');
+    return prefix + randomDigits + dayString;
+  }
+
+  function checkAuth() {
+    const uid = localStorage.getItem('uid');
+    if (!uid) {
+      if (confirm('You need to sign in to access this page. Would you like to go to the login page?')) {
+        window.location.href = 'index.html';
+      }
+      return false;
+    }
+    return true;
+  }
+
+  function switchMethod(method) {
+    currentMethod = method;
+    document.querySelectorAll('.method-tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll(`.method-tab[data-method="${method}"]`).forEach(tab => tab.classList.add('active'));
+    
+    if (method === 'imps') {
+      document.querySelectorAll('.imps-details').forEach(el => el.style.display = 'flex');
+      document.querySelectorAll('.upi-details').forEach(el => el.style.display = 'none');
+    } else {
+      document.querySelectorAll('.imps-details').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.upi-details').forEach(el => el.style.display = 'flex');
+    }
+    loadUserData();
+  }
+
+  function switchUpdateMethod(method) {
+    document.querySelectorAll('#updateMethodTabs .method-tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelector(`#updateMethodTabs .method-tab[data-method="${method}"]`).classList.add('active');
+    
+    if (method === 'imps') {
+      document.getElementById('impsUpdateForm').style.display = 'block';
+      document.getElementById('upiUpdateForm').style.display = 'none';
+    } else {
+      document.getElementById('impsUpdateForm').style.display = 'none';
+      document.getElementById('upiUpdateForm').style.display = 'block';
+    }
+  }
+
+  // Fetch and configure VIP privileges
+  function fetchUserVipStats(uid, callback) {
+    database.ref('depositRequests').orderByChild('uid').equalTo(uid).once('value', snap => {
+        let totalDep = 0;
+        snap.forEach(child => {
+            let val = child.val();
+            if (val.status === 'success' || val.status === 'approved') {
+                totalDep += Number(val.amount) || 0;
+            }
+        });
+        
+        currentUserVip = VIP_LEVELS[0];
+        for (let i = 0; i < VIP_LEVELS.length; i++) {
+          if (totalDep >= VIP_LEVELS[i].minXp) {
+            currentUserVip = VIP_LEVELS[i];
+          } else { break; }
+        }
+        
+        const todayStart = new Date();
+        todayStart.setHours(0,0,0,0);
+        
+        database.ref(`appusers/${uid}/withdrawalHistory`).once('value', wSnap => {
+            todayOrdersCount = 0;
+            todayWithdrawalAmount = 0;
+            hasPendingWithdrawal = false;
+            
+            wSnap.forEach(child => {
+                let val = child.val();
+                
+                // NEW: Check if there's any active pending/processing withdrawals
+                if (val.status === 'pending' || val.status === 'processing') {
+                    hasPendingWithdrawal = true;
+                }
+                
+                if (val.timestamp >= todayStart.getTime() && val.status !== 'failed') {
+                    todayOrdersCount++;
+                    todayWithdrawalAmount += Number(val.amount) || 0;
+                }
+            });
+            
+            updateVipInfoUI();
+            updateAmountGridUI();
+            if (callback) callback();
+        }).catch(() => { if (callback) callback(); });
+    }).catch(() => { if (callback) callback(); });
+  }
+
+  function getRequiredVipLevel(amount) {
+    return VIP_LEVELS.find(v => v.maxAmount >= amount) || VIP_LEVELS[10];
+  }
+
+  function updateVipInfoUI() {
+    document.getElementById('vipInfoIcon').src = currentUserVip.icon;
+    document.getElementById('vipInfoLevel').innerText = `VIP ${currentUserVip.level}`;
+    document.getElementById('vipMaxOrders').innerText = currentUserVip.maxOrders;
+    document.getElementById('vipUsedOrders').innerText = todayOrdersCount;
+    document.getElementById('vipMaxAmount').innerText = `₹${currentUserVip.maxAmount}`;
+    document.getElementById('vipUsedAmount').innerText = `₹${todayWithdrawalAmount}`;
+  }
+
+  function updateAmountGridUI() {
+    const amounts = [100, 200, 300, 500, 1000, 2000, 5000, 10000, 20000];
+    amounts.forEach(amt => {
+        const option = document.querySelector(`.withdraw-option[data-amt="${amt}"]`);
+        if (!option) return;
+        const reqVip = getRequiredVipLevel(amt);
+        
+        const oldTag = option.querySelector('.vip-exclusive-tag');
+        if (oldTag) oldTag.remove();
+
+        if (currentUserVip.level < reqVip.level) {
+            const tag = document.createElement('div');
+            tag.className = 'vip-exclusive-tag';
+            tag.innerText = `VIP ${reqVip.level} Exclusive`;
+            option.appendChild(tag);
+        }
+    });
+  }
+
+  function loadUserData() {
+    const uid = localStorage.getItem('uid');
+    if (!uid) {
+      checkAuth();
+      return;
+    }
+
+    if (!isInitialLoadDone) updateProgressBar(40);
+    
+    let dataLoaded = false;
+    let vipLoaded = false;
+    
+    function checkAllLoaded() {
+        if (dataLoaded && vipLoaded) {
+            if (!isInitialLoadDone) {
+                finishLoading();
+                isInitialLoadDone = true;
+            }
+        }
+    }
+
+    database.ref('appusers/' + uid).once('value').then(snapshot => {
+      const userData = snapshot.val();
+      if (userData) {
+        let totalBalance = userData.totalBalance || 0;
+        let withdrawableBalance = userData.withdrawableBalance || 0;
+        lastBankUpdate = userData.lastBankUpdate || null;
+
+        document.getElementById('totalBalance').textContent = `₹${totalBalance.toFixed(2)}`;
+        document.getElementById('withdrawableBalance').textContent = `₹${withdrawableBalance.toFixed(2)}`;
+        document.getElementById('updateTotalBalance').textContent = `₹${totalBalance.toFixed(2)}`;
+        
+        if (userData.BankDetails) {
+          const bankDetails = userData.BankDetails;
+          document.getElementById('displayAccountNumber').textContent = bankDetails.accountNumber || 'Not set';
+          document.getElementById('displayIfsc').textContent = bankDetails.ifscCode || 'Not set';
+          document.getElementById('displayAccountName').textContent = bankDetails.accountName || 'Not set';
+          
+          document.getElementById('updateAccountNumber').value = bankDetails.accountNumber || '';
+          document.getElementById('updateAccountName').value = bankDetails.accountName || '';
+          document.getElementById('updateIfsc').value = bankDetails.ifscCode || '';
+        } else {
+          document.getElementById('displayAccountNumber').textContent = 'Not set';
+          document.getElementById('displayIfsc').textContent = 'Not set';
+          document.getElementById('displayAccountName').textContent = 'Not set';
+        }
+        
+        if (userData.UPIDetails) {
+          const upiDetails = userData.UPIDetails;
+          document.getElementById('displayUpiId').textContent = upiDetails.upiId || 'Not set';
+          document.getElementById('displayUpiName').textContent = upiDetails.upiName || 'Not set';
+          
+          document.getElementById('updateUpiId').value = upiDetails.upiId || '';
+          document.getElementById('updateUpiName').value = upiDetails.upiName || '';
+        } else {
+          document.getElementById('displayUpiId').textContent = 'Not set';
+          document.getElementById('displayUpiName').textContent = 'Not set';
+        }
+      }
+      
+      dataLoaded = true;
+      if (!isInitialLoadDone) updateProgressBar(70);
+      checkAllLoaded();
+    }).catch(error => {
+      console.error("Error loading user data:", error);
+      showToastMessage("Failed to load user data");
+      dataLoaded = true;
+      checkAllLoaded();
+    });
+    
+    fetchUserVipStats(uid, () => {
+       vipLoaded = true;
+       if (!isInitialLoadDone) updateProgressBar(90);
+       checkAllLoaded();
+    });
+  }
+
+  function showBankUpdateModal() {
+    switchUpdateMethod(currentMethod);
+    document.getElementById('mainContainer').style.display = 'none';
+    document.getElementById('bankUpdateModal').style.display = 'block';
+    document.querySelector('.back-button').style.display = 'none';
+    document.getElementById('viewRecordsBtn').style.display = 'none';
+  }
+
+  function hideBankUpdateModal() {
+    document.getElementById('bankUpdateModal').style.display = 'none';
+    document.getElementById('mainContainer').style.display = 'flex';
+    document.querySelector('.back-button').style.display = 'inline-flex';
+    document.getElementById('viewRecordsBtn').style.display = 'inline-flex';
+  }
+
+  function confirmBankUpdateModal() {
+    if (!checkAuth()) return;
+    const uid = localStorage.getItem('uid');
+    const updateMethod = document.querySelector('#updateMethodTabs .method-tab.active').getAttribute('data-method');
+    
+    // NEW: Check if updated this calendar month (IST)
+    const istTime = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+    const currentMonthKey = istTime.getFullYear() + "-" + (istTime.getMonth() + 1).toString().padStart(2, '0');
+
+    if (lastBankUpdate === currentMonthKey) {
+        showMessagePopup("You can only update your account details once per calendar month.");
+        return;
+    }
+
+    const updates = {};
+    updates['lastBankUpdate'] = currentMonthKey;
+
+    if (updateMethod === 'imps') {
+      const bankDetails = {
+        accountNumber: document.getElementById('updateAccountNumber').value.trim(),
+        ifscCode: document.getElementById('updateIfsc').value.trim().toUpperCase(),
+        accountName: document.getElementById('updateAccountName').value.trim()
+      };
+      if (!bankDetails.accountNumber || !bankDetails.ifscCode || !bankDetails.accountName) {
+        showMessagePopup('Please fill all bank details!'); return;
+      }
+      if (bankDetails.accountNumber.length < 9 || bankDetails.accountNumber.length > 18) {
+        showMessagePopup('Account number must be between 9-18 digits!'); return;
+      }
+      if (!bankDetails.ifscCode.match(/^[A-Z]{4}0[A-Z0-9]{6}$/)) {
+        showMessagePopup('Invalid IFSC code format!'); return;
+      }
+      
+      updates['BankDetails'] = bankDetails;
+
+    } else {
+      const upiDetails = {
+        upiId: document.getElementById('updateUpiId').value.trim(),
+        upiName: document.getElementById('updateUpiName').value.trim()
+      };
+      if (!upiDetails.upiId || !upiDetails.upiName) {
+        showMessagePopup('Please fill all UPI details!'); return;
+      }
+      if (!upiDetails.upiId.match(/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/)) {
+        showMessagePopup('Invalid UPI ID format! Please use format: user@upi'); return;
+      }
+      
+      updates['UPIDetails'] = upiDetails;
+    }
+
+    // Set atomic update for details + last update month tracker
+    database.ref('appusers/' + uid).update(updates)
+      .then(() => {
+        lastBankUpdate = currentMonthKey;
+        showSuccessPopup(updateMethod === 'imps' ? 'Bank details updated successfully!' : 'UPI details updated successfully!');
+        loadUserData(); setTimeout(hideBankUpdateModal, 1500);
+      })
+      .catch(error => { showMessagePopup('Failed to update details. Please try again.'); });
+  }
+
+  // Process Withdrawal enforcing VIP maxOrders and maxAmount using secure transaction
+  function processWithdrawal() {
+    if (!checkAuth()) return;
+    
+    // NEW: Enforce rule where user cannot submit withdrawal if another is processing
+    if (hasPendingWithdrawal) {
+        showMessagePopup("You already have a pending or processing withdrawal. Please wait for it to complete.");
+        return;
+    }
+
+    if (currentUserVip.level === 0 || currentUserVip.maxOrders === 0) {
+        showMessagePopup("You are a Non-VIP User. Please deposit at least ₹100 to upgrade to VIP and place withdrawal orders.");
+        return;
+    }
+
+    const uid = localStorage.getItem('uid');
+    const amount = selectedWithdrawalAmount || 100;
+    const tax = amount * 0.03;
+    const serviceFee = 10;
+    const totalAmount = amount + tax + serviceFee;
+
+    if (todayOrdersCount >= currentUserVip.maxOrders) {
+        showMessagePopup(`You have reached your maximum of ${currentUserVip.maxOrders} withdrawal orders for today (VIP ${currentUserVip.level}).`);
+        return;
+    }
+    if (amount > currentUserVip.maxAmount) {
+        showMessagePopup(`Your VIP ${currentUserVip.level} limit allows a maximum withdrawal of ₹${currentUserVip.maxAmount} per order.`);
+        return;
+    }
+
+    let withdrawalDetails = {};
+    if (currentMethod === 'imps') {
+      withdrawalDetails = {
+        method: 'imps',
+        accountNumber: document.getElementById('displayAccountNumber').textContent,
+        ifscCode: document.getElementById('displayIfsc').textContent,
+        accountName: document.getElementById('displayAccountName').textContent
+      };
+      if (withdrawalDetails.accountNumber === 'Not set' || withdrawalDetails.ifscCode === 'Not set' || withdrawalDetails.accountName === 'Not set') {
+        showMessagePopup('Please add your bank details first!'); return;
+      }
+    } else {
+      withdrawalDetails = {
+        method: 'upi',
+        upiId: document.getElementById('displayUpiId').textContent,
+        upiName: document.getElementById('displayUpiName').textContent
+      };
+      if (withdrawalDetails.upiId === 'Not set' || withdrawalDetails.upiName === 'Not set') {
+        showMessagePopup('Please add your UPI details first!'); return;
+      }
+    }
+
+    const withdrawalId = generateOrderId();
+    const withdrawalData = {
+      amount: amount, fee: tax, serviceFee: serviceFee, status: 'pending',
+      timestamp: firebase.database.ServerValue.TIMESTAMP, method: currentMethod, withdrawalDetails: withdrawalDetails
+    };
+
+    database.ref(`appusers/${uid}`).transaction((userData) => {
+      if (userData) {
+        let total = userData.totalBalance || 0;
+        let withdrawable = userData.withdrawableBalance || 0;
+        
+        // NEW WAGERING CHECK SECURE
+        if (total > withdrawable) {
+          return undefined; // abort transaction
+        }
+
+        if (totalAmount > withdrawable) {
+          return undefined; // abort transaction
+        }
+
+        userData.totalBalance = Math.max(0, total - totalAmount);
+        userData.withdrawableBalance = Math.max(0, withdrawable - totalAmount);
+        
+        if (!userData.withdrawalHistory) {
+            userData.withdrawalHistory = {};
+        }
+        userData.withdrawalHistory[withdrawalId] = withdrawalData;
+      }
+      return userData;
+    }, (error, committed, snapshot) => {
+      if (error || !committed) {
+        showMessagePopup(`Error: Unwithdrawable balance exists or insufficient funds!`);
+      } else {
+        let methodText = currentMethod === 'imps' ? 'Bank (IMPS)' : 'UPI';
+        const message = `
+          <div style="text-align: left;">
+            <p style="font-weight: 900; color:rgba(255,255,255,0.7); margin-bottom: 5px; text-align:left;">Withdrawal Request Submit Successful!</p>
+            <p><span style="display: inline-block; width: 100px;">Amount:</span> <strong>₹${amount.toFixed(2)}</strong></p>
+            <p><span style="display: inline-block; width: 100px;">Service Fee:</span> <strong>₹${serviceFee.toFixed(2)}</strong></p>
+            <p><span style="display: inline-block; width: 100px;">Tax (3%):</span> <strong>₹${tax.toFixed(2)}</strong></p>
+            <p><span style="display: inline-block; width: 100px;">Total:</span> <strong>₹${totalAmount.toFixed(2)}</strong></p>
+            <hr style="border: none; border-top: 1px dashed #ddd; margin: 6px 0;">
+            <p><span style="display: inline-block; width: 100px;">Method:</span> <strong>${methodText}</strong></p>
+            <p><span style="display: inline-block; width: 100px;">Order ID:</span> <strong>${withdrawalId}</strong></p>
+            <p style="margin-top: 5px; font-size: 9px; color:#12AD2B;">Your withdrawal request is being processed.<br> It may take 3-7 business days for Bank Settlement.</p>
+          </div>
+        `;
+        showSuccessPopup(message);
+        loadUserData(); 
+        
+        // Ensure consistency with the transaction history logic used in the main platform
+        const recordId = generateSecureRandom12Digits();
+        const record = { 
+            type: 'withdrawal', 
+            amount: -totalAmount, 
+            description: `Withdrawal - ${methodText}`, 
+            transactionName: 'Withdrawal', 
+            timestamp: Date.now(), 
+            balanceAfter: snapshot.val().totalBalance, 
+            isIncome: false, 
+            transactionId: recordId 
+        };
+        database.ref(`appusers/${uid}/transactionRecords`).push(record);
+      }
+    });
+  }
+
+  function initiateWithdrawal() {
+    if (!isAppReady) return;
+    
+    // NEW WAGERING CHECK: Block if ANY unwithdrawable balance exists
+    const tbText = document.getElementById('totalBalance').textContent.replace(/[^0-9.]/g, '');
+    const wbText = document.getElementById('withdrawableBalance').textContent.replace(/[^0-9.]/g, '');
+    const currentTb = parseFloat(tbText) || 0;
+    const currentWb = parseFloat(wbText) || 0;
+
+    if (currentTb > currentWb) {
+        showMessagePopup("You have unwithdrawable balance on your account. You must wager your balance to make it 100% withdrawable before submitting a request!");
+        return;
+    }
+    
+    // NEW: Enforce rule where user cannot submit withdrawal if another is processing
+    if (hasPendingWithdrawal) {
+        showMessagePopup("You already have a pending or processing withdrawal. Please wait for it to complete.");
+        return;
+    }
+    
+    if (currentUserVip.level === 0 || currentUserVip.maxOrders === 0) {
+        showMessagePopup("Only For VIP 1 Or Above Users");
+        return;
+    }
+
+    const amount = selectedWithdrawalAmount;
+    const reqVip = getRequiredVipLevel(amount);
+    
+    if (currentUserVip.level < reqVip.level) {
+        showMessagePopup(`You need to be VIP ${reqVip.level} to withdraw ₹${amount}. Your current level is VIP ${currentUserVip.level}.`);
+        return;
+    }
+    
+    if (todayOrdersCount >= currentUserVip.maxOrders) {
+        showMessagePopup(`You have reached your maximum of ${currentUserVip.maxOrders} withdrawal orders for today.`);
+        return;
+    }
+
+    const tax = amount * 0.03;
+    const serviceFee = 10;
+    const totalAmount = amount + tax + serviceFee;
+    let withdrawalDetails = {};
+    let methodText = '';
+    
+    if (currentMethod === 'imps') {
+      withdrawalDetails = {
+        method: 'imps',
+        accountNumber: document.getElementById('displayAccountNumber').textContent,
+        ifscCode: document.getElementById('displayIfsc').textContent,
+        accountName: document.getElementById('displayAccountName').textContent
+      };
+      methodText = 'Bank (IMPS)';
+      if (withdrawalDetails.accountNumber === 'Not set' || withdrawalDetails.ifscCode === 'Not set' || withdrawalDetails.accountName === 'Not set') {
+        showMessagePopup('Please add your bank details first! Click the edit button to add bank details.'); return;
+      }
+    } else {
+      withdrawalDetails = {
+        method: 'upi',
+        upiId: document.getElementById('displayUpiId').textContent,
+        upiName: document.getElementById('displayUpiName').textContent
+      };
+      methodText = 'UPI';
+      if (withdrawalDetails.upiId === 'Not set' || withdrawalDetails.upiName === 'Not set') {
+        showMessagePopup('Please add your UPI details first! Click the edit button to add UPI details.'); return;
+      }
+    }
+
+    let detailsHtml = '';
+    if (currentMethod === 'imps') {
+      detailsHtml = `
+        <p><span style="display: inline-block; width: 120px;">Account:</span> <strong>${withdrawalDetails.accountNumber}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">IFSC:</span> <strong>${withdrawalDetails.ifscCode}</strong></p>
+      `;
+    } else {
+      detailsHtml = `
+        <p><span style="display: inline-block; width: 120px;">UPI ID:</span> <strong>${withdrawalDetails.upiId}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">Name:</span> <strong>${withdrawalDetails.upiName}</strong></p>
+      `;
+    }
+
+    const message = `
+      <div style="text-align: left;">
+        <p style="font-weight: 900; color:rgba(255,255,255,0.7); margin-bottom: 5px; text-align:left;">Confirm Amount and account details</p>
+        <p><span style="display: inline-block; width: 120px;">Method:</span> <strong>${methodText}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">Amount:</span> <strong>₹${amount.toFixed(2)}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">Service Fee:</span> <strong>₹${serviceFee.toFixed(2)}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">Tax (3%):</span> <strong>₹${tax.toFixed(2)}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">Total:</span> <strong>₹${totalAmount.toFixed(2)}</strong></p>
+        <hr style="border: none; border-top: 1px dashed #ddd; margin: 6px 0;">
+        ${detailsHtml}
+        <p style="margin-top: 5px; font-size: 10px; color:#12AD2B;">Please confirm to proceed with withdrawal.</p>
+      </div>
+    `;
+
+    showConfirmationPopup('Confirm Withdrawal', message, 'withdrawal');
+  }
+
+  function loadWithdrawalHistory(status = 'pending') {
+    const uid = localStorage.getItem('uid');
+    if (!uid) return;
+
+    database.ref('appusers/' + uid + '/withdrawalHistory').once('value').then(snapshot => {
+        const recordsList = document.getElementById('recordsList');
+        recordsList.innerHTML = '';
+        const withdrawals = snapshot.val() || {};
+        if (Object.keys(withdrawals).length === 0) {
+            recordsList.innerHTML = '<div class="no-records">No withdrawal records found</div>'; return;
+        }
+
+        const sortedWithdrawals = Object.entries(withdrawals)
+            .map(([withdrawalId, withdrawal]) => ({ id: withdrawalId, ...withdrawal }))
+            .filter(withdrawal => withdrawal.status === status)
+            .sort((a, b) => b.timestamp - a.timestamp); 
+
+        if (sortedWithdrawals.length === 0) {
+            recordsList.innerHTML = `<div class="no-records">No withdrawal records found</div>`; return;
+        }
+
+        sortedWithdrawals.forEach(withdrawal => {
+            const date = new Date(withdrawal.timestamp);
+            const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true };
+            const formattedDate = date.toLocaleString('en-IN', options);
+            const recordItem = document.createElement('div');
+            recordItem.className = 'withdrawal-record';
+            
+            let detailsHtml = '';
+            if (withdrawal.method === 'imps') {
+                detailsHtml = `
+                    <div class="record-row"><div class="record-label">Account</div><div class="record-value">${withdrawal.withdrawalDetails?.accountNumber || 'N/A'}</div></div>
+                    <div class="record-row"><div class="record-label">IFSC</div><div class="record-value">${withdrawal.withdrawalDetails?.ifscCode || 'N/A'}</div></div>
+                `;
+            } else {
+                detailsHtml = `
+                    <div class="record-row"><div class="record-label">UPI ID</div><div class="record-value">${withdrawal.withdrawalDetails?.upiId || 'N/A'}</div></div>
+                    <div class="record-row"><div class="record-label">Name</div><div class="record-value">${withdrawal.withdrawalDetails?.upiName || 'N/A'}</div></div>
+                `;
+            }
+            recordItem.innerHTML = `
+                <div class="record-section">
+                    <div class="record-label">${withdrawal.method === 'imps' ? 'Bank' : 'UPI'}</div>
+                    <div class="record-value">+ ₹${withdrawal.amount.toFixed(0)}</div>
+                    <div class="record-time">${formattedDate}</div>
+                    <div class="record-divider"></div>
+                </div>
+                <div class="record-row">
+                    <div class="record-label">Withdrawal ID</div>
+                    <div class="record-value">${withdrawal.id}</div>
+                </div>
+                ${detailsHtml}
+                <div class="record-divider2"></div>
+            `;
+            recordsList.appendChild(recordItem);
+        });
+    });
+  }
+
+  function switchTab(status) {
+    document.querySelectorAll('.records-tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelector(`.records-tab[data-status="${status}"]`).classList.add('active');
+    currentTab = status;
+    loadWithdrawalHistory(status);
+  }
+
+  function showConfirmationPopup(title, message, action) {
+    if (!isAppReady) return;
+    const popupContainer = document.getElementById('popupContainer');
+    document.getElementById('popupTitle').textContent = title;
+    document.getElementById('popupMessage').innerHTML = message;
+    document.getElementById('popupConfirm').style.display = 'block';
+    document.getElementById('popupCancel').style.display = 'block';
+    document.getElementById('popupCloseBtn').style.display = 'none';
+    currentAction = action;
+    document.getElementById('popupConfirm').onclick = function() {
+      if (currentAction === 'withdrawal') processWithdrawal();
+      hidePopup();
+    };
+    popupContainer.style.display = 'flex';
+  }
+
+  // Toasts functionality
+  function showMessagePopup(message) {
+    if (!isAppReady) return;
+    showToastMessage(message);
+  }
+
+  function showSuccessPopup(message) {
+    if (!isAppReady) return;
+    showToastMessage(message);
+  }
+
+  function showToastMessage(message) {
+    const toast = document.getElementById('centerToast');
+    toast.innerHTML = message;
+    toast.style.display = 'block';
+    void toast.offsetWidth;
+    toast.classList.add('show');
+    
+    if (toast.hideTimeout) clearTimeout(toast.hideTimeout);
+    toast.hideTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => { toast.style.display = 'none'; }, 300);
+    }, 3000);
+  }
+
+  function hidePopup() { document.getElementById('popupContainer').style.display = 'none'; currentAction = null; }
+  
+  function showRecordsModal() { 
+    document.getElementById('mainContainer').style.display = 'none';
+    document.querySelector('.back-button').style.display = 'none';
+    document.getElementById('viewRecordsBtn').style.display = 'none';
+    document.getElementById('recordsModal').style.display = 'block'; 
+    loadWithdrawalHistory(currentTab); 
+  }
+  
+  function hideRecordsModal() { 
+    document.getElementById('recordsModal').style.display = 'none'; 
+    document.getElementById('mainContainer').style.display = 'flex';
+    document.querySelector('.back-button').style.display = 'inline-flex';
+    document.getElementById('viewRecordsBtn').style.display = 'inline-flex';
+  }
+
+  function selectAmount(amount) {
+    const requiredVip = getRequiredVipLevel(amount);
+    
+    if (currentUserVip.level < requiredVip.level) {
+      showMessagePopup(`Requires VIP ${requiredVip.level} to withdraw ₹${amount}.`);
+      return;
+    }
+    
+    document.querySelectorAll('.withdraw-option').forEach(btn => btn.classList.remove('selected'));
+    document.querySelector(`.withdraw-option[data-amt="${amount}"]`).classList.add('selected');
+    
+    selectedWithdrawalAmount = amount;
+    setTimeout(updateTaxCalculation, 50);
+  }
+
+  function updateTaxCalculation() {
+    let amount = selectedWithdrawalAmount || 0;
+    const serviceFee = 10;
+    const tax = amount * 0.03;
+    const total = amount + tax + serviceFee;
+    
+    if (amount > 0) {
+      document.getElementById('taxCalculation').style.display = 'block';
+      document.getElementById('calcAmount').textContent = `₹${amount.toFixed(2)}`;
+      document.getElementById('calcFee').textContent = `₹${serviceFee.toFixed(2)}`;
+      document.getElementById('calcTax').textContent = `₹${tax.toFixed(2)}`;
+      document.getElementById('calcNet').textContent = `₹${total.toFixed(2)}`;
+    } else {
+      document.getElementById('taxCalculation').style.display = 'none';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    updateProgressBar(10);
+    if (!checkAuth()) return;
+    loadUserData();
+    
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', function() {
+        this.classList.add('button-click');
+        setTimeout(() => { this.classList.remove('button-click'); }, 300);
+      });
+    });
+    
+    document.querySelectorAll('#methodTabs .method-tab').forEach(tab => { tab.addEventListener('click', function() { switchMethod(this.getAttribute('data-method')); }); });
+    document.querySelectorAll('#updateMethodTabs .method-tab').forEach(tab => { tab.addEventListener('click', function() { switchUpdateMethod(this.getAttribute('data-method')); }); });
+    document.querySelectorAll('.records-tab').forEach(tab => { tab.addEventListener('click', function() { switchTab(this.getAttribute('data-status')); }); });
+    
+    document.getElementById('editBankBtn').addEventListener('click', showBankUpdateModal);
+    document.getElementById('bankUpdateBackBtn').addEventListener('click', hideBankUpdateModal);
+    document.getElementById('viewRecordsBtn').addEventListener('click', showRecordsModal);
+    document.getElementById('closeRecords').addEventListener('click', hideRecordsModal);
+    document.getElementById('popupClose').addEventListener('click', hidePopup);
+    document.getElementById('popupCancel').addEventListener('click', hidePopup);
+    document.getElementById('popupCloseBtn').addEventListener('click', hidePopup);
+
+    selectAmount(100);
+  });
+  
+    document.querySelector('.back-button').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.history.length > 1) { window.history.back(); }
+      else { window.location.href = 'home.html'; }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const fab = document.getElementById('fab');
+      const maxWidth = window.innerWidth;
+      const maxHeight = window.innerHeight;
+      const fabSize = 52;
+
+      let posX = window.innerWidth - fabSize - 10;
+      let posY = window.innerHeight - fabSize - 10;
+      let velX = 0, velY = 0;
+      let lastTime;
+      let isDragging = false;
+      let dragStartX, dragStartY;
+      let touchId = null;
+      let tapStartTime = 0;
+      let tapStartX = 0;
+      let tapStartY = 0;
+
+      fab.style.left = posX + 'px';
+      fab.style.top = posY + 'px';
+
+      const friction = 0.92;
+      const bounce = -0.7;
+      const throwFactor = -1;
+      const tapThreshold = 10;
+      const tapTimeThreshold = 180;
+
+      fab.addEventListener('touchstart', handleTouchStart, { passive: false });
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
+      requestAnimationFrame(updatePosition);
+
+      function handleTouchStart(e) {
+        if (touchId !== null) return;
+        const touch = e.touches[0];
+        touchId = touch.identifier;
+        tapStartTime = Date.now();
+        tapStartX = touch.clientX;
+        tapStartY = touch.clientY;
+        startDrag(touch.clientX, touch.clientY);
+        e.preventDefault();
+      }
+      function handleTouchMove(e) {
+        if (!isDragging) return;
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          if (t.identifier === touchId) { updateDrag(t.clientX, t.clientY); e.preventDefault(); break; }
+        }
+      }
+      function handleTouchEnd(e) {
+        if (!isDragging) return;
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          if (t.identifier === touchId) {
+            const dx = Math.abs(t.clientX - tapStartX);
+            const dy = Math.abs(t.clientY - tapStartY);
+            const tapDuration = Date.now() - tapStartTime;
+            if (dx < tapThreshold && dy < tapThreshold && tapDuration < tapTimeThreshold) { window.location.href = 'chat.html'; }
+            endDrag(); touchId = null; break;
+          }
+        }
+      }
+      function startDrag(x, y) {
+        isDragging = true; fab.style.animation = 'none'; fab.style.cursor = 'grabbing'; fab.style.transition = 'none';
+        dragStartX = x - posX; dragStartY = y - posY; velX = 0; velY = 0;
+      }
+      function updateDrag(x, y) {
+        const newX = x - dragStartX; const newY = y - dragStartY;
+        if (lastTime) {
+          const now = performance.now(); const dt = (now - lastTime) / 1000;
+          if (dt > 0) { velX = (newX - posX) / dt * throwFactor; velY = (newY - posY) / dt * throwFactor; }
+        }
+        posX = newX; posY = newY; lastTime = performance.now(); constrain(); render();
+      }
+      function endDrag() {
+        isDragging = false; fab.style.cursor = 'pointer'; fab.style.transition = 'transform .25s var(--trans)';
+        if (posY <= 0) { velY = Math.abs(velY) * bounce; } else if (posY >= maxHeight - fabSize) { velY = -Math.abs(velY) * bounce; }
+        if (posX <= 0) { velX = Math.abs(velX) * bounce; } else if (posX >= maxWidth - fabSize) { velX = -Math.abs(velX) * bounce; }
+      }
+      function constrain() { posX = Math.max(0, Math.min(posX, maxWidth - fabSize)); posY = Math.max(0, Math.min(posY, maxHeight - fabSize)); }
+      function render() { fab.style.left = posX + 'px'; fab.style.top = posY + 'px'; }
+      function updatePosition(ts) {
+        if (!isDragging) {
+          if (lastTime) {
+            const dt = (ts - lastTime) / 1000;
+            velX *= friction; velY *= friction; posX += velX * dt; posY += velY * dt;
+            if (posX < 0){ posX = 0; velX = -velX * bounce; } else if (posX > maxWidth - fabSize){ posX = maxWidth - fabSize; velX = -velX * bounce; }
+            if (posY < 0){ posY = 0; velY = -velY * bounce; } else if (posY > maxHeight - fabSize){ posY = maxHeight - fabSize; velY = -velY * bounce; }
+            render();
+          }
+        }
+        lastTime = ts; requestAnimationFrame(updatePosition);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="og:locale" content="en_US" >
+    <meta id="mateurl" name="og:url">
+    <meta name="og:type" content="website">
+    <meta name="og:site_name" content="KamaaiKendra">
+    <meta name="og:title" content="Topup Your Kimi Account Balance and Earn Big Regularly ">
+    <meta id="description" name="og:description" content="1.Topup Your Kimi Account Via This Official channel only
+2.Beware Of Scams Don't Pay Via Private Chats or Messages
+3.Pay Only Via The Official Payment channel in easy process and steps">
+    <meta id="secureurl" property="og: image:secure_url" content="https://cdn.bh2026.com/proRes/upload_f0916c28a109a1cad6952219b6f69113.jpg">
+    <meta id="imges" property="og:image" content="https://cdn.bh2026.com/proRes/upload_c95541c8c5d36afa7be7444b9256b964.jpg">
+    <title>Kimi Balance Topup</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <style>
+    /* Disable text selection */
+    * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    body {
+        cursor: default;
+    }
+    /* ========== MAIN STYLES ========== */
+    body {
+        background:#1a1a1a;
+        height: 100vh;
+        padding: 8px;
+        padding-bottom: 40px;
+        background-repeat: no-repeat;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        color: #2d3748;
+        height: 100%;
+        margin: 0;
+    }
+    .header-container {
+        min-width: 100vw;
+        object-fit: cover;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 110;
+        background-size: 100% 100%;
+        max-width: 100vw;
+        height: 35px;
+        font-weight: 900;
+        padding: 5px;
+        color: #fdbd01;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.9);
+        width: 100vw;
+        background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(11,0,22,0.5) 15%, rgba(22,0,44,0.5) 20%, rgba(44,10,88,0.5) 30%, rgba(88,20,166,0.5) 40%, rgba(166,40,360,0.5) 50%, rgba(88,20,166,0.5) 60%, rgba(44,10,88,0.5) 70%, rgba(22,0,44,0.5) 80%, rgba(11,0,22,0.5) 85%, rgba(0,0,0,0.5) 100%);
+        border-bottom: 2px solid #2a2a2a;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        display: flex;
+        backdrop-filter: blur(5px);
+        align-items: center;
+        justify-content: space-between;
+    }
+    .header-text {
+        color: white;
+        font-family: Segoe UI;
+        font-size: 1rem;
+        flex-grow: 1;
+        text-align: center;
+    }
+    .btn-nav-back {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background: transparent;
+        color: #fdbd01;
+        border: none;
+        cursor: pointer;
+        font-size: 25px;
+        font-weight: 900;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        text-decoration: none;
+        padding: 0;
+        margin: 0;
+    }
+    .btn-nav-back:hover { transform: translateX(-2px); }
+    .btn-nav-back:active { transform: translateX(-5px); }
+    .btn-nav-records {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: transparent;
+        color: #fdbd01;
+        border: none;
+        cursor: pointer;
+        font-size: 22px;
+        font-weight: 900;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        text-decoration: none;
+        padding: 0;
+        margin-right: 0;
+    }
+    .btn-nav-records:hover { transform: translateY(-2px); }
+    h2, h3, h6, p, .card-content, .text-copy-target, .modal-content-container p { font-size: small; }
+    .badge-wrapper {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 10px 0;
+    }
+    .badge-img {
+        width: 60px;
+        height: 30px;
+        object-fit: contain;
+    }
+    p {
+        color: black;
+        font-weight: 900;
+        font-size: 8px;
+        font-family: fantasy;
+        text-transform: uppercase;
+        background: #EEEEEE;
+    }
+    h5 {
+        color: black;
+        margin: 5px;
+        border-radius: 5px;
+        display: inline-block;
+        align-content: center;
+        text-align: center;
+        font-size: 10px;
+        font-family: fantasy;
+    }
+    .amount-input-wrapper {
+        margin-top: 55px;
+        width: 100%;
+        background: transparent;
+        padding-top: 5px;
+        padding-bottom: 10px;
+    }
+    .input-deposit-field {
+        width: 95%;
+        height: 25px;
+        background: rgba(0,0,0,0.5);
+        border: none;
+        outline: none;
+        border-radius: 4px;
+        color: rgba(255,255,255,0.8);
+        font-size: 14px;
+        text-align: left;
+        font-family: Segoe UI;
+        padding-left: 10px;
+    }
+    .grid-amount-options {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+        width: 98%;
+        margin-top: 10px;
+        justify-self: center;
+    }
+    .btn-amount-option {
+        background: rgba(0,0,0,0.5);
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        font-family: Segoe UI;
+        padding: 5px;
+        border-radius: 4px;
+        background-size: 100% 100%;
+        text-align: center;
+        cursor: pointer;
+        border: 1px solid rgba(0,0,0,0.2);
+        width: 100%;
+        transition: all 0.3s ease;
+        text-shadow: 2px 2px 4px rgba(250,42,85,0.1);
+    }
+    .btn-amount-option:hover,
+    .btn-amount-option.is-active {
+        background: linear-gradient(180deg, rgba(108,11,195,0.5), rgba(158,0,202,0.6));
+        box-shadow: 0 .51px 0 rgba(0,0,0,0.35), 0 1px 0 rgba(0,0,0,0.35);
+    }
+    .breakdown-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 5px;
+        max-width: 100%;
+        margin: 0 auto;
+        background: rgba(0,0,0,0.5);
+        border-radius: 6px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .card-value-box {
+        background:#1a1a1a;
+        border: 0.6px solid rgba(0,0,0,0.5);
+        outline: 1.4px solid #fdbd01;
+        border-radius: 4px;
+        padding: 0;
+        color: #ffffff;
+        overflow: hidden;
+        position: relative;
+    }
+    .card-value-box::after {
+        content: "";
+        position: absolute;
+        top: 110%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle at center, rgba(0,0,0,0.0) 0%, transparent 100%), repeating-conic-gradient(from 0deg, rgba(0,0,0,0.01) 0deg 5deg, rgba(182,0,238,0.09) 6deg 10deg);
+        width: 300px;
+        height: 300px;
+        border-radius: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+    .card-value-box .text-label {
+        color: #43f0c8;
+        font-size: 10px;
+        font-weight: 500;
+        margin-bottom: 2px;
+        text-align: left;
+        padding: 1px 3px;
+        background: linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.5) 20%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.1) 80%, rgba(0,0,0,0.01) 100%);
+    }
+    .card-value-box .text-value {
+        font-size: 14px;
+        font-weight: 900;
+        text-align: center;
+        letter-spacing: 1px;
+        text-shadow: 0 0 5px rgba(205,55,333,0.9), 0 0 10px rgba(205,25,445,0.6), 0 0 15px rgba(255,65,555,0.3);
+    }
+    .overlay-modal-window {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: white;
+        backdrop-filter: blur(0px);
+        animation: fadeIn 0.1s ease-out;
+        text-align: center;
+        max-width: 100vw;
+    }
+    .overlay-system-alert {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        text-align: center;
+        max-width: 100vw;
+    }
+    .modal-content-container {
+        background: white;
+        border-radius: 4px;
+        width: 100vw;
+        text-align: center;
+        position: absolute;
+        align-content: center;
+        justify-content: center;
+        justify-items: center;
+    }
+    .text-alert-header {
+        background: rgba(0,0,0,0.9);
+        color: #fdbd01;
+        font-size: 20px;
+        font-weight: 900;
+        text-shadow: none;
+        padding: 2px 8px;
+        margin-top: -30px;
+        border-top-right-radius: 4px;
+        border-top-left-radius: 4px;
+        border: 2px solid #fdbd01;
+    }
+    .btn-close-modal {
+        color: white;
+        font-weight: 900;
+        border: 2px solid white;
+        padding: 2px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        margin: 2px;
+        font-family: Segoe UI;
+        background: rgba(0,0,0,0.9);
+        font-size: 18px;
+    }
+    .btn-primary-deposit {
+        background: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgblH1VThPIvWAyTLgZFEi67yZybhnsLRq5jpUivmnoIefVXw79_L_jqf-8DjCHi_y8JVf2CrlJvsXZNrj6CSIJWfjDENRVJKlPk9L_AAZrgq74b3pC_2CtAvPtMtr9sC5F8mRqmjLhcWPbqydsC1xy8LTYA4DNT35Ub28ZatyPSIUREf0vXy0ufLkF-J4/s16000/1000110830.png'), rgba(0,0,0,0.7);
+        border-radius: 50px;
+        background-size: 100% 100%;
+        color: white;
+        font-family: Segoe UI;
+        font-weight: 900;
+        border: none;
+        padding: 10px 25px;
+        cursor: pointer;
+        margin: 2px;
+        box-shadow: 0 2px 1px rgba(0,0,0,1.3);
+        text-shadow: 0 0 2px #003366, 0 0 2px #003366, 0 0 2px #003366, 0 0 2px #003366;
+        margin-top: 10px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+    }
+    .btn-primary-deposit:active { transform: scale(0.98); }
+    #modalSystemAlert .modal-content-container {
+        position: fixed;
+        top: 40%;
+        max-width: 90%;
+        justify-self: center;
+        text-align: center;
+        padding: 5px;
+        font-family: Segoe UI;
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+        background: transparent;
+        animation: none;
+        filter: drop-shadow(0 0 15px #0ff) drop-shadow(0 0 30px #0ff) drop-shadow(0 0 45px #0ff) drop-shadow(0 0 60px #0ff);
+    }
+    #textAlertBody {
+        color: rgba(255,255,255,1.9);
+        font-family:Segoe UI;
+        padding: 12px 0;
+        text-shadow: 2px 2px 4px rgba(250,42,85,0.1);
+        padding: 5px;
+        border-radius: 4px;
+        letter-spacing: 0.05em;
+        background: rgba(9,0,22,0.99);
+        border: 2px solid #fdbd01;
+        animation: none;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .overlay-history-modal {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        max-width: 100vw;
+        height: 100vh;
+        background:#1a1a1a;
+        overflow: hidden;
+        animation: modalSlideIn 0.1s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    @keyframes modalSlideIn {
+        from { opacity: 0; transform: translateY(-50px) scale(0.9); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .history-modal-content {
+        height: 100%;
+        width: 100%;
+        position: relative;
+    }
+    .history-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        padding: 6.5px;
+        border-bottom: 2px solid #2a2a2a;
+        font-size: 12px;
+        font-family:Segoe UI;
+        position: relative;
+        width: 100%;
+        background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(11,0,22,0.5) 15%, rgba(22,0,44,0.5) 20%, rgba(44,10,88,0.5) 30%, rgba(88,20,166,0.5) 40%, rgba(166,40,360,0.5) 50%, rgba(88,20,166,0.5) 60%, rgba(44,10,88,0.5) 70%, rgba(22,0,44,0.5) 80%, rgba(11,0,22,0.5) 85%, rgba(0,0,0,0.5) 100%);
+    }
+    .text-history-title {
+        color: #fdbd01;
+        font-weight: 900;
+        font-size: 20px;
+        text-shadow: 0 0 10px rgba(0,255,204,0.17);
+        letter-spacing: 1px;
+        font-family:Segoe UI;
+        text-transform: uppercase;
+        margin: 5px;
+    }
+    .btn-close-history {
+        position: fixed;
+        top: 5px;
+        right: 5px;
+        color: #fdbd01;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .btn-close-history:hover { color: #00ffcc; transform: scale(1.2); }
+    .grid-history-cards {
+        padding: 10px;
+        display: grid;
+        gap: 10px;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+    }
+    .card-history-record {
+        background: rgba(0,0,0,0.4);
+        border-radius: 8px;
+        padding: 12px;
+        border: 1px solid rgba(0,230,235,0.3);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .row-card-data {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .text-record-amount {
+        font-size: 18px;
+        font-weight: 900;
+        color: #E2F516;
+        text-shadow: 0 0 8px rgba(226,245,22,0.6);
+        display: flex;
+        align-items: center;
+    }
+    .badge-record-status {
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: 900;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: inline-block;
+        text-align: center;
+        border: 1px solid rgba(0,230,235,0.5);
+    }
+    .is-status-pending { background: linear-gradient(135deg,#FFA500,#FF8C00); color:#000; box-shadow:0 0 10px rgba(255,165,0,0.5); }
+    .is-status-processing { background: linear-gradient(135deg,#2196F3,#1976D2); color:#fff; box-shadow:0 0 10px rgba(33,150,243,0.5); }
+    .is-status-success { background: linear-gradient(135deg,#4CAF50,#388E3C); color:#fff; box-shadow:0 0 10px rgba(76,175,80,0.5); }
+    .is-status-failed { background: linear-gradient(135deg,#F44336,#D32F2F); color:#fff; box-shadow:0 0 10px rgba(244,67,54,0.5); }
+    .block-record-code {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        color: white;
+    }
+    .btn-copy-mini {
+        background: transparent;
+        border: 1px solid rgba(0,230,235,0.5);
+        color: #00ffcc;
+        padding: 3px 6px;
+        border-radius: 3px;
+        font-size: 9px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .btn-copy-mini:hover { background: rgba(0,255,204,0.1); }
+    .row-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 10px;
+        color: #cccccc;
+    }
+    .btn-support-link {
+        background: linear-gradient(135deg,#3a7bd5,#00d2ff);
+        color: white;
+        border: 1px solid rgba(0,230,235,0.5);
+        padding: 5px 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 900;
+        font-size: 9px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(58,123,213,0.3);
+        font-family: Segoe UI;
+    }
+    .btn-support-link:hover { box-shadow: 0 0 15px rgba(58,123,213,0.5); }
+    .state-empty-history {
+        text-align: center;
+        padding: 40px 20px;
+        color: rgba(255,255,255,0.7);
+        font-size: 16px;
+    }
+    .state-empty-history i {
+        font-size: 40px;
+        margin-bottom: 15px;
+        display: block;
+        color: rgba(0,255,204,0.5);
+    }
+    .text-input-error { color: #ff6b6b; font-size: 12px; font-weight: bold; margin-top: 5px; display: none; }
+    .text-selected-value { color: #fdbd01; font-weight: 900; font-size: 14px; margin: 5px 0; }
+    .section-payment-options {
+        background: transparent;
+        padding: 0;
+        font-family:Segoe UI;
+        color: #bfffe8;
+    }
+    .header-payment-section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        background: linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.5) 20%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.1) 80%, rgba(0,0,0,0.01) 100%);
+        border-left: 2px solid #18f3b0;
+        padding: 4px;
+    }
+    .text-payment-header {
+        font-size: 14px;
+        font-weight: 900;
+        letter-spacing: 0.4px;
+        color: #18f3b0;
+        font-family: Segoe UI;
+    }
+    .grid-payment-methods {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+    }
+    .card-payment-method {
+        background: rgba(0,0,0,0.5);
+        border-radius: 4px;
+        padding: 2px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #e9fff7;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+        text-align: center;
+        cursor: pointer;
+    }
+    .card-payment-method:active {
+        background: linear-gradient(180deg, rgba(108,11,195,0.5), rgba(158,0,202,0.6));
+        box-shadow: 0 .51px 0 rgba(0,0,0,0.35), 0 1px 0 rgba(0,0,0,0.35);
+    }
+    .icon-payment-method {
+        width: 25px;
+        height: 25px;
+        border-radius: 4px;
+        background-size: cover;
+        background-position: center;
+        flex-shrink: 0;
+    }
+    .icon-payment-method.type-qr { background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiOy__Ik8gW2TWe-nIOuhSY7JYwNtq4dUOWHUj3vm3uv_0UiGXhYH6hj2-q3WMvJSpJymWOyF6ahBsEFQ-nXmGfpW55KmwR4ZIcUOhyeWYM7AT_vVWrZGqjwIEjHENoWp55HryvvlcK5sH2yqPkh_pCvF93kyV-JRD5a9I8C8lPuoVApkGZOi-XgCJbft8/s16000/1000110975.png'); background-color:#fff; }
+    .icon-payment-method.type-upi { background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiaooYxdqZXlre4wT3foCurGdZUGESaQ9JKjwvLn-V_-nvxy7xID87iyDiYD1aaGhb6oZHesBshv_axJYxrrtP8iTsOmUSH248QxZB8BBTTCNkyZ5zeMxB6XpM3IDVCeDmaNJKcNgmtVWBWwX3XDG6svath9tXN8tNM5b2C9wJUt6xwbG7FtFov86QzR-o/s16000/1000110976.png'); background-color:#fff; }
+    .icon-payment-method.type-imps { background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiz318JF95GDQ4meyaWrnNflyk0WhHDkc3LE_0EGBT7iNgaW5PlsOR3quj7vz_cEgILwFGt-5g1DGcs1p2nh27CzH4QEgJYO8T9CDj8tE6pZCAY2X1ui5bYUmwUDCYw-jo2P2tFGGeWDTPlwJmPNoq9RoCQloHQ8SzuRGZ5hiOPaOtaDeM47nJKsL6VcUA/s16000/1000110974.png'); background-color:#fff; }
+    .text-method-label { font-size: 12px; font-weight: 800; letter-spacing: 0.3px; white-space: nowrap; }
+    .section-support-links {
+        width: 100%;
+        background: transparent;
+        border-radius: 6px;
+        padding-top: 10px;
+    }
+    .card-support-link {
+        background: rgba(0,0,0,0.5);
+        border-radius: 6px;
+        margin: 5px 0px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-right: 10px;
+        cursor: pointer;
+        border: 1px solid rgba(177,25,395,0.15);
+    }
+    .card-support-link:active { border: 1px solid #fdbd01; }
+    .icon-support-primary {
+        background-repeat: no-repeat;
+        background-size: 40px 40px;
+        width: 40px;
+        height: 40px;
+        margin-right: 15px;
+    }
+    .icon-support-secondary {
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        width: 45px;
+        height: 40px;
+        margin-right: 10px;
+    }
+    .text-support-label {
+        color: rgba(190,144,430,0.9);
+        font-family: Segoe UI;
+        font-size: 12px;
+        font-weight: 900;
+        flex: 1;
+        text-align: left;
+    }
+    .icon-support-arrow {
+        font-size: 20px;
+        color: rgba(190,44,430,0.7);
+    }
+    .box-disclaimer-info {
+        background: rgba(0,0,0,0.5);
+        border-radius: 6px;
+        padding: 5px;
+        font-size: 9px;
+        color: #f0f000;
+        font-weight: 600;
+        position: relative;
+        margin: 0px;
+        font-family: Segoe UI;
+        text-align: left;
+    }
+    .box-disclaimer-info li {
+        list-style: none;
+        margin-left: -35px;
+        margin-bottom: 5px;
+    }
+
+    /* PAYMENT PHASE STYLES */
+    .pay-phase-container {
+        background-color: white;
+        min-height: 100vh;
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+    }
+    .pay-phase-header {
+        background-color: #2554C7;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 15px;
+    }
+    .pay-phase-close {
+        color:white;
+        font-weight: 900;
+        text-align: center;
+        line-height: 1;
+        cursor: pointer;
+    }
+    .pay-phase-close i { font-size: 24px; }
+    .pay-phase-close span { font-size: 12px; }
+    .pay-phase-logo {
+        background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLOgcsOgISWUtUiw1yH3hXoTQJ1EzAVnr6e0rr69h7GDi2DyQ7Sn8heKpqikTI0giSUbB3dZGHKJ7srl8Ir9BEctFoc9FSoGi-Cp1joDdwL5nkKubdN7CanZEKnK-YLOjRUD5LOpwnF8_d0M7qX-sLK-L7y2B_w7SKAaC77IyMeMWxjyZPsVV1AiAbjxs/s960/1000122325.png");
+        background-size: 100% 100%;
+        height:25px;
+        width:60px;
+    }
+    .pay-phase-title {
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .pay-phase-order {
+        font-weight: 900;
+        font-size: 14px;
+        margin-top: 15px;
+        color: #000;
+    }
+    .pay-phase-amount {
+        color: #1e3a8a;
+        font-size: 36px;
+        font-weight: 900;
+        margin: 5px 0;
+    }
+    .pay-phase-instruction {
+        font-weight: 900;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 15px;
+    }
+    .pay-phase-blue-box {
+        border:1px solid rgba(0,0,0,0.3);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 0 15px 15px 15px;
+    }
+    .pay-phase-qr-white {
+        background: white;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        border:1px solid black;
+    }
+    .pay-phase-qr-white img {
+        width: 200px;
+        height: 200px;
+        display: block;
+        margin: 0 auto;
+    }
+    .pay-phase-dl-btn {
+        background: white;
+        color: #1e3a8a;
+        font-weight: 900;
+        font-size: 20px;
+        border:1px solid ;
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+    }
+    .pay-phase-dl-btn i { font-size: 24px; }
+    .pay-phase-upi-row {
+        background: white;
+        border-radius: 6px;
+        padding: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        border:1px solid rgba(0,0,0,0.3);
+    }
+    .pay-phase-upi-text {
+        font-weight: 900;
+        font-size: 16px;
+        color: #000;
+        flex: 1;
+        text-align: left;
+        padding-left: 5px;
+    }
+    .pay-phase-copy-btn {
+        background-color: #5b71fa;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 5px 15px;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .pay-phase-rules {
+        color: #e86b24;
+        font-weight: bold;
+        font-size: 11px;
+        text-align: left;
+        line-height: 1.4;
+    }
+    .pay-phase-utr-input {
+        background-color: #e0e0e0;
+        border: 1px solid #000;
+        border-radius: 25px;
+        width: calc(100% - 30px);
+        margin: 0 15px 15px 15px;
+        padding: 12px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1e3a8a;
+        text-align: center;
+        box-sizing: border-box;
+    }
+    .pay-phase-utr-input::placeholder {
+        color: #1e3a8a;
+    }
+    .pay-phase-submit-btn {
+        background-color: #5b71fa;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        width: calc(100% - 30px);
+        margin: 0 15px 20px 15px;
+        padding: 12px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .pay-phase-upi-app-btn {
+        background-color: #00C853;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        width: calc(100% - 30px);
+        margin: 0 15px 15px 15px;
+        padding: 12px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header-container"><div class="header-text">DEPOSIT</div></div>
+<button class="btn-nav-back">
+    <i class="fas fa-reply"></i>
+</button>
+
+<script>
+document.querySelector('.btn-nav-back').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (window.history.length > 1) { 
+        window.history.back(); 
+    } else { 
+        window.location.href = 'home.html'; 
+    }
+});
+</script>
+<button class="btn-nav-records" onclick="fetchAndShowHistory()">
+    <i class="fas fa-book"></i> 
+</button>
+
+<div class="amount-input-wrapper">
+    <input type="number" id="inputDepositAmount" class="input-deposit-field" placeholder="Please Select or Enter an Amount to Deposit" min="200" max="50000" oninput="validateAmountInput()" />
+    <div class="text-input-error" id="msgAmountError"></div>
+    <div class="text-selected-value" id="textSelectedAmt">Selected Amount: 200</div>
+</div>
+
+<div class="grid-amount-options">
+    <button class="btn-amount-option" onclick="handleAmountSelection(200, event)">200</button>
+    <button class="btn-amount-option" onclick="handleAmountSelection(300, event)">300</button>
+    <button class="btn-amount-option" onclick="handleAmountSelection(500, event)">500</button>
+    <button class="btn-amount-option" onclick="handleAmountSelection(1000, event)">1000</button>
+    <button class="btn-amount-option" onclick="handleAmountSelection(1500, event)">1500</button>
+    <button class="btn-amount-option" onclick="handleAmountSelection(2000, event)">2000</button>
+    <button class="btn-amount-option" onclick="handleAmountSelection(5000, event)">5000</button>
+    <button class="btn-amount-option" onclick="handleAmountSelection(10000, event)">10000</button>
+    <button class="btn-amount-option" onclick="handleAmountSelection(20000, event)">20000</button>
+    <button class="btn-amount-option" onclick="handleAmountSelection(50000, event)">50000</button>
+</div>
+
+<div class="section-payment-options">
+  <div class="header-payment-section"><span class="text-payment-header">Payment Method</span></div>
+  <div class="grid-payment-methods" id="wrapperPaymentMethods">
+    <div class="card-payment-method" id="method-upi-qr" data-method="UPI-QR"><div class="icon-payment-method type-qr"></div><div class="text-method-label">UPI-QR</div></div>
+    <div class="card-payment-method" id="method-upi-upi" data-method="UPI-UPI"><div class="icon-payment-method type-upi"></div><div class="text-method-label">UPI-UPI</div></div>
+    <div class="card-payment-method" id="method-upi-imps" data-method="UPI-IMPS"><div class="icon-payment-method type-imps"></div><div class="text-method-label">UPI-IMPS</div></div>
+    <div class="card-payment-method" id="method-upi-all" data-method="UPI-All"><div class="icon-payment-method type-qr"></div><div class="text-method-label">UPI-All</div></div>
+  </div>
+</div>
+
+<div class="breakdown-grid">
+    <div class="card-value-box"><div class="text-label">Amount To be Paid-</div><div class="text-value" id="textCashAmt">200.00</div></div>
+</div>
+
+<button class="btn-primary-deposit" onclick="openPaymentModal()">DEPOSIT NOW</button>
+
+<div class="section-support-links">
+  <div class="card-support-link" onclick="window.location.href='feedback.html'">
+    <div class="icon-support-secondary" style="background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2dOwmjiwU2zTerue0curEIURyiR3TlSNLydjmzb7OGubX_t_W-DQOxCnhOezLowpee2jvxUb_LZJoz_vXtRJ0LiHMe2llLtQsI67sFPnSML-F489dELhLV5M1IsaL5JzFap8qJjYIf7akkyYwLHK6tM0EZ2NVjSXjvKeGumJELGAigM48YnkcKA1xaeg/s16000/1000110910.png');"></div>
+    <div class="text-support-label">Deposit Feedback</div>
+    <div class="icon-support-arrow"><i class="fas fa-angle-right"></i></div>
+  </div>
+  <div class="card-support-link" onclick="window.location.href='chat.html'">
+    <div class="icon-support-primary" style="background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjcLCD3aI9TJHWvMYo_FO-C9IhuuEmPI5-AQeTn8n7ScwC3tmfrDpWzu9CosgbLjiNuh-E-r3vyi9CWi9Emcra77H3eRMkgFwNrzPMU4RxmXJWsMRhmFhjn7ZOQRhzcqY78IBH1Ruw8to6H3Le7Sjr8eDhiQbp4-9pDyhHsxqgekgIAMGVZe7iqLZZ2AVA/s16000/1000110907.png');"></div>
+    <div class="text-support-label">Online Customer Service</div>
+    <div class="icon-support-arrow"><i class="fas fa-angle-right"></i></div>
+  </div>
+  <div class="box-disclaimer-info">
+    <ul>
+      <li>1.Make sure to verify details before submitting deposit.</li>
+      <li>2.Deposit amounts usually credits in just minutes.</li>
+      <li>3.Any problems with deposit, kindly email us at <a href="mailto:kimiapi92@gmail.com" style="color:#fdbd01; font-weight:600;">kimiapi92@gmail.com</a></li>
+    </ul>
+  </div>
+</div>
+
+<div id="modalPaymentWindow" class="overlay-modal-window">
+  <div class="pay-phase-container">
+    <div class="pay-phase-header">
+      <div class="pay-phase-close" onclick="closePaymentModal()">
+        <i class="fas fa-times"></i><br><span>close</span>
+      </div>
+      <div class="pay-phase-logo"></div>
+      <div class="pay-phase-title">Payment</div>
+    </div>
+    <div class="pay-phase-order" id="displayOrderId">ORDER ID: DOR00000000000000</div>
+    <div class="pay-phase-amount" id="displayAmount">₹000.00</div>
+    <div class="pay-phase-instruction">Follow Instructions To Pay</div>
+
+    <div id="payPhaseQrBlock" class="pay-phase-blue-box" style="display:none;">
+      <div class="pay-phase-qr-white">
+        <img id="imgPaymentQrCode" src="" alt="loading">
+      </div>
+      <button class="pay-phase-dl-btn" onclick="downloadQrCode()">
+        <span style="flex:1; text-align: left; padding-left: 5px;">Download QR</span>
+        <i class="fas fa-cloud-download-alt"></i>
+      </button>
+    </div>
+
+    <div id="payPhaseUpiBlock" class="pay-phase-blue-box" style="display:none;">
+      <div class="pay-phase-upi-row">
+        <div class="pay-phase-upi-text" id="textUpiId">Loading...</div>
+        <button class="pay-phase-copy-btn" onclick="copyToClipboard(UNIVERSAL_UPI_ID)">copy</button>
+      </div>
+      <div class="pay-phase-rules">
+        1. Open Any Upi App and Use UPI ID To Pay<br>
+        2. Pay The Original Amount Only Don't Overpay<br>
+        3. Don't pay Twice For the Same Order Id<br>
+        12 digit UTR code Is Mandatory For all Orders
+      </div>
+    </div>
+
+    <div id="payPhaseImpsBlock" class="pay-phase-blue-box" style="display:none;">
+      <div class="pay-phase-upi-row">
+        <div class="pay-phase-upi-text">Bank Name: AIRTEL PAYMENTS BANK</div>
+      </div>
+      <div class="pay-phase-upi-row">
+        <div class="pay-phase-upi-text">Name: Marfuja Begum</div>
+        <button class="pay-phase-copy-btn" onclick="copyToClipboard('Marfuja Begum')">copy</button>
+      </div>
+      <div class="pay-phase-upi-row">
+        <div class="pay-phase-upi-text">A/C: 8761876121</div>
+        <button class="pay-phase-copy-btn" onclick="copyToClipboard('8761876121')">copy</button>
+      </div>
+      <div class="pay-phase-upi-row">
+        <div class="pay-phase-upi-text">IFSC: AIRP0000001</div>
+        <button class="pay-phase-copy-btn" onclick="copyToClipboard('AIRP0000001')">copy</button>
+      </div>
+      <div class="pay-phase-rules">
+        1. Copy-paste IMPS Details and transfer funds.<br>
+        2. Submit exact UTR/UPI-Reference No. below.<br>
+        3. Verify IMPS Details Before Transfering Funds.
+      </div>
+    </div>
+
+    <button class="pay-phase-upi-app-btn" onclick="openUpiApp()">
+        <i class="fas fa-external-link-alt"></i> PAY DIRECTLY VIA UPI APP
+    </button>
+    <input type="text" id="inputUtrNumber" class="pay-phase-utr-input" placeholder="Input 12 digit Here" maxlength="12" pattern="\d{12}" title="Please enter exactly 12 digits" />
+    <button class="pay-phase-submit-btn" onclick="submitUtrCode()">SUBMIT</button>
+  </div>
+</div>
+
+<div id="modalSystemAlert" class="overlay-system-alert">
+  <div class="modal-content-container">
+    <div class="text-alert-header" id="textAlertTitle">MESSAGE</div>
+    <div id="textAlertBody" style="padding: 15px; text-align: center;"></div>
+    <div id="containerUtrList" style="display: none;"></div>
+    <button class="btn-close-modal" onclick="closeSystemMessage()">Okay</button>
+  </div>
+</div>
+
+<div id="modalRecordHistory" class="overlay-history-modal">
+  <div class="history-modal-content">
+    <div class="history-modal-header">
+      <div class="text-history-title">DEPOSIT RECORDS</div>
+      <span class="btn-close-history" onclick="closeDepositRecords()"><i class="fas fa-times-circle"></i></span>
+    </div>
+    <div class="grid-history-cards" id="wrapperHistoryCards"></div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
+<script>
+// ==================== FIREBASE CONFIG ====================
+const firebaseConfig = {
+  apiKey: "AIzaSyAfVcC_wBMaarOExZVrUeqZf65NzT7BCfU",
+  authDomain: "kamaaikendra-546d6.firebaseapp.com",
+  databaseURL: "https://kamaaikendra-546d6-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "kamaaikendra-546d6",
+  storageBucket: "kamaaikendra-546d6.firebasestorage.app",
+  messagingSenderId: "878228615894",
+  appId: "1:878228615894:web:c3660d7510fb05d0d54f77"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const auth = firebase.auth();
+
+let currentAppLinks = [];
+let amountQrCodes = {};
+let UNIVERSAL_UPI_ID = '';
+let predefinedAmounts = [];
+let customAmountQrFallback = '';
+
+function updateUpiDisplay() {
+  const span = document.getElementById('textUpiId');
+  if (span) span.innerText = UNIVERSAL_UPI_ID;
+}
+
+async function fetchFirebaseConfig() {
+  try {
+    const appLinksSnap = await database.ref('config/appLinks').once('value');
+    currentAppLinks = appLinksSnap.val() || [];
+    const qrSnap = await database.ref('config/amountQrCodes').once('value');
+    amountQrCodes = qrSnap.val() || {};
+    const upiSnap = await database.ref('config/universalUpiId').once('value');
+    UNIVERSAL_UPI_ID = upiSnap.val() || '8761876121-1@nyes';
+    const amtSnap = await database.ref('config/predefinedAmounts').once('value');
+    predefinedAmounts = amtSnap.val() || [200,300,500,1000,1500,2000,5000,10000,20000,50000];
+    const fallbackSnap = await database.ref('config/customAmountQrFallback').once('value');
+    customAmountQrFallback = fallbackSnap.val() || 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjfsfEFOY0tOTtp-eJFUUjZ2cDYyFDna-91Gu421llz_3esGgM4q3PT9jJqx8QLlA6pl2GIGbsrZE-o03UKqkHR9j3AlbodUit6G2aVR97kZ-djMUS9XA3N4HgstLmh3pdHqtnT3M_ApmjG6sG6FY28XPRwdzExjBX_ZcgyClooGwHGM-546YVPBXFZjSo/s500/1000110947.png';
+    updateUpiDisplay();
+  } catch (error) {
+    console.error('Error loading Firebase config:', error);
+    setDefaultConfig();
+  }
+}
+
+function setDefaultConfig() {
+  currentAppLinks = [];
+  amountQrCodes = {};
+  UNIVERSAL_UPI_ID = '8761876121-1@nyes';
+  predefinedAmounts = [200,300,500,1000,1500,2000,5000,10000,20000,50000];
+  customAmountQrFallback = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjfsfEFOY0tOTtp-eJFUUjZ2cDYyFDna-91Gu421llz_3esGgM4q3PT9jJqx8QLlA6pl2GIGbsrZE-o03UKqkHR9j3AlbodUit6G2aVR97kZ-djMUS9XA3N4HgstLmh3pdHqtnT3M_ApmjG6sG6FY28XPRwdzExjBX_ZcgyClooGwHGM-546YVPBXFZjSo/s500/1000110947.png';
+  updateUpiDisplay();
+}
+
+// ==================== APP LOGIC ====================
+let currentAmount = 200;
+let currentQrUrl = '';
+let currentDeposits = [];
+let currentTransactionId = '';
+let currentDepositKey = '';
+let selectedPaymentMethod = 'UPI-QR';
+
+const paymentMethodsCards = document.querySelectorAll('#wrapperPaymentMethods .card-payment-method');
+
+function setActiveMethod(method) {
+    if (!method) return;
+    paymentMethodsCards.forEach(m => { 
+        m.style.background = 'rgba(0,0,0,0.5)'; 
+        m.style.boxShadow = 'inset 0 0 0 1px rgba(255,255,255,0.05)'; 
+    });
+    method.style.background = 'linear-gradient(180deg, rgba(108,11,195,0.5), rgba(158,0,202,0.6))';
+    method.style.boxShadow = '0 .51px 0 rgba(0,0,0,0.35), 0 1.5px 0 rgba(0,0,0,0.35)';
+    selectedPaymentMethod = method.getAttribute('data-method');
+}
+
+paymentMethodsCards.forEach(m => {
+    m.addEventListener('click', function(e) {
+        setActiveMethod(this);
+    });
+});
+if (paymentMethodsCards.length) setActiveMethod(paymentMethodsCards[0]);
+
+function createSecureDigits(length) {
+  const array = new Uint8Array(length);
+  crypto.getRandomValues(array);
+  let result = '';
+  for (let i = 0; i < length; i++) result += array[i] % 10;
+  return result;
+}
+
+function createTransactionId() {
+  return 'DOR' + createSecureDigits(12) + new Date().getDate().toString().padStart(2,'0');
+}
+
+function checkAuth() {
+  return new Promise((resolve, reject) => {
+    auth.onAuthStateChanged(user => user ? resolve(user) : (reject('Not authenticated'), window.location.href='index.html'));
+  });
+}
+
+function handleAmountSelection(amount, evt) {
+  const buttons = document.querySelectorAll('.btn-amount-option');
+  buttons.forEach(btn => btn.classList.remove('is-active'));
+  if (evt && evt.target) evt.target.classList.add('is-active');
+  else {
+    buttons.forEach(btn => { if(btn.textContent.trim() == amount) btn.classList.add('is-active'); });
+  }
+  document.getElementById('inputDepositAmount').value = amount;
+  updateAmountDisplays(amount);
+  document.getElementById('msgAmountError').style.display = 'none';
+}
+
+function validateAmountInput() {
+  const input = document.getElementById('inputDepositAmount');
+  const err = document.getElementById('msgAmountError');
+  const amt = parseInt(input.value);
+  document.querySelectorAll('.btn-amount-option').forEach(b => b.classList.remove('is-active'));
+  if (isNaN(amt) || amt < 200 || amt > 50000 || amt % 50 !== 0) {
+    err.textContent = amt < 200 ? 'Min ₹200' : amt > 50000 ? 'Max ₹50000' : 'Must be multiple of ₹50';
+    err.style.display = 'block';
+    resetAmountDisplays();
+    return false;
+  }
+  err.style.display = 'none';
+  updateAmountDisplays(amt);
+  return true;
+}
+
+function updateAmountDisplays(amount) {
+  currentAmount = amount;
+  document.getElementById('textSelectedAmt').innerText = `Selected Amount: ₹${amount}`;
+  document.getElementById('textCashAmt').innerText = amount.toFixed(2);
+
+  // Dynamic Payment Method Display Rules
+  const qrCard = document.getElementById('method-upi-qr');
+  const upiCard = document.getElementById('method-upi-upi');
+  const impsCard = document.getElementById('method-upi-imps');
+  const allCard = document.getElementById('method-upi-all');
+
+  if (qrCard && upiCard && impsCard && allCard) {
+      qrCard.style.display = 'flex';
+      upiCard.style.display = 'flex';
+      impsCard.style.display = 'flex';
+      allCard.style.display = 'flex';
+
+      if (amount > 5000) {
+          qrCard.style.display = 'none';
+          upiCard.style.display = 'none';
+          impsCard.style.display = 'none';
+          setActiveMethod(allCard);
+      } else if (amount > 2000) {
+          qrCard.style.display = 'none';
+          upiCard.style.display = 'none';
+          if (selectedPaymentMethod === 'UPI-QR' || selectedPaymentMethod === 'UPI-UPI') {
+              setActiveMethod(impsCard);
+          }
+      } else if (amount > 1000) {
+          qrCard.style.display = 'none';
+          if (selectedPaymentMethod === 'UPI-QR') {
+              setActiveMethod(upiCard);
+          }
+      }
+  }
+}
+
+function resetAmountDisplays() {
+  currentAmount = 0;
+  document.getElementById('textSelectedAmt').innerText = 'Selected Amount: 0';
+  document.getElementById('textCashAmt').innerText = '0.00';
+}
+
+function openPaymentModal() {
+  if (currentAmount < 200 || currentAmount > 50000 || currentAmount % 50 !== 0) {
+    displaySystemMessage('Please select a valid amount (₹200–50000, multiples of 50)');
+    return;
+  }
+  
+  checkAuth().then(user => {
+    currentTransactionId = createTransactionId();
+    document.getElementById('displayOrderId').innerText = 'ORDER ID: ' + currentTransactionId;
+    document.getElementById('displayAmount').innerText = '₹' + currentAmount.toFixed(2);
+    
+    // Instantly submit the order without UTR code and record the Payment Method
+    const newOrderData = {
+      uid: user.uid,
+      transactionId: currentTransactionId,
+      orderId: currentTransactionId,
+      amount: currentAmount,
+      paymentMethod: selectedPaymentMethod,
+      utr: '',
+      utrCount: 0,
+      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      status: 'pending',
+      processed: false
+    };
+
+    const newOrderRef = database.ref('depositRequests').push(newOrderData);
+    currentDepositKey = newOrderRef.key;
+
+    const upiString = `upi://pay?pa=spribe777@okicici&pn=SPRIBE%20OFFICIAL&am=${currentAmount.toFixed(2)}&cu=INR&aid=uGICAgOCP_b7OGA`;
+    const qr = new QRious({
+      value: upiString,
+      size: 300,
+      level: 'H'
+    });
+    currentQrUrl = qr.toDataURL();
+    document.getElementById('imgPaymentQrCode').src = currentQrUrl;
+
+    document.getElementById('payPhaseQrBlock').style.display = 'none';
+    document.getElementById('payPhaseUpiBlock').style.display = 'none';
+    document.getElementById('payPhaseImpsBlock').style.display = 'none';
+
+    if (selectedPaymentMethod === 'UPI-QR') {
+        document.getElementById('payPhaseQrBlock').style.display = 'block';
+    } else if (selectedPaymentMethod === 'UPI-UPI') {
+        document.getElementById('payPhaseUpiBlock').style.display = 'block';
+    } else if (selectedPaymentMethod === 'UPI-IMPS') {
+        document.getElementById('payPhaseImpsBlock').style.display = 'block';
+    } else if (selectedPaymentMethod === 'UPI-All') {
+        document.getElementById('payPhaseQrBlock').style.display = 'block';
+        document.getElementById('payPhaseUpiBlock').style.display = 'block';
+        document.getElementById('payPhaseImpsBlock').style.display = 'block';
+    }
+
+    document.getElementById('modalPaymentWindow').style.display = 'block';
+  }).catch(e => displaySystemMessage('Please login first'));
+}
+
+function closePaymentModal() { 
+    document.getElementById('modalPaymentWindow').style.display = 'none'; 
+    document.getElementById('inputUtrNumber').value = ''; 
+}
+
+function downloadQrCode() {
+  try {
+    const anchor = document.createElement('a');
+    anchor.href = currentQrUrl;
+    anchor.download = 'KIMI_WIN_deposit_QR.png';
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+  } catch(e) {
+    console.error('Download QR Code error: ', e);
+  }
+}
+
+function openUpiApp() {
+    if (currentAmount > 0) {
+        const upiLink = `upi://pay?pa=spribe777@okicici&pn=SPRIBE%20OFFICIAL&am=${currentAmount.toFixed(2)}&cu=INR&aid=uGICAgOCP_b7OGA`;
+        window.location.href = upiLink;
+    } else {
+        displaySystemMessage('Invalid amount selected.');
+    }
+}
+
+function displaySystemMessage(msg, showUtr = false) {
+  document.getElementById('textAlertBody').innerText = msg;
+  document.getElementById('textAlertTitle').innerText = showUtr ? 'UTR record' : 'alert';
+  document.getElementById('containerUtrList').style.display = showUtr ? 'block' : 'none';
+  document.getElementById('modalSystemAlert').style.display = 'block';
+}
+
+function closeSystemMessage() { 
+    document.getElementById('modalSystemAlert').style.display = 'none'; 
+    document.getElementById('containerUtrList').style.display = 'none'; 
+}
+
+window.onclick = function (e) {
+  if (e.target === document.getElementById('modalPaymentWindow')) closePaymentModal();
+  else if (e.target === document.getElementById('modalSystemAlert')) closeSystemMessage();
+  else if (e.target === document.getElementById('modalRecordHistory')) closeDepositRecords();
+};
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    if (btn && btn.classList) { btn.classList.add('is-copied'); setTimeout(() => btn.classList.remove('is-copied'), 2000); }
+    displaySystemMessage('Details copied to clipboard!');
+  });
+}
+
+function verifyUtrUniqueness(utr) {
+  return database.ref('depositRequests').orderByChild('utr').equalTo(utr).once('value').then(s => s.exists());
+}
+
+function createDepositRecord(utr, uid, amount) {
+  const tid = currentTransactionId || createTransactionId();
+
+  return database.ref('depositRequests').push({
+    uid, 
+    utr, 
+    utrCount: 1,
+    amount, 
+    paymentMethod: selectedPaymentMethod,
+    timestamp: firebase.database.ServerValue.TIMESTAMP,
+    status: 'pending', 
+    processed: false, 
+    transactionId: tid,
+    orderId: tid
+  }).then(() => { 
+    displaySystemMessage('Deposit request submitted successfully!'); 
+  });
+}
+
+function submitUtrCode() {
+  checkAuth().then(user => {
+    const rev = document.getElementById('inputUtrNumber').value.trim();
+    if (!/^\d{12}$/.test(rev)) { displaySystemMessage('Please enter a valid 12-digit UTR code!'); return; }
+    verifyUtrUniqueness(rev).then(exists => {
+      if (exists) { displaySystemMessage('This UTR code has already been submitted.'); return; }
+      
+      if (currentDepositKey) {
+        database.ref('depositRequests/' + currentDepositKey).once('value').then(snap => {
+          const d = snap.val() || {};
+          const count = (d.utrCount !== undefined) ? d.utrCount : (d.utr ? 1 : 0);
+          if (count >= 2) {
+            displaySystemMessage('Maximum 2 UTR submissions allowed for this order.');
+            return;
+          }
+          database.ref('depositRequests/' + currentDepositKey).update({
+            utr: rev,
+            utrCount: count + 1
+          }).then(() => {
+            document.getElementById('inputUtrNumber').value = '';
+            closePaymentModal();
+            resetAmountDisplays();
+            document.querySelectorAll('.btn-amount-option').forEach(b => b.classList.remove('is-active'));
+            document.getElementById('inputDepositAmount').value = '';
+            displaySystemMessage('UTR code submitted successfully!');
+          }).catch(e => displaySystemMessage('Submission failed. Try again.'));
+        });
+      } else {
+        createDepositRecord(rev, user.uid, currentAmount).then(() => {
+          document.getElementById('inputUtrNumber').value = '';
+          closePaymentModal();
+          resetAmountDisplays();
+          document.querySelectorAll('.btn-amount-option').forEach(b => b.classList.remove('is-active'));
+          document.getElementById('inputDepositAmount').value = '';
+        }).catch(e => displaySystemMessage('Submission failed. Try again.'));
+      }
+    }).catch(e => displaySystemMessage('Error verifying UTR.'));
+  }).catch(e => displaySystemMessage('Please login to submit UTR'));
+}
+
+function attachUtrFromHistory(key, orderId) {
+  checkAuth().then(user => {
+    const inputElem = document.getElementById('inputUtr_' + key);
+    if (!inputElem) return;
+    const utrVal = inputElem.value.trim();
+    if (!/^\d{12}$/.test(utrVal)) {
+      displaySystemMessage('Please enter a valid 12-digit UTR code!');
+      return;
+    }
+    verifyUtrUniqueness(utrVal).then(exists => {
+      if (exists) {
+        displaySystemMessage('This UTR code has already been submitted.');
+        return;
+      }
+      database.ref('depositRequests/' + key).once('value').then(orderSnap => {
+        const d = orderSnap.val() || {};
+        const count = (d.utrCount !== undefined) ? d.utrCount : (d.utr ? 1 : 0);
+        if (count >= 2) {
+          displaySystemMessage('Maximum 2 UTR submissions allowed for this order.');
+          return;
+        }
+        database.ref('depositRequests/' + key).update({
+          utr: utrVal,
+          utrCount: count + 1
+        }).then(() => {
+          displaySystemMessage('UTR code submitted successfully for order #' + orderId);
+          database.ref('depositRequests').orderByChild('uid').equalTo(user.uid).once('value').then(snap => {
+            currentDeposits = [];
+            snap.forEach(c => {
+              const data = c.val();
+              currentDeposits.push({
+                key: c.key,
+                id: data.transactionId || data.orderId || c.key,
+                amount: data.amount,
+                utr: data.utr || '',
+                utrCount: (data.utrCount !== undefined) ? data.utrCount : (data.utr ? 1 : 0),
+                paymentMethod: data.paymentMethod || 'UPI-QR',
+                status: data.status || 'pending',
+                timestamp: data.timestamp || 0
+              });
+            });
+            currentDeposits.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
+            renderDepositCards();
+          });
+        }).catch(e => {
+          displaySystemMessage('Failed to update UTR. Try again.');
+        });
+      }).catch(e => {
+        displaySystemMessage('Failed to read order data.');
+      });
+    }).catch(e => {
+      displaySystemMessage('Error verifying UTR.');
+    });
+  }).catch(() => displaySystemMessage('Please login to attach UTR'));
+}
+
+function fetchAndShowHistory() {
+  checkAuth().then(user => {
+    displaySystemMessage('Loading deposit history...');
+    database.ref('depositRequests').orderByChild('uid').equalTo(user.uid).once('value').then(snap => {
+      currentDeposits = [];
+      snap.forEach(c => {
+        const d = c.val();
+        currentDeposits.push({
+          key: c.key,
+          id: d.transactionId || d.orderId || c.key,
+          amount: d.amount,
+          utr: d.utr || '',
+          utrCount: (d.utrCount !== undefined) ? d.utrCount : (d.utr ? 1 : 0),
+          paymentMethod: d.paymentMethod || 'UPI-QR',
+          status: d.status || 'pending',
+          timestamp: d.timestamp || 0
+        });
+      });
+      if (currentDeposits.length === 0) { displaySystemMessage('No deposit history found'); return; }
+      currentDeposits.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
+      renderDepositCards();
+      document.getElementById('modalSystemAlert').style.display = 'none';
+      document.getElementById('modalRecordHistory').style.display = 'block';
+    }).catch(e => displaySystemMessage('Failed to load history'));
+  }).catch(e => displaySystemMessage('Please login to view history'));
+}
+
+function renderDepositCards() {
+  const container = document.getElementById('wrapperHistoryCards');
+  container.innerHTML = '';
+  if (currentDeposits.length === 0) {
+    container.innerHTML = '<div class="state-empty-history"><i class="fas fa-inbox"></i><div>No deposits found</div></div>';
+    return;
+  }
+  currentDeposits.forEach(dep => {
+    let statusClass = 'is-status-pending', statusText = 'Pending';
+    if (dep.status === 'processing') { statusClass = 'is-status-processing'; statusText = 'Processing'; }
+    else if (dep.status === 'approved' || dep.status === 'success') { statusClass = 'is-status-success'; statusText = 'Success'; }
+    else if (dep.status === 'failed') { statusClass = 'is-status-failed'; statusText = 'Failed'; }
+    const timeStr = dep.timestamp ? new Date(dep.timestamp).toLocaleString('en-IN', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true}) : 'N/A';
+
+    const hasUtr = dep.utr && dep.utr.trim() !== '';
+    const utrCount = (dep.utrCount !== undefined) ? dep.utrCount : (hasUtr ? 1 : 0);
+
+    const utrDisplay = hasUtr 
+      ? `<div class="block-record-code"><span style="color:#00ffcc; font-weight:700;">UTR:</span> ${dep.utr}<button class="btn-copy-mini" onclick="navigator.clipboard.writeText('${dep.utr}')"><i class="fas fa-copy"></i></button></div>`
+      : `<div class="block-record-code" style="color:#ffcc00; font-weight:bold;"><i class="fas fa-exclamation-circle"></i> UTR Not Attached</div>`;
+
+    let utrActionHtml = '';
+    if (utrCount < 2) {
+      const isFirstAttach = utrCount === 0 && !hasUtr;
+      const actionText = isFirstAttach ? 'Attach' : 'Resubmit';
+      utrActionHtml = `
+        <div style="display:flex; gap:6px; margin-top:2px;">
+          <input type="text" id="inputUtr_${dep.key}" placeholder="${actionText} 12-digit UTR" maxlength="12" pattern="\\d{12}" style="flex:1; background:rgba(0,0,0,0.6); border:1px solid rgba(0,230,235,0.5); border-radius:4px; color:#ffffff; padding:5px 8px; font-size:11px; outline:none;" />
+          <button onclick="attachUtrFromHistory('${dep.key}', '${dep.id}')" style="background:linear-gradient(135deg,#5b71fa,#3a7bd5); color:#ffffff; border:1px solid rgba(0,230,235,0.6); border-radius:4px; padding:5px 10px; font-size:11px; font-weight:900; cursor:pointer; white-space:nowrap;">
+            ${actionText} UTR
+          </button>
+        </div>
+      `;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'card-history-record';
+    card.innerHTML = `
+      <div class="row-card-data">
+        <div class="text-record-amount">₹${parseFloat(dep.amount).toFixed(2)}</div>
+        <div class="badge-record-status ${statusClass}">${statusText}</div>
+      </div>
+      <div class="row-card-data">
+        <div class="block-record-code">
+          <span style="color:#fdbd01; font-weight:700;">#</span>${dep.id}
+          <button class="btn-copy-mini" onclick="navigator.clipboard.writeText('${dep.id}')"><i class="fas fa-copy"></i></button>
+        </div>
+        <div style="font-size:10px; font-weight:800; color:#18f3b0; background:rgba(24,243,176,0.15); padding:2px 6px; border-radius:4px; border:1px solid rgba(24,243,176,0.4);">
+          <i class="fas fa-wallet"></i> ${dep.paymentMethod || 'UPI-QR'}
+        </div>
+      </div>
+      <div class="row-card-data">
+        ${utrDisplay}
+      </div>
+      ${utrActionHtml}
+      <div class="row-card-footer">
+        <div class="datetime">${timeStr}</div>
+        <button class="btn-support-link" onclick="openCustomerSupport('${dep.id}')"><i class="fas fa-headset"></i> Support</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function closeDepositRecords() { document.getElementById('modalRecordHistory').style.display = 'none'; }
+function openCustomerSupport(tid) { window.location.href = `feedback.html`; }
+
+function initializeDepositListener() {
+  checkAuth().then(user => {
+    database.ref('depositRequests').orderByChild('uid').equalTo(user.uid).on('child_changed', snap => {
+      const d = snap.val();
+      if ((d.status === 'approved' || d.status === 'success') && !d.processed) {
+        displaySystemMessage(`Deposit of ₹${d.amount} has been approved and credited!`);
+      }
+    });
+  }).catch(()=>{});
+}
+window.addEventListener('load', initializeDepositListener);
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', function() {
+  fetchFirebaseConfig().then(() => {
+    const amtInput = document.getElementById('inputDepositAmount');
+    amtInput.addEventListener('blur', validateAmountInput);
+    amtInput.addEventListener('keypress', e => { if(e.key==='Enter') validateAmountInput(); });
+    amtInput.value = 200;
+    updateAmountDisplays(200);
+  });
+});
+</script>
+</body>
+</html>
